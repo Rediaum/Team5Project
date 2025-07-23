@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Slf4j
 public class MainController {
-    @RequestMapping("/")
+    @RequestMapping("")
     public String main(Model model) {
         log.info("Start Main ,,,,,,");
         // Database 데이터를 가지고 온다.
