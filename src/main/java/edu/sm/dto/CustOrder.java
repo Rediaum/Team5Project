@@ -1,15 +1,15 @@
 package edu.sm.dto;
 
 import lombok.*;
-
 import java.sql.Timestamp;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Getter
 @Setter
 @Builder
-public class Custorder {
+public class CustOrder {
     private int orderId;
     private int custId;
     private Timestamp orderDate;
