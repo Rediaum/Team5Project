@@ -44,3 +44,21 @@ function myMap() {
     };
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 }
+
+// register section Password Strength JS
+$(document).ready(function () {
+    $('#password').on('keyup', function () {
+        var password = $(this).val();
+        var strengthText = $('#strengthText');
+
+        if (!password) {
+            strengthText.text('Tidak ada Password').removeClass().addClass('text-muted');
+        } else if (password.length < 6) {
+            strengthText.text('Lemah').removeClass().addClass('text-danger');
+        } else if (/[A-Z]/.test(password) && /[0-9]/.test(password)) {
+            strengthText.text('Kuat').removeClass().addClass('text-success');
+        } else {
+            strengthText.text('Sedang').removeClass().addClass('text-warning');
+        }
+    });
+});
