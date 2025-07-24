@@ -782,7 +782,7 @@
                         Customer
                      </h6>
                      <p>
-                        Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.
+                        민성이는 매우 개쩌는 사람이었어요 그의 판매력에 저는 티셔트 300만장을 사버렸죠 어머 이제 전 vip?
                      </p>
                   </div>
                </div>
