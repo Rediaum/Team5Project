@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
-public interface CustRepository extends ProjectRepository<Cust, Integer> {
+public interface CustRepository extends ProjectRepository<Cust, String> {
+    // email을 Key로 사용하기 위한 String
 }
