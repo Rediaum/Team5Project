@@ -101,39 +101,44 @@
 <section class="inner_page_head">
    <div class="container mt-5">
       <div class="card p-4">
-         <h3 class="mb-4 font-weight-bold">Daftar Akun Baru</h3>
+         <h3 class="mb-4 font-weight-bold">Register New Account</h3>
 
          <!-- Form Starts -->
          <form>
             <div class="form-group">
-               <label for="firstName">Nama Depan*</label>
-               <input type="text" class="form-control" id="firstName" placeholder="Masukkan nama depan">
+               <label for="firstName">Fist Name*</label>
+               <input type="text" class="form-control" id="firstName" placeholder="Input first name">
             </div>
 
             <div class="form-group">
-               <label for="lastName">Nama Belakang*</label>
-               <input type="text" class="form-control" id="lastName" placeholder="Masukkan nama belakang">
+               <label for="lastName">Last Name*</label>
+               <input type="text" class="form-control" id="lastName" placeholder="Input last name">
             </div>
 
             <div class="form-group">
-               <label for="dob">Tanggal Lahir*</label>
+               <label for="dob">Date of Birth*</label>
                <input type="date" class="form-control" id="dob">
             </div>
 
             <div class="form-group">
                <label for="email">Email*</label>
-               <input type="email" class="form-control" id="email" placeholder="Masukkan email">
+               <input type="email" class="form-control" id="email" placeholder="Input email">
             </div>
 
             <div class="form-group">
-               <label for="password">Kata Sandi*</label>
+               <label for="password">Password*</label>
                <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi" onkeyup="checkStrength(this.value)">
-               <small id="passwordHelp" class="form-text text-muted mt-1">Kekuatan Password: <span id="strengthText">Tidak ada Password</span></small>
+               <small id="passwordHelp" class="form-text text-muted mt-1">Password Strength: <span id="strengthText">No Password</span></small>
             </div>
 
             <div class="form-group">
-               <label for="confirmPassword">Konfirmasi Password*</label>
-               <input type="password" class="form-control" id="confirmPassword" placeholder="Konfirmasi Password">
+               <label for="confirmPassword">Confirm Password*</label>
+               <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+            </div>
+
+            <div class="form-group">
+               <label for="email">Phone Number*</label>
+               <input type="email" class="form-control" id="email" placeholder="Input phone number">
             </div>
             <%-- Form ends --%>
 
