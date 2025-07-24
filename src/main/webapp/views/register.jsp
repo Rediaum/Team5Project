@@ -107,7 +107,7 @@
 <section class="inner_page_head">
    <div class="container mt-5">
       <div class="card p-4">
-         <h3 class="mb-4 font-weight-bold text-dark">Register New Account</h3>
+         <h3 class="mb-4 font-weight-bold text-dark">Register New Account da</h3>
 
          <!-- Form Starts -->
          <form action="/registerimpl" method="Post">
