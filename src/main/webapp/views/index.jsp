@@ -56,7 +56,7 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/blog">Blog</a>
+                     <a class="nav-link" href="${pageContext.request.contextPath}/blog_list">Blog</a>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
@@ -874,7 +874,7 @@
                               <li><a href="${pageContext.request.contextPath}/about">About</a></li>
                               <li><a href="#">Services</a></li>
                               <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                              <li><a href="${pageContext.request.contextPath}/blog">Blog</a></li>
+                              <li><a href="${pageContext.request.contextPath}/blog_list">Blog</a></li>
                               <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
                            </ul>
                         </div>
