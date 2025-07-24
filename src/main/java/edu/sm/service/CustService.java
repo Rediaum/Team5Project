@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustService implements ProjectService<Cust, Integer> {
+public class CustService implements ProjectService<Cust, String> {
 
     final CustRepository custRepository;
 
@@ -25,17 +25,17 @@ public class CustService implements ProjectService<Cust, Integer> {
     }
 
     @Override
-    public void remove(Integer i) throws Exception {
-        custRepository.delete(i);
+    public void remove(String email) throws Exception {
+        custRepository.delete(email);
     }
 
     @Override
     public List<Cust> get() throws Exception {
-        return custRepository.selectAll();
+        return null;
     }
 
     @Override
-    public Cust get(Integer i) throws Exception {
-        return custRepository.select(i);
+    public Cust get(String email) throws Exception {
+        return custRepository.select(email);
     }
 }
