@@ -52,13 +52,13 @@ $(document).ready(function () {
         var strengthText = $('#strengthText');
 
         if (!password) {
-            strengthText.text('Tidak ada Password').removeClass().addClass('text-muted');
+            strengthText.text('Password 없음').removeClass().addClass('text-muted');
         } else if (password.length < 6) {
-            strengthText.text('Lemah').removeClass().addClass('text-danger');
+            strengthText.text('Weak').removeClass().addClass('text-danger');
         } else if (/[A-Z]/.test(password) && /[0-9]/.test(password)) {
-            strengthText.text('Kuat').removeClass().addClass('text-success');
+            strengthText.text('Strong').removeClass().addClass('text-success');
         } else {
-            strengthText.text('Sedang').removeClass().addClass('text-warning');
+            strengthText.text('Medium').removeClass().addClass('text-warning');
         }
     });
 });
