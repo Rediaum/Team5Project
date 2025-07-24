@@ -53,11 +53,17 @@
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
-                  <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/blog">Blog</a>
-                  </li>
                   <li class="nav-item active">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
+                  </li>
+                  <!-- Login/Register Dropdown -->
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="true"><span class="nav-label">Account <span class="caret"></span></span></a>
+                     <ul class="dropdown-menu">
+                        <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
+                        <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
+                     </ul>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">
@@ -101,44 +107,34 @@
 <section class="inner_page_head">
    <div class="container mt-5">
       <div class="card p-4">
-         <h3 class="mb-4 font-weight-bold">Register New Account</h3>
+         <h3 class="mb-4 font-weight-bold text-dark">Register New Account</h3>
 
          <!-- Form Starts -->
-         <form>
+         <form action="/registerimpl" method="Post">
             <div class="form-group">
-               <label for="firstName">Fist Name*</label>
-               <input type="text" class="form-control" id="firstName" placeholder="Input first name">
+               <label for="custName">Name*</label>
+               <input type="text" class="form-control" id="custName" placeholder="Input name">
             </div>
 
             <div class="form-group">
-               <label for="lastName">Last Name*</label>
-               <input type="text" class="form-control" id="lastName" placeholder="Input last name">
+               <label for="custEmail">Email*</label>
+               <input type="email" class="form-control" id="custEmail" placeholder="Input email">
             </div>
 
             <div class="form-group">
-               <label for="dob">Date of Birth*</label>
-               <input type="date" class="form-control" id="dob">
-            </div>
-
-            <div class="form-group">
-               <label for="email">Email*</label>
-               <input type="email" class="form-control" id="email" placeholder="Input email">
-            </div>
-
-            <div class="form-group">
-               <label for="password">Password*</label>
-               <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi" onkeyup="checkStrength(this.value)">
+               <label for="custPwd">Password*</label>
+               <input type="password" class="form-control" id="custPwd" name="custPwd" placeholder="Input password">
                <small id="passwordHelp" class="form-text text-muted mt-1">Password Strength: <span id="strengthText">No Password</span></small>
             </div>
 
             <div class="form-group">
-               <label for="confirmPassword">Confirm Password*</label>
-               <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+               <label for="confirmCustPwd">Confirm Password*</label>
+               <input type="password" class="form-control" id="confirmCustPwd" name="confirmCustPwd" placeholder="Confirm Password">
             </div>
 
             <div class="form-group">
-               <label for="email">Phone Number*</label>
-               <input type="email" class="form-control" id="email" placeholder="Input phone number">
+               <label for="custPhone">Phone Number*</label>
+               <input type="tel" class="form-control" id="custPhone" placeholder="Input phone number">
             </div>
             <%-- Form ends --%>
 

@@ -1,3 +1,5 @@
+console.log('Custom.js loaded');
+
 // to get current year
 function getYear() {
     var currentDate = new Date();
@@ -7,6 +9,46 @@ function getYear() {
 
 getYear();
 
+// register section Password Strength JS
+$(document).ready(function () {
+    // Password Strength
+    $('#custPwd').on('keyup', function () {
+        const password = $(this).val();
+        const strengthText = $('#strengthText');
+
+        if (!password) {
+            strengthText.text('Password 없음').removeClass().addClass('text-muted');
+        } else if (password.length < 6) {
+            strengthText.text('Weak').removeClass().addClass('text-danger');
+        } else if (/[A-Z]/.test(password) && /[0-9]/.test(password)) {
+            strengthText.text('Strong').removeClass().addClass('text-success');
+        } else {
+            strengthText.text('Medium').removeClass().addClass('text-warning');
+        }
+    });
+
+    // Password Match Validation
+    $('#confirmCustPwd, #custPwd').on('keyup', function () {
+        const password = $('#custPwd').val();
+        const confirm = $('#confirmCustPwd').val();
+        const message = $('#matchMessage');
+        const btn = $('#registerBtn');
+
+        if (!confirm) {
+            message.text('').removeClass();
+            btn.prop('disabled', true);
+            return;
+        }
+
+        if (password === confirm) {
+            message.text('Password matched').removeClass().addClass('text-success');
+            btn.prop('disabled', false);
+        } else {
+            message.text('Password does not match').removeClass().addClass('text-danger');
+            btn.prop('disabled', true);
+        }
+    });
+});
 
 // client section owl carousel
 $(".client_owl-carousel").owlCarousel({
@@ -45,20 +87,3 @@ function myMap() {
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 }
 
-// register section Password Strength JS
-$(document).ready(function () {
-    $('#password').on('keyup', function () {
-        var password = $(this).val();
-        var strengthText = $('#strengthText');
-
-        if (!password) {
-            strengthText.text('Password 없음').removeClass().addClass('text-muted');
-        } else if (password.length < 6) {
-            strengthText.text('Weak').removeClass().addClass('text-danger');
-        } else if (/[A-Z]/.test(password) && /[0-9]/.test(password)) {
-            strengthText.text('Strong').removeClass().addClass('text-success');
-        } else {
-            strengthText.text('Medium').removeClass().addClass('text-warning');
-        }
-    });
-});
