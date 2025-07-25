@@ -5,7 +5,7 @@
 ### 🕺구성원
 1. Rediaum          <https://github.com/Rediaum>
 
-2. jhs0106        <https://github.com/jhs0106>
+2. jhs0106        <https://github.com/jhs0106> // Readme 수정 후 작성자
 
 3. vieri          <https://github.com/vieri4643>
 
@@ -13,8 +13,9 @@
 
 
 
-### 🌑
+### 🗂️
+<img width="1540" height="1202" alt="Image" src="https://github.com/user-attachments/assets/a18d3ae7-ecd3-47b6-ba94-ff39ae808a51" />
 
 
 
-### 🌒
+### 
