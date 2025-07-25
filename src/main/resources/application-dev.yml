@@ -14,11 +14,18 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/projectdb?characterEncoding=utf8
     username: smuser
     password: 111111
+
 mybatis:
   type-aliases-package: edu.sm.dto
   mapper-locations: classpath:/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
 logging:
   level:
     root: info
+
+app:
+  dir:
+    imgsdir : file:///C:/java/Team5Project/imgs
+    uploadimgsdir : C:/java/Team5Project/imgs
