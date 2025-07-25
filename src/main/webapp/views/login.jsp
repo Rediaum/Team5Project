@@ -103,8 +103,8 @@
    </header>
    <!-- end header section -->
 </div>
-<!-- register page section -->
-<section class="register_page">
+<!-- Login page section -->
+<section class="login_page">
    <div class="container mt-5">
       <div class="card p-4 mx-auto col-md-6">
          <h3 class="mb-4 font-weight-bold text-dark text-lg-center">Register New Account</h3>
