@@ -36,18 +36,6 @@ public class connectTestController {
     }
 
     /**
-     * Products 페이지
-     */
-    @GetMapping("/product")
-    public String product(Model model) {
-        model.addAttribute("pageTitle", "Our Products");
-        // 추후 상품 목록 데이터를 여기서 추가
-        // List<Product> products = productService.getAllProducts();
-        // model.addAttribute("products", products);
-        return "product"; // product.jsp로 이동
-    }
-
-    /**
      * Blog 페이지
      */
     @GetMapping("/blog_list")
