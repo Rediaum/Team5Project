@@ -16,4 +16,7 @@
 ### 🗂️ ERD
 <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
 
-### 
+### 🗂️ DDL
+https://www.notion.so/erd-ddl-238fe5d709bc80bd90dcfe2b4614ebf0?source=copy_link
+### 🗂️ DML
+https://www.notion.so/DML-239fe5d709bc80ab8bc7f5d57af3c7e4?source=copy_link  -- 샘플 DML
