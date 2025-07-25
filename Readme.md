@@ -9,7 +9,7 @@
 
 3. vieri          <https://github.com/vieri4643>
 
-4. kimhyerim0000  <https://github.com/kimhyerim0000> // 원본 작성자
+4. kimhyerim0000  <https://github.com/kimhyerim0000> // Readme 원본 작성자
 
 
 
