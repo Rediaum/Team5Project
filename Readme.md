@@ -14,6 +14,6 @@
 
 
 ### 🗂️ ERD
-<img width="1540" height="1202" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
+<img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
 
 ### 
