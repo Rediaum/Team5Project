@@ -3,7 +3,6 @@ package edu.sm.controller;
 import edu.sm.dto.Cust;
 import edu.sm.service.CustService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,17 +23,8 @@ public class AccountController {
     }
 
     @RequestMapping("/registerimpl")
-    public String registerimpl(Model model, Cust cust, HttpSession session, HttpServletRequest request) throws Exception {
-        // Cek request method, proses hanya jika POST
-        if (!"POST".equalsIgnoreCase(request.getMethod())) {
-            // Jika bukan POST, redirect ke halaman register (menghindari double input / error)
-            return "redirect:/register";
-        }
-        // Cek data wajib, mencegah null pointer dan double input tanpa data
-        if (cust == null || cust.getCustName() == null || cust.getCustEmail() == null || cust.getCustPwd() == null) {
-            model.addAttribute("error", "Required fields are missing.");
-            return "register";
-        }
+    public String registerimpl(Model model, Cust cust, HttpSession session) throws Exception {
+
         log.info("Registering user: password={}, name={}, email={}, phone={}",
                 cust.getCustPwd(), cust.getCustName(), cust.getCustEmail(), cust.getCustPhone());
         try {
