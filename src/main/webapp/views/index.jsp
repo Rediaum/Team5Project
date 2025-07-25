@@ -874,7 +874,7 @@
                               <li><a href="${pageContext.request.contextPath}/about">About</a></li>
                               <li><a href="#">Services</a></li>
                               <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                              <li><a href="${pageContext.request.contextPath}/blog">Blog</a></li>
+                              <li><a href="${pageContext.request.contextPath}/blog_list">Blog</a></li>
                               <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
                            </ul>
                         </div>
