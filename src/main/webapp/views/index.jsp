@@ -45,8 +45,7 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/">Home <span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"
-                        aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Pages <span class="caret"></span></span></a>
+                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Pages <span class="caret"></span></a>
                      <ul class="dropdown-menu">
                         <%-- 컨트롤러에서 "/about", "/testimonial" 등으로 매핑될 경로로 수정 --%>
                         <li><a href="${pageContext.request.contextPath}/about">About</a></li>
@@ -57,16 +56,10 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
+                     <a class="nav-link" href="${pageContext.request.contextPath}/blog_list">Blog</a>
                   </li>
-                  <!-- Login/Register Dropdown -->
-                  <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button"
-                        aria-haspopup="true" aria-expanded="true"><span class="nav-label">Account <span class="caret"></span></span></a>
-                     <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
-                        <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
-                     </ul>
+                  <li class="nav-item">
+                     <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
                   <li class="nav-item">
                      <%-- 장바구니 페이지로 이동하는 링크로 수정 가능 --%>
@@ -881,7 +874,7 @@
                               <li><a href="${pageContext.request.contextPath}/about">About</a></li>
                               <li><a href="#">Services</a></li>
                               <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                              <li><a href="${pageContext.request.contextPath}/blog">Blog</a></li>
+                              <li><a href="${pageContext.request.contextPath}/blog_list">Blog</a></li>
                               <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
                            </ul>
                         </div>

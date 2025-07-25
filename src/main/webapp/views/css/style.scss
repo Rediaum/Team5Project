@@ -31,10 +31,7 @@ $textCol: #1f1f1f;
   }
 }
 
-@mixin upperBold {
-  text-transform: uppercase;
-  font-weight: bold;
-}
+
 
 body {
   @include main-font;
@@ -162,7 +159,7 @@ a:focus {
         padding: 5px 20px;
         color: $black;
         text-align: center;
-        text-transform: uppercase;
+
         border-radius: 5px;
         transition: all 0.3s;
 
@@ -586,7 +583,6 @@ a:focus {
 
       button {
         @include hero_btn($primary1, $white, 10px, 45px, 35px);
-        text-transform: uppercase;
         margin-top: 35px;
         font-weight: 600;
         width: 100%;
