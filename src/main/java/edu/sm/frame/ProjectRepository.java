@@ -1,7 +1,5 @@
 package edu.sm.frame;
 
-import edu.sm.dto.Cust;
-
 import java.util.List;
 
 public interface ProjectRepository<V, K> {

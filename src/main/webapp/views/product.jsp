@@ -5,12 +5,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <!-- Basic -->
    <meta charset="utf-8" />
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-   <!-- Mobile Metas -->
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-   <!-- Site Metas -->
    <meta name="keywords" content="" />
    <meta name="description" content="" />
    <meta name="author" content="" />
@@ -18,18 +15,13 @@
    <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 수정 --%>
    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
    <title>Famms - Fashion HTML Template</title>
-   <!-- bootstrap core css -->
    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
-   <!-- font awesome style -->
    <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
-   <!-- Custom styles for this template -->
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
-   <!-- responsive style -->
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 </head>
 <body class="sub_page">
 <div class="hero_area">
-   <!-- header section strats -->
    <header class="header_section">
       <div class="container">
          <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -61,7 +53,8 @@
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">
-                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;"
+                             xml:space="preserve">
                                  <g>
                                     <g>
                                        <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
@@ -95,9 +88,7 @@
          </nav>
       </div>
    </header>
-   <!-- end header section -->
 </div>
-<!-- inner page section -->
 <section class="inner_page_head">
    <div class="container_fuild">
       <div class="row">
@@ -109,8 +100,6 @@
       </div>
    </div>
 </section>
-<!-- end inner page section -->
-<!-- product section -->
 <section class="product_section layout_padding">
    <div class="container">
       <div class="heading_container heading_center">
@@ -120,21 +109,24 @@
       </div>
       <div class="row">
          <%-- 4. 동적 데이터 처리 예시 --%>
-         <%-- 이 부분은 나중에 DB에서 상품 목록(productList)을 가져와 JSTL로 반복 처리해야 합니다. --%>
+         <%-- 이 부분은 DB에서 상품 목록(productList)을 가져와 JSTL로 반복 처리합니다. --%>
          <c:forEach var="product" items="${productList}">
             <div class="col-sm-6 col-md-4 col-lg-3">
                <div class="box">
                   <div class="option_container">
                      <div class="options">
+                           <%-- 상품 상세 페이지 링크 (productId 사용) --%>
                         <a href="${pageContext.request.contextPath}/product/${product.productId}" class="option1">
                               ${product.productName}
                         </a>
+                           <%-- 장바구니 추가 링크 (productId 사용) --%>
                         <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
                            Buy Now
                         </a>
                      </div>
                   </div>
                   <div class="img-box">
+                        <%-- 이미지 경로: ${pageContext.request.contextPath}/views/images/상품이미지파일명 --%>
                      <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
                   </div>
                   <div class="detail-box">
@@ -149,33 +141,7 @@
             </div>
          </c:forEach>
 
-         <%-- 아래는 JSTL을 사용하지 않을 경우를 대비한 정적 HTML 예시입니다. --%>
-         <%-- 실제 개발 시에는 위의 <c:forEach> 블록을 사용하고 아래는 삭제합니다. --%>
-         <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="box">
-               <div class="option_container">
-                  <div class="options">
-                     <a href="" class="option1">
-                        Men's Shirt
-                     </a>
-                     <a href="" class="option2">
-                        Buy Now
-                     </a>
-                  </div>
-               </div>
-               <div class="img-box">
-                  <img src="${pageContext.request.contextPath}/views/images/p1.png" alt="">
-               </div>
-               <div class="detail-box">
-                  <h5>
-                     Men's Shirt
-                  </h5>
-                  <h6>
-                     $75
-                  </h6>
-               </div>
-            </div>
-         </div>
+
          <%-- ... 나머지 정적 상품들도 동일하게 경로 수정 ... --%>
       </div>
       <div class="btn-box">
@@ -185,8 +151,6 @@
       </div>
    </div>
 </section>
-<!-- end product section -->
-<!-- footer section -->
 <footer class="footer_section">
    <div class="container">
       <div class="row">
@@ -264,14 +228,9 @@
       </div>
    </div>
 </footer>
-<!-- footer section -->
-<!-- jQery -->
 <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
-<!-- popper js -->
 <script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
-<!-- bootstrap js -->
 <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-<!-- custom js -->
 <script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 </body>
 </html>
