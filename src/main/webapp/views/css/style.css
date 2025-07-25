@@ -152,7 +152,7 @@ a:focus {
     padding: 5px 20px;
     color: #131313;
     text-align: center;
-    text-transform: uppercase;
+
     border-radius: 5px;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
@@ -665,7 +665,7 @@ a:focus {
   border-radius: 35px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
-  text-transform: uppercase;
+
   margin-top: 35px;
   font-weight: 600;
   width: 100%;
@@ -992,7 +992,7 @@ footer {
 .widget_menu h3 {
     font-size: 18px;
     font-weight: 700;
-    text-transform: uppercase;
+
     letter-spacing: 0.2px;
     margin-bottom: 25px;
 }
@@ -1061,7 +1061,7 @@ form input {
     width: 100%;
     font-size: 14px;
     margin-bottom: 20px;
-    text-transform: capitalize;
+
     line-height: normal;
 }
 
@@ -1073,7 +1073,7 @@ form textarea {
     min-height: 150px;
     font-size: 14px;
     margin-bottom: 20px;
-    text-transform: capitalize;
+
     line-height: normal;
 }
 
@@ -1082,7 +1082,7 @@ form input[type="submit"] {
     padding: 15px 45px;
     width: auto;
     font-size: 16px;
-    text-transform: capitalize;
+
     line-height: normal;
     margin: 0 auto;
     display: flex;
