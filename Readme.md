@@ -13,9 +13,7 @@
 
 
 
-### 🗂️
-<img width="1540" height="1202" alt="Image" src="https://github.com/user-attachments/assets/a18d3ae7-ecd3-47b6-ba94-ff39ae808a51" />
-
-
+### 🗂️ ERD
+<img width="1540" height="1202" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
 
 ### 
