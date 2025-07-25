@@ -104,41 +104,42 @@
    <!-- end header section -->
 </div>
 <!-- register page section -->
-<section class="inner_page_head">
+<section class="register_page">
    <div class="container mt-5">
-      <div class="card p-4">
-         <h3 class="mb-4 font-weight-bold text-dark">Register New Account da</h3>
+      <div class="card p-4 mx-auto" style="max-width: 600px; width: 100%;>
+         <h3 class="mb-4 font-weight-bold text-dark text-lg-center">Register New Account</h3>
 
          <!-- Form Starts -->
-         <form action="/registerimpl" method="Post">
+         <form action="/registerimpl" method="Post" id="registerForm">
             <div class="form-group">
                <label for="custName">Name*</label>
-               <input type="text" class="form-control" id="custName" placeholder="Input name">
+               <input type="text" class="form-control" id="custName" name="custName" placeholder="Input name" required>
             </div>
 
             <div class="form-group">
                <label for="custEmail">Email*</label>
-               <input type="email" class="form-control" id="custEmail" placeholder="Input email">
+               <input type="email" class="form-control" id="custEmail" name="custEmail" placeholder="Input email" required>
             </div>
 
             <div class="form-group">
                <label for="custPwd">Password*</label>
-               <input type="password" class="form-control" id="custPwd" name="custPwd" placeholder="Input password">
-               <small id="passwordHelp" class="form-text text-muted mt-1">Password Strength: <span id="strengthText">No Password</span></small>
+               <input type="password" class="form-control" id="custPwd" name="custPwd" placeholder="Input password" required>
+               <span id="strengthText"></span>
             </div>
 
             <div class="form-group">
                <label for="confirmCustPwd">Confirm Password*</label>
-               <input type="password" class="form-control" id="confirmCustPwd" name="confirmCustPwd" placeholder="Confirm Password">
+               <input type="password" class="form-control" id="confirmCustPwd" name="confirmCustPwd" placeholder="Confirm Password" required>
+               <span id="matchMessage"></span>
             </div>
 
             <div class="form-group">
                <label for="custPhone">Phone Number*</label>
-               <input type="tel" class="form-control" id="custPhone" placeholder="Input phone number">
+               <input type="tel" class="form-control" id="custPhone" name="custPhone" placeholder="Input phone number" required>
             </div>
             <%-- Form ends --%>
 
-            <button type="submit" class="btn btn-primary btn-block mt-4">Register</button>
+            <button type="button" class="btn btn-dark btn-block mt-4" id="registerBtn">Register</button>
          </form>
       </div>
    </div>

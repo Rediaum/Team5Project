@@ -3,13 +3,12 @@ package edu.sm.controller;
 import edu.sm.dto.Cust;
 import edu.sm.service.CustService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 @Slf4j
@@ -25,31 +24,29 @@ public class AccountController {
     }
 
     @RequestMapping("/registerimpl")
-    public String registerimpl(Model model, Cust cust, HttpSession session, @RequestParam("confirmCustPwd") String confirmCustPwd) throws Exception {
-
-        log.info("Registering user: password={}, name={}, email={}, phone={}", cust.getCustPwd(), cust.getCustName(), cust.getCustEmail(), cust.getCustPhone());
-
-        // Check if password and confirm password match
-        if (!cust.getCustPwd().equals(confirmCustPwd)) {
-            model.addAttribute("error", "Password and confirmation do not match.");
-            return "register"; // Return to register page if mismatch
+    public String registerimpl(Model model, Cust cust, HttpSession session, HttpServletRequest request) throws Exception {
+        // Cek request method, proses hanya jika POST
+        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+            // Jika bukan POST, redirect ke halaman register (menghindari double input / error)
+            return "redirect:/register";
         }
-
+        // Cek data wajib, mencegah null pointer dan double input tanpa data
+        if (cust == null || cust.getCustName() == null || cust.getCustEmail() == null || cust.getCustPwd() == null) {
+            model.addAttribute("error", "Required fields are missing.");
+            return "register";
+        }
+        log.info("Registering user: password={}, name={}, email={}, phone={}",
+                cust.getCustPwd(), cust.getCustName(), cust.getCustEmail(), cust.getCustPhone());
         try {
-            // Register user data into the database
+            // Save user data into the database
             custService.register(cust);
-
-            // Save the registered user in session
+            // Store the registered user in the session
             session.setAttribute("logincust", cust);
         } catch (Exception e) {
-            // If an error occurs (e.g., duplicate email), return to register page
             model.addAttribute("error", "Registration failed. Please try again.");
             return "register";
         }
-
-        // Redirect to the main page after successful registration
+        // Redirect to the home page after successful registration
         return "redirect:/";
     }
-
-
 }

@@ -13,7 +13,6 @@ public class Cust {
     private int custId;
     private String custEmail;
     private String custPwd;
-    private String custConfirmPwd;
     private String custName;
     private String custPhone;
     private Timestamp custRegdate;
