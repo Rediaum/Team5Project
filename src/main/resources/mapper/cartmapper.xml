@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.repository.CartRepository">
+
+    <select id="findByCustId" parameterType="String" resultType="Cart">
+        SELECT
+            c.cart_id, c.cust_id, c.product_id, c.product_qt,
+            p.product_name, p.product_price, p.product_img
+        FROM Cart c
+                 JOIN Product p ON c.product_id = p.product_id
+        WHERE c.cust_id = #{custId}
+    </select>
+
+    <insert id="insert" parameterType="Cart">
+        INSERT INTO Cart (cust_id, product_id, product_qt, cart_regdate)
+        VALUES (#{cust_id}, #{product_id}, #{product_qt}, NOW())
+            ON DUPLICATE KEY UPDATE product_qt = product_qt + VALUES(product_qt)
+    </insert>
+
+    <update id="update" parameterType="Cart">
+        UPDATE Cart SET product_qt = #{product_qt} WHERE cart_id = #{cart_id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM Cart WHERE cart_id = #{cart_id}
+    </delete>
+
+</mapper>
