@@ -61,6 +61,12 @@
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
+
+                  <%-- ✅ 회원가입 링크 추가 --%>
+                  <li class="nav-item">
+                     <a class="nav-link" href="${pageContext.request.contextPath}/register" style="color: #f7444e; font-weight: bold;">Register</a>
+                  </li>
+
                   <li class="nav-item">
                      <%-- 장바구니 페이지로 이동하는 링크로 수정 가능 --%>
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">
@@ -125,6 +131,10 @@
                               <a href="${pageContext.request.contextPath}/product" class="btn1">
                                  Shop Now
                               </a>
+                              <%-- ✅ 회원가입 버튼 추가 --%>
+                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
+                                 Join Now
+                              </a>
                            </div>
                         </div>
                      </div>
@@ -149,6 +159,10 @@
                            <div class="btn-box">
                               <a href="${pageContext.request.contextPath}/product" class="btn1">
                                  Shop Now
+                              </a>
+                              <%-- ✅ 회원가입 버튼 추가 --%>
+                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
+                                 Join Now
                               </a>
                            </div>
                         </div>
@@ -175,6 +189,10 @@
                               <a href="${pageContext.request.contextPath}/product" class="btn1">
                                  Shop Now
                               </a>
+                              <%-- ✅ 회원가입 버튼 추가 --%>
+                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
+                                 Join Now
+                              </a>
                            </div>
                         </div>
                      </div>
@@ -193,6 +211,31 @@
    </section>
    <!-- end slider section -->
 </div>
+
+<!-- ✅ 메시지 표시 영역 -->
+<c:if test="${not empty success}">
+   <div class="container">
+      <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin: 20px 0;">
+         <strong>성공!</strong> ${success}
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+   </div>
+</c:if>
+
+<c:if test="${not empty error}">
+   <div class="container">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 20px 0;">
+         <strong>오류!</strong> ${error}
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+   </div>
+</c:if>
+<!-- 메시지 표시 영역 끝 -->
+
 <!-- why section -->
 <section class="why_section layout_padding">
    <div class="container">
@@ -886,7 +929,8 @@
                               <li><a href="#">Account</a></li>
                               <li><a href="#">Checkout</a></li>
                               <li><a href="#">Login</a></li>
-                              <li><a href="#">Register</a></li>
+                              <%-- ✅ 푸터에도 회원가입 링크 추가 --%>
+                              <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
                               <li><a href="#">Shopping</a></li>
                               <li><a href="#">Widget</a></li>
                            </ul>

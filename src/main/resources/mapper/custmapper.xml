@@ -33,4 +33,9 @@
         DELETE FROM cust WHERE cust_id=#{custId}
     </delete>
 
+    <!-- ✅ Admin 테이블에서 이메일 존재 여부 확인 (단순 쿼리) -->
+    <select id="checkAdminEmailExists" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM admin WHERE admin_email=#{email}
+    </select>
+
 </mapper>

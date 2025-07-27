@@ -18,7 +18,7 @@ public class ProductController {
 
     final ProductService productService;
 
-    // String dir = "product/";  <-- 이 줄을 삭제하거나 주석 처리하세요.
+//     String dir = "product/";  <-- 이 줄을 삭제하거나 주석 처리하세요.
 
     @RequestMapping("")
     public String product(Model model) throws Exception{

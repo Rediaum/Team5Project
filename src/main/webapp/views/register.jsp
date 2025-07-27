@@ -1,0 +1,341 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
+    <title>${pageTitle}</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
+    <!-- font awesome style -->
+    <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
+
+    <style>
+        .register-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            height: 45px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 0 15px;
+        }
+        .btn-register {
+            background: #f7444e;
+            color: white;
+            border: none;
+            height: 45px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-register:hover {
+            background: #d63031;
+            color: white;
+        }
+        .btn-check {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            height: 45px;
+        }
+        .btn-check:hover {
+            background: #0984e3;
+            color: white;
+        }
+        .check-result {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .check-success {
+            color: #00b894;
+        }
+        .check-error {
+            color: #e17055;
+        }
+        .alert {
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .input-group-append .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+</head>
+
+<body class="sub_page">
+<div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg custom_nav-container ">
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/">
+                    <img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class=""> </span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- end header section -->
+</div>
+
+<!-- register section -->
+<section class="register_section layout_padding">
+    <div class="container">
+        <div class="register-container">
+            <div class="heading_container heading_center">
+                <h2>회원가입</h2>
+            </div>
+
+            <!-- 오류 메시지 표시 -->
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger" role="alert">
+                        ${error}
+                </div>
+            </c:if>
+
+            <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
+                <!-- 이메일 -->
+                <div class="form-group">
+                    <label for="custEmail">이메일 *</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="custEmail" name="custEmail"
+                               value="${cust.custEmail}" required placeholder="example@email.com">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-check" onclick="checkEmailDuplicate()">중복확인</button>
+                        </div>
+                    </div>
+                    <div id="emailCheckResult" class="check-result"></div>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="form-group">
+                    <label for="custPwd">비밀번호 *</label>
+                    <input type="password" class="form-control" id="custPwd" name="custPwd"
+                           required placeholder="비밀번호를 입력하세요">
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div class="form-group">
+                    <label for="pwdConfirm">비밀번호 확인 *</label>
+                    <input type="password" class="form-control" id="pwdConfirm" name="pwdConfirm"
+                           required placeholder="비밀번호를 다시 입력하세요">
+                    <div id="pwdCheckResult" class="check-result"></div>
+                </div>
+
+                <!-- 이름 -->
+                <div class="form-group">
+                    <label for="custName">이름 *</label>
+                    <input type="text" class="form-control" id="custName" name="custName"
+                           value="${cust.custName}" required placeholder="이름을 입력하세요">
+                </div>
+
+                <!-- 전화번호 -->
+                <div class="form-group">
+                    <label for="custPhone">전화번호</label>
+                    <input type="tel" class="form-control" id="custPhone" name="custPhone"
+                           value="${cust.custPhone}" placeholder="010-1234-5678">
+                </div>
+
+                <!-- 제출 버튼 -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-register btn-lg btn-block">회원가입</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- end register section -->
+
+<!-- footer section -->
+<footer class="footer_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 footer-col">
+                <div class="footer_contact">
+                    <h4>Reach at..</h4>
+                    <div class="contact_link_box">
+                        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
+                        <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call +01 1234567890</span></a>
+                        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>demo@gmail.com</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 footer-col">
+                <div class="footer_detail">
+                    <a href="${pageContext.request.contextPath}/" class="footer-logo">Famms</a>
+                    <p>Necessary, making this the first true generator on the Internet.</p>
+                </div>
+            </div>
+            <div class="col-md-4 footer-col">
+                <h4>Subscribe</h4>
+                <form action="">
+                    <input type="text" placeholder="Enter email" />
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-info">
+            <p>&copy; <span id="displayYear"></span> All Rights Reserved By
+                <a href="https://html.design/">Free Html Templates</a><br><br>
+                &copy; <span id="displayYear2"></span> Distributed By
+                <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+            </p>
+        </div>
+    </div>
+</footer>
+<!-- footer section -->
+
+<!-- jQery -->
+<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
+<!-- custom js -->
+<script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
+
+<script>
+    let emailChecked = false;
+
+    // 이메일 중복 검사
+    function checkEmailDuplicate() {
+        const custEmail = document.getElementById('custEmail').value;
+        const resultDiv = document.getElementById('emailCheckResult');
+
+        if (!custEmail.trim()) {
+            resultDiv.innerHTML = '<span class="check-error">이메일을 입력하세요.</span>';
+            return;
+        }
+
+        // 이메일 형식 검사
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(custEmail)) {
+            resultDiv.innerHTML = '<span class="check-error">올바른 이메일 형식이 아닙니다.</span>';
+            return;
+        }
+
+        // AJAX 요청
+        fetch('${pageContext.request.contextPath}/register/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'email=' + encodeURIComponent(custEmail)
+        })
+            .then(response => response.json())
+            .then(available => {
+                if (available) {
+                    resultDiv.innerHTML = '<span class="check-success">사용 가능한 이메일입니다.</span>';
+                    emailChecked = true;
+                } else {
+                    resultDiv.innerHTML = '<span class="check-error">이미 사용중인 이메일입니다.</span>';
+                    emailChecked = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = '<span class="check-error">오류가 발생했습니다. 다시 시도해주세요.</span>';
+                emailChecked = false;
+            });
+    }
+
+    // 비밀번호 확인 검사
+    document.getElementById('pwdConfirm').addEventListener('input', function() {
+        const pwd = document.getElementById('custPwd').value;
+        const pwdConfirm = this.value;
+        const resultDiv = document.getElementById('pwdCheckResult');
+
+        if (pwdConfirm && pwd !== pwdConfirm) {
+            resultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>';
+        } else if (pwdConfirm && pwd === pwdConfirm) {
+            resultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>';
+        } else {
+            resultDiv.innerHTML = '';
+        }
+    });
+
+    // 이메일 입력값이 변경되면 중복 검사 상태 초기화
+    document.getElementById('custEmail').addEventListener('input', function() {
+        emailChecked = false;
+        document.getElementById('emailCheckResult').innerHTML = '';
+    });
+
+    // 폼 제출 시 유효성 검사
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const pwd = document.getElementById('custPwd').value;
+        const pwdConfirm = document.getElementById('pwdConfirm').value;
+        const custName = document.getElementById('custName').value;
+        const custEmail = document.getElementById('custEmail').value;
+
+        // 필수 필드 검사
+        if (!custEmail.trim()) {
+            alert('이메일을 입력하세요.');
+            e.preventDefault();
+            return;
+        }
+
+        if (!custName.trim()) {
+            alert('이름을 입력하세요.');
+            e.preventDefault();
+            return;
+        }
+
+        if (!pwd.trim()) {
+            alert('비밀번호를 입력하세요.');
+            e.preventDefault();
+            return;
+        }
+
+        if (!emailChecked) {
+            alert('이메일 중복 확인을 해주세요.');
+            e.preventDefault();
+            return;
+        }
+
+        if (pwd !== pwdConfirm) {
+            alert('비밀번호가 일치하지 않습니다.');
+            e.preventDefault();
+            return;
+        }
+    });
+</script>
+</body>
+</html>
