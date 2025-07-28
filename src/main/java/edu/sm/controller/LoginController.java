@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @RequiredArgsConstructor
 public class LoginController {
-//1
+
     private final CustService custService;
 
     /**
@@ -23,10 +23,8 @@ public class LoginController {
      */
     @RequestMapping("/login")
     public String login(Model model) {
-        model.addAttribute("center", "login");
-        return "index";
+        return "login";  // 직접 login.jsp 반환
     }
-
     /**
      * 로그인 처리
      */
