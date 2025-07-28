@@ -1,5 +1,6 @@
 package edu.sm.frame;
 
+import edu.sm.dto.Product;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

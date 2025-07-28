@@ -38,4 +38,9 @@ public class ProductService implements ProjectService<Product, Integer> {
     public Product get(Integer i) throws Exception {
         return productRepository.select(i);
     }
+
+    // ProductService에만 있는 추가 메소드
+    public List<Product> getRecentProducts(int limit) throws Exception {
+        return productRepository.getRecentProducts(limit);
+    }
 }
