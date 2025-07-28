@@ -52,6 +52,35 @@
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                           <circle cx="12" cy="7" r="4"/>
+                           <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                        </svg>
+                     </a>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust == null}">
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
+                                 <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+                              </a>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
+                                 <i class="fa fa-user-plus" aria-hidden="true"></i> Register
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                                 <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                              </a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                                 <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
+                     </div>
+                  </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">
                         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;"
