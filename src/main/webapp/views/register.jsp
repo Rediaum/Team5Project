@@ -236,12 +236,6 @@
                     return;
                 }
 
-                if (!phoneChecked) {
-                    alert('전화번호 중복 확인을 해주세요.');
-                    e.preventDefault();
-                    return;
-                }
-
                 if (pwd !== pwdConfirm) {
                     alert('비밀번호가 일치하지 않습니다.');
                     e.preventDefault();
@@ -372,9 +366,6 @@
                     <div class="input-group">
                         <input type="tel" class="form-control" id="custPhone" name="custPhone"
                                value="${cust.custPhone}" placeholder="010-1234-5678">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-check" onclick="checkPhoneDuplicate()">중복확인</button>
-                        </div>
                     </div>
                     <div id="phoneCheckResult" class="check-result"></div>
                 </div>
