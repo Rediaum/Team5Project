@@ -5,10 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Basic -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
   <title>장바구니 - Shop Project Team 5</title>
@@ -22,156 +20,29 @@
   <!-- responsive style -->
   <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
-  <style>
-    .cart-container {
-      padding: 40px 0;
-    }
-    .cart-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 15px;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-    .cart-item:hover {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    .cart-item-img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .cart-item-details {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .cart-item-name {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 5px;
-    }
-    .cart-item-price {
-      color: #f7444e;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .quantity-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .quantity-btn {
-      width: 35px;
-      height: 35px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .quantity-btn:hover {
-      background: #f7444e;
-      color: white;
-      border-color: #f7444e;
-    }
-    .quantity-input {
-      width: 60px;
-      text-align: center;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 8px;
-    }
-    .cart-summary {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 25px;
-      margin-top: 20px;
-      border: 1px solid #e9ecef;
-    }
-    .cart-summary h4 {
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      padding: 5px 0;
-    }
-    .summary-total {
-      border-top: 2px solid #f7444e;
-      padding-top: 15px;
-      margin-top: 15px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .btn-remove {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-remove:hover {
-      background: #c82333;
-    }
-    .empty-cart {
-      text-align: center;
-      padding: 60px 0;
-      color: #666;
-    }
-    .empty-cart i {
-      font-size: 80px;
-      color: #ddd;
-      margin-bottom: 20px;
-    }
-    .btn-checkout {
-      background: #f7444e;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: bold;
-      width: 100%;
-      margin-top: 15px;
-      transition: all 0.3s;
-    }
-    .btn-checkout:hover {
-      background: #e73940;
-      transform: translateY(-2px);
-    }
-    .btn-continue {
-      background: #28a745;
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 25px;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s;
-    }
-    .btn-continue:hover {
-      background: #218838;
-      text-decoration: none;
-      color: white;
-    }
-  </style>
-
   <!-- jQuery -->
   <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
   <!-- Bootstrap JavaScript -->
   <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
+
+  <script>
+    let cart = {
+      init: function() {},
+      del: function(cartId) {
+        if (confirm('이 상품을 장바구니에서 삭제하시겠습니까?')) {
+          location.href = '${pageContext.request.contextPath}/cart/delete?cartId=' + cartId;
+        }
+      },
+      mod: function(cartId) {
+        let cnt = $('#' + cartId).val();
+        if (cnt < 1) {
+          alert('수량은 1개 이상이어야 합니다.');
+          return;
+        }
+        location.href = '${pageContext.request.contextPath}/cart/update?cartId=' + cartId + '&quantity=' + cnt;
+      }
+    }
+  </script>
 </head>
 
 <body class="sub_page">
@@ -194,14 +65,14 @@
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/about">About</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/register">Register</a>
+            <li class="nav-item active">
+              <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
             </li>
           </ul>
         </div>
@@ -211,20 +82,21 @@
   <!-- end header section -->
 </div>
 
-<!-- Cart Section -->
-<section class="cart-container">
-  <div class="container">
+<!-- Cart Page Content -->
+<section class="inner_page_head">
+  <div class="container_fuild">
     <div class="row">
-      <div class="col-12">
-        <div class="heading_container">
-          <h2>
-            <i class="fa fa-shopping-cart"></i> 장바구니
-          </h2>
-          <p>선택하신 상품들을 확인하세요</p>
+      <div class="col-md-12">
+        <div class="full">
+          <h3>장바구니</h3>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
+<section class="layout_padding">
+  <div class="container">
     <%-- 성공/오류 메시지 표시 --%>
     <c:if test="${not empty success}">
       <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -245,16 +117,17 @@
     </c:if>
 
     <div class="row">
-      <%-- 장바구니 상품 목록 --%>
-      <div class="col-lg-8">
+      <div class="col-md-12">
+        <h2>장바구니</h2>
+
         <c:choose>
           <%-- 장바구니가 비어있는 경우 --%>
           <c:when test="${empty cartItems}">
-            <div class="empty-cart">
-              <i class="fa fa-shopping-cart"></i>
+            <div class="text-center" style="padding: 50px 0;">
+              <i class="fa fa-shopping-cart" style="font-size: 80px; color: #ddd;"></i>
               <h3>장바구니가 비어있습니다</h3>
               <p>원하는 상품을 장바구니에 담아보세요!</p>
-              <a href="${pageContext.request.contextPath}/product" class="btn-continue">
+              <a href="${pageContext.request.contextPath}/product" class="btn btn-primary">
                 <i class="fa fa-arrow-left"></i> 쇼핑 계속하기
               </a>
             </div>
@@ -262,112 +135,82 @@
 
           <%-- 장바구니에 상품이 있는 경우 --%>
           <c:otherwise>
-            <c:forEach var="item" items="${cartItems}">
-              <div class="cart-item" data-cart-id="${item.cartId}">
-                <div class="row align-items-center">
-                    <%-- 상품 이미지 --%>
-                  <div class="col-md-3">
-                    <img src="${pageContext.request.contextPath}/views/images/${item.productImg}"
-                         alt="${item.productName}" class="cart-item-img" />
-                  </div>
-
-                    <%-- 상품 정보 --%>
-                  <div class="col-md-4">
-                    <div class="cart-item-details">
-                      <div class="cart-item-name">${item.productName}</div>
-                      <div class="cart-item-price">
-                        <fmt:formatNumber value="${item.productPrice}" pattern="#,###" />원
-                      </div>
-                    </div>
-                  </div>
-
-                    <%-- 수량 조절 --%>
-                  <div class="col-md-3">
-                    <div class="quantity-controls">
-                      <button class="quantity-btn" onclick="updateQuantity(${item.cartId}, ${item.productQt - 1})">
-                        <i class="fa fa-minus"></i>
-                      </button>
-                      <input type="number" class="quantity-input" value="${item.productQt}"
-                             onchange="updateQuantity(${item.cartId}, this.value)" min="1" />
-                      <button class="quantity-btn" onclick="updateQuantity(${item.cartId}, ${item.productQt + 1})">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                    <%-- 삭제 버튼 --%>
-                  <div class="col-md-2">
-                    <button class="btn-remove" onclick="removeItem(${item.cartId})">
+            <%-- day02 스타일 테이블 --%>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>이미지</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th>소계</th>
+                <th>등록일</th>
+                <th>수정</th>
+                <th>삭제</th>
+              </tr>
+              </thead>
+              <tbody>
+              <c:forEach var="c" items="${cartItems}">
+                <tr>
+                  <td>
+                    <img src="${pageContext.request.contextPath}/views/images/${c.productImg}"
+                         width="50px" alt="${c.productName}">
+                  </td>
+                  <td>${c.productName}</td>
+                  <td><fmt:formatNumber value="${c.productPrice}" pattern="#,###" />원</td>
+                  <td>
+                    <input type="number" value="${c.productQt}" class="form-control"
+                           id="${c.cartId}" min="1" style="width: 80px;">
+                  </td>
+                  <td>
+                    <strong>
+                      <fmt:formatNumber value="${c.productPrice * c.productQt}" pattern="#,###" />원
+                    </strong>
+                  </td>
+                  <td><fmt:formatDate value="${c.cartRegdate}" pattern="MM-dd" /></td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="cart.mod(${c.cartId})">
+                      <i class="fa fa-edit"></i> 수정
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="cart.del(${c.cartId})">
                       <i class="fa fa-trash"></i> 삭제
                     </button>
-                  </div>
-                </div>
-              </div>
-            </c:forEach>
+                  </td>
+                </tr>
+              </c:forEach>
+              </tbody>
+            </table>
 
-            <%-- 장바구니 비우기 버튼 --%>
-            <div class="text-right mt-3">
-              <form action="${pageContext.request.contextPath}/cart/clear" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-outline-danger"
-                        onclick="return confirm('장바구니를 모두 비우시겠습니까?')">
-                  <i class="fa fa-trash"></i> 장바구니 비우기
+            <%-- 총계 표시 --%>
+            <div class="row">
+              <div class="col-md-6">
+                <form action="${pageContext.request.contextPath}/cart/clear" method="post" style="display: inline;">
+                  <button type="submit" class="btn btn-outline-danger"
+                          onclick="return confirm('장바구니를 모두 비우시겠습니까?')">
+                    <i class="fa fa-trash"></i> 장바구니 비우기
+                  </button>
+                </form>
+              </div>
+              <div class="col-md-6 text-right">
+                <h4>
+                  총 <strong style="color: #f7444e;">${itemCount}개</strong> 상품 -
+                  <strong style="color: #f7444e;">
+                    <fmt:formatNumber value="${totalPrice}" pattern="#,###" />원
+                  </strong>
+                </h4>
+                <button class="btn btn-success btn-lg" onclick="proceedToCheckout()">
+                  <i class="fa fa-credit-card"></i> 주문하기
                 </button>
-              </form>
+                <a href="${pageContext.request.contextPath}/product" class="btn btn-outline-primary">
+                  <i class="fa fa-arrow-left"></i> 쇼핑 계속하기
+                </a>
+              </div>
             </div>
           </c:otherwise>
         </c:choose>
       </div>
-
-      <%-- 주문 요약 (장바구니에 상품이 있을 때만 표시) --%>
-      <c:if test="${not empty cartItems}">
-        <div class="col-lg-4">
-          <div class="cart-summary">
-            <h4><i class="fa fa-calculator"></i> 주문 요약</h4>
-
-            <div class="summary-row">
-              <span>상품 개수:</span>
-              <span><strong>${itemCount}개</strong></span>
-            </div>
-
-            <div class="summary-row">
-              <span>상품 금액:</span>
-              <span><fmt:formatNumber value="${totalPrice}" pattern="#,###" />원</span>
-            </div>
-
-            <div class="summary-row">
-              <span>배송비:</span>
-              <span>
-                <c:choose>
-                  <c:when test="${totalPrice >= 50000}">
-                    <span style="color: #28a745;">무료</span>
-                  </c:when>
-                  <c:otherwise>
-                    3,000원
-                  </c:otherwise>
-                </c:choose>
-              </span>
-            </div>
-
-            <c:set var="deliveryFee" value="${totalPrice >= 50000 ? 0 : 3000}" />
-            <c:set var="finalTotal" value="${totalPrice + deliveryFee}" />
-
-            <div class="summary-row summary-total">
-              <span>총 결제 금액:</span>
-              <span style="color: #f7444e;">
-                <fmt:formatNumber value="${finalTotal}" pattern="#,###" />원
-              </span>
-            </div>
-
-            <button class="btn-checkout" onclick="proceedToCheckout()">
-              <i class="fa fa-credit-card"></i> 주문하기
-            </button>
-
-            <a href="${pageContext.request.contextPath}/product" class="btn-continue" style="margin-top: 10px;">
-              <i class="fa fa-arrow-left"></i> 쇼핑 계속하기
-            </a>
-          </div>
-        </div>
-      </c:if>
     </div>
   </div>
 </section>
@@ -413,80 +256,12 @@
 </div>
 
 <script>
-  // 장바구니 JavaScript 함수들
-  function updateQuantity(cartId, newQuantity) {
-    if (newQuantity < 1) {
-      if (confirm('상품을 장바구니에서 제거하시겠습니까?')) {
-        removeItem(cartId);
-      }
-      return;
-    }
-
-    $.ajax({
-      url: '${pageContext.request.contextPath}/cart/update',
-      type: 'POST',
-      data: {
-        cartId: cartId,
-        quantity: newQuantity
-      },
-      success: function(response) {
-        if (response.success) {
-          // 페이지 새로고침으로 업데이트된 정보 표시
-          location.reload();
-        } else {
-          alert(response.message || '수량 변경에 실패했습니다.');
-        }
-      },
-      error: function() {
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
-      }
-    });
-  }
-
-  function removeItem(cartId) {
-    if (!confirm('이 상품을 장바구니에서 제거하시겠습니까?')) {
-      return;
-    }
-
-    $.ajax({
-      url: '${pageContext.request.contextPath}/cart/remove',
-      type: 'POST',
-      data: {
-        cartId: cartId
-      },
-      success: function(response) {
-        if (response.success) {
-          // 해당 상품 항목 제거 애니메이션
-          $('[data-cart-id="' + cartId + '"]').fadeOut(300, function() {
-            location.reload();
-          });
-        } else {
-          alert(response.message || '상품 제거에 실패했습니다.');
-        }
-      },
-      error: function() {
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
-      }
-    });
-  }
-
   function proceedToCheckout() {
-    // 주문 페이지로 이동 (구현 예정)
     alert('주문 기능은 곧 구현될 예정입니다!');
-    // window.location.href = '${pageContext.request.contextPath}/order';
   }
 
-  // 페이지 로드 완료 후
+  // 알림 메시지 자동 숨김
   $(document).ready(function() {
-    // 수량 입력 필드에서 Enter 키 방지
-    $('.quantity-input').on('keypress', function(e) {
-      if (e.which == 13) {
-        e.preventDefault();
-        $(this).blur();
-      }
-    });
-
-    // 알림 메시지 자동 숨김
     setTimeout(function() {
       $('.alert').fadeOut();
     }, 5000);

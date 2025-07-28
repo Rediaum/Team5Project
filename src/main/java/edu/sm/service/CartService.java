@@ -4,14 +4,12 @@ import edu.sm.dto.Cart;
 import edu.sm.frame.ProjectService;
 import edu.sm.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CartService implements ProjectService<Cart, Integer> {
 
     private final CartRepository cartRepository;
@@ -41,41 +39,27 @@ public class CartService implements ProjectService<Cart, Integer> {
         return cartRepository.selectAll();
     }
 
-    /**
-     * ✅ 특정 고객의 장바구니 목록 조회 (Integer 타입으로 수정)
-     */
+    // ===== 장바구니 전용 메소드 =====
+
     public List<Cart> findByCustId(Integer custId) throws Exception {
-        log.info("고객 {}의 장바구니 조회", custId);
         return cartRepository.findByCustId(custId);
     }
 
-    /**
-     * ✅ 장바구니 총 가격 계산
-     */
     public int calculateTotalPrice(Integer custId) throws Exception {
         List<Cart> cartItems = cartRepository.findByCustId(custId);
         int totalPrice = 0;
-
         for (Cart item : cartItems) {
             totalPrice += item.getProductPrice() * item.getProductQt();
         }
-
-        log.info("고객 {}의 장바구니 총 가격: {}원", custId, totalPrice);
         return totalPrice;
     }
 
-    /**
-     * ✅ 장바구니 총 상품 개수
-     */
     public int getCartItemCount(Integer custId) throws Exception {
         List<Cart> cartItems = cartRepository.findByCustId(custId);
         int totalCount = 0;
-
         for (Cart item : cartItems) {
             totalCount += item.getProductQt();
         }
-
-        log.info("고객 {}의 장바구니 총 상품 개수: {}개", custId, totalCount);
         return totalCount;
     }
 }
