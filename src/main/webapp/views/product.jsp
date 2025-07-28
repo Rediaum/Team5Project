@@ -117,7 +117,7 @@
                   <div class="option_container">
                      <div class="options">
                            <%-- 상품 상세 페이지 링크 (productId 사용) --%>
-                        <a href="${pageContext.request.contextPath}/product/${product.productId}" class="option1">
+                        <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="option1">
                               ${product.productName}
                         </a>
                            <%-- 장바구니 추가 링크 (productId 사용) --%>
