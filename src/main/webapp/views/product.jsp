@@ -1,6 +1,7 @@
 <%-- 1. JSP 페이지 기본 설정 및 JSTL 태그 라이브러리 선언 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -133,12 +134,12 @@
                         <%-- 이미지 경로: ${pageContext.request.contextPath}/views/images/상품이미지파일명 --%>
                      <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
                   </div>
-                  <div class="detail-box">
+                  <div class="detail-box" style="display: block !important;">
                      <h5>
                            ${product.productName}
                      </h5>
                      <h6>
-                        $${product.productPrice}
+                        <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
                      </h6>
                   </div>
                </div>
