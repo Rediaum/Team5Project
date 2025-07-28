@@ -21,6 +21,108 @@
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 </head>
+
+<!-- 카테고리 바 스타일 추가 -->
+<style>
+   .category_filter_container {
+      text-align: center;
+      padding: 20px 0;
+   }
+
+   .category_filter_bar {
+      display: inline-flex;
+      background: #fff;
+      border-radius: 15px;
+      padding: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: center;
+   }
+
+   .category_item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px 20px;
+      text-decoration: none;
+      color: #666;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      min-width: 80px;
+      background: transparent;
+   }
+
+   .category_item:hover {
+      background: #f8f9fa;
+      color: #f7444e;
+      text-decoration: none;
+      transform: translateY(-2px);
+   }
+
+   .category_item.active {
+      background: #f7444e;
+      color: white;
+      transform: translateY(-2px);
+   }
+
+   .category_item.active:hover {
+      color: white;
+   }
+
+   .category_icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      transition: transform 0.3s ease;
+   }
+
+   .category_item:hover .category_icon {
+      transform: scale(1.1);
+   }
+
+   .category_item span {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+   }
+
+   /* 모바일 반응형 */
+   @media (max-width: 768px) {
+      .category_filter_bar {
+         padding: 8px;
+         gap: 3px;
+      }
+
+      .category_item {
+         padding: 12px 8px;
+         min-width: 60px;
+      }
+
+      .category_icon {
+         font-size: 20px;
+         margin-bottom: 6px;
+      }
+
+      .category_item span {
+         font-size: 12px;
+      }
+   }
+
+   /* 스크롤바 숨기기 (모바일에서 가로 스크롤 시) */
+   @media (max-width: 576px) {
+      .category_filter_container {
+         overflow-x: auto;
+         padding: 15px 0;
+      }
+
+      .category_filter_bar {
+         display: flex;
+         min-width: max-content;
+         margin: 0 15px;
+      }
+   }
+</style>
+
 <body class="sub_page">
 <div class="hero_area">
    <header class="header_section">
@@ -128,12 +230,81 @@
    </div>
 </section>
 <section class="product_section layout_padding">
-   <div class="container">
-      <div class="heading_container heading_center">
-         <h2>
-            Our <span>products</span>
-         </h2>
-      </div>
+      <section class="product_section layout_padding">
+         <div class="container">
+            <div class="heading_container heading_center">
+               <h2>Our <span>products</span></h2>
+            </div>
+
+            <!-- 카테고리 필터 바 추가 -->
+            <div class="category_filter_container" style="margin-bottom: 40px;">
+               <div class="category_filter_bar">
+                  <!-- 전체 보기 -->
+                  <a href="${pageContext.request.contextPath}/product"
+                     class="category_item ${selectedCategory == 0 ? 'active' : ''}">
+                     <div class="category_icon">🛍️</div>
+                     <span>전체</span>
+                  </a>
+
+                  <!-- 카테고리 1: 오디오/음향기기 -->
+                  <a href="${pageContext.request.contextPath}/product/category/1"
+                     class="category_item ${selectedCategory == 1 ? 'active' : ''}">
+                     <div class="category_icon">🎧</div>
+                     <span>오디오</span>
+                  </a>
+
+                  <!-- 카테고리 2: 게이밍/액세서리 -->
+                  <a href="${pageContext.request.contextPath}/product/category/2"
+                     class="category_item ${selectedCategory == 2 ? 'active' : ''}">
+                     <div class="category_icon">🎮</div>
+                     <span>게이밍</span>
+                  </a>
+
+                  <!-- 카테고리 3: 웨어러블/스마트기기 -->
+                  <a href="${pageContext.request.contextPath}/product/category/3"
+                     class="category_item ${selectedCategory == 3 ? 'active' : ''}">
+                     <div class="category_icon">⌚</div>
+                     <span>웨어러블</span>
+                  </a>
+
+                  <!-- 카테고리 4: 노트북/PC -->
+                  <a href="${pageContext.request.contextPath}/product/category/4"
+                     class="category_item ${selectedCategory == 4 ? 'active' : ''}">
+                     <div class="category_icon">💻</div>
+                     <span>노트북</span>
+                  </a>
+
+                  <!-- 카테고리 5: 모니터 -->
+                  <a href="${pageContext.request.contextPath}/product/category/5"
+                     class="category_item ${selectedCategory == 5 ? 'active' : ''}">
+                     <div class="category_icon">🖥️</div>
+                     <span>모니터</span>
+                  </a>
+
+                  <!-- 카테고리 6: TV -->
+                  <a href="${pageContext.request.contextPath}/product/category/6"
+                     class="category_item ${selectedCategory == 6 ? 'active' : ''}">
+                     <div class="category_icon">📺</div>
+                     <span>TV</span>
+                  </a>
+
+                  <!-- 카테고리 7: 스마트폰 -->
+                  <a href="${pageContext.request.contextPath}/product/category/7"
+                     class="category_item ${selectedCategory == 7 ? 'active' : ''}">
+                     <div class="category_icon">📱</div>
+                     <span>스마트폰</span>
+                  </a>
+               </div>
+            </div>
+
+            <!-- 기존 상품 그리드 코드 -->
+            <div class="row">
+               <c:forEach var="product" items="${productList}">
+                  <!-- 기존 상품 카드 코드 그대로 유지 -->
+               </c:forEach>
+            </div>
+         </div>
+      </section>
       <div class="row">
          <%-- 4. 동적 데이터 처리 예시 --%>
          <%-- 이 부분은 DB에서 상품 목록(productList)을 가져와 JSTL로 반복 처리합니다. --%>

@@ -28,6 +28,7 @@ public class ProductController {
         try {
             List<Product> productList = productService.get();
             model.addAttribute("productList", productList);
+            model.addAttribute("selectedCategory", 0); // 0 = 전체
             log.info("상품 목록 페이지에 {} 개의 상품을 표시합니다.", productList.size());
         } catch (Exception e) {
             log.error("상품 목록 로딩 오류", e);
@@ -51,6 +52,35 @@ public class ProductController {
             return "redirect:/product";
         }
     }
+    /**
+     * 카테고리별 상품 필터링
+     */
+    @RequestMapping("/product/category/{categoryId}")
+    public String productByCategory(@PathVariable int categoryId, Model model) {
+        log.info("Start Product by Category... categoryId: {}", categoryId);
+        try {
+            List<Product> allProducts = productService.get();
+            List<Product> filteredProducts = new ArrayList<>();
+
+            // 카테고리별 필터링
+            for (Product product : allProducts) {
+                if (product.getCategoryId() == categoryId) {
+                    filteredProducts.add(product);
+                }
+            }
+
+            model.addAttribute("productList", filteredProducts);
+            model.addAttribute("selectedCategory", categoryId);
+            log.info("카테고리 {} : {} 개의 상품을 찾았습니다.", categoryId, filteredProducts.size());
+
+        } catch (Exception e) {
+            log.error("카테고리별 상품 로딩 오류", e);
+            model.addAttribute("productList", new ArrayList<>());
+        }
+        return "product";
+    }
+
+
 
     /**
      * About 페이지
