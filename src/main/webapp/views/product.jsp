@@ -145,18 +145,44 @@
                <div class="box">
                   <div class="option_container">
                      <div class="options">
-                           <%-- 상품 상세 페이지 링크 (productId 사용) --%>
+                           <%-- 상품 상세 페이지 링크 --%>
                         <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="option1">
                               ${product.productName}
                         </a>
-                           <%-- 장바구니 추가 링크 (productId 사용) --%>
-                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
-                           Add Cart
-                        </a>
-                           <%-- 상품 구매 링크 (productId 사용) 경로 설정 예정 --%>
-                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
-                           Buy Now
-                        </a>
+
+                           <%-- 장바구니 추가 버튼 (로그인 체크) --%>
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust != null}">
+                              <%-- 로그인시: 장바구니 추가 --%>
+                              <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
+                                 Add To Cart
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <%-- 비로그인시: 로그인 페이지로 --%>
+                              <a href="${pageContext.request.contextPath}/login" class="option2"
+                                 onclick="alert('장바구니에 상품을 담으려면 로그인이 필요합니다.'); return true;">
+                                 Add To Cart
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
+
+                           <%-- 바로 구매 버튼 (로그인 체크) --%>
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust != null}">
+                              <%-- 로그인시: 바로 구매 --%>
+                              <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
+                                 Buy Now
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <%-- 비로그인시: 로그인 페이지로 --%>
+                              <a href="${pageContext.request.contextPath}/login" class="option3"
+                                 onclick="alert('구매하려면 로그인이 필요합니다.'); return true;">
+                                 Buy Now
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
                      </div>
                   </div>
                   <div class="img-box">
