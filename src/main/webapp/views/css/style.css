@@ -497,6 +497,17 @@ a:focus {
   color: #000000;
 }
 
+.product_section .options .option3 {
+    background-color: #000000;
+    border: 1px solid #000000;
+    color: #ffffff;
+}
+
+.product_section .options .option3:hover {
+    background-color: transparent;
+    color: #000000;
+}
+
 .product_section .btn-box {
   display: -webkit-box;
   display: -ms-flexbox;

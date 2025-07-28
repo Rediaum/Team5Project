@@ -8,16 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class connectTestController {
     /**
-     * 홈페이지 - 메인 페이지 (index.jsp)
-     */
-    @GetMapping("/")
-    public String home(Model model) {
-        // 필요시 홈페이지에 표시할 데이터를 모델에 추가
-        model.addAttribute("pageTitle", "Shop - Project team - 5");
-        return "index"; // index.jsp로 이동
-    }
-
-    /**
      * About 페이지 (about.jsp)
      */
     @GetMapping("/about")
