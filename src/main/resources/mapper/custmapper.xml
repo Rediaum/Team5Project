@@ -38,4 +38,9 @@
         SELECT COUNT(*) FROM admin WHERE admin_email=#{email}
     </select>
 
+    <!-- ✅ Admin 테이블에서 전화번호 존재 여부 확인 (단순 쿼리) -->
+    <select id="checkAdminPhoneExists" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM admin WHERE admin_phone=#{phone}
+    </select>
+
 </mapper>

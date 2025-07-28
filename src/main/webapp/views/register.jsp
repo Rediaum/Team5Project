@@ -84,7 +84,6 @@
 
     <script>
         let emailChecked = false;
-
         // 이메일 중복 검사
         function checkEmailDuplicate() {
             const custEmail = document.getElementById('custEmail').value;
@@ -126,6 +125,48 @@
                     emailChecked = false;
                 });
         }
+        
+        let phoneChecked = false;
+        function checkPhoneDuplicate() {
+            const custPhone = document.getElementById('custPhone').value;
+            const resultDiv = document.getElementById('phoneCheckResult');
+
+            if (!custPhone.trim()) {
+                resultDiv.innerHTML = '<span class="check-error">전화번호를 입력하세요.</span>'; // Masukkan nomor telepon
+                return;
+            }
+
+            // Opsional: Validasi format nomor telepon (misal: hanya angka)
+            const phoneRegex = /^\d{10,11}$/; // Contoh: 10-11 digit angka
+            if (!phoneRegex.test(custPhone)) {
+                resultDiv.innerHTML = '<span class="check-error">올바른 전화번호 형식이 아닙니다. (예: 01012345678)</span>'; // Format nomor telepon tidak valid
+                return;
+            }
+
+            // AJAX 요청 ke server untuk memeriksa duplikasi nomor telepon
+            fetch('${pageContext.request.contextPath}/register/check-phone', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'phone=' + encodeURIComponent(custPhone)
+            })
+                .then(response => response.json())
+                .then(available => {
+                    if (available) {
+                        resultDiv.innerHTML = '<span class="check-success">사용 가능한 전화번호입니다.</span>'; // Nomor telepon tersedia
+                        phoneChecked = true;
+                    } else {
+                        resultDiv.innerHTML = '<span class="check-error">이미 사용중인 전화번호입니다.</span>'; // Nomor telepon sudah digunakan
+                        phoneChecked = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resultDiv.innerHTML = '<span class="check-error">오류가 발생했습니다. 다시 시도해주세요.</span>'; // Terjadi kesalahan. Coba lagi.
+                    phoneChecked = false;
+                });
+        }
 
         // 페이지 로드 후 이벤트 리스너 등록
         document.addEventListener('DOMContentLoaded', function() {
@@ -150,12 +191,19 @@
                 document.getElementById('emailCheckResult').innerHTML = '';
             });
 
+            // Tambahkan event listener untuk input nomor telepon
+            document.getElementById('custPhone').addEventListener('input', function() {
+                phoneChecked = false; // Reset status jika input berubah
+                document.getElementById('phoneCheckResult').innerHTML = '';
+            });
+
             // 폼 제출 시 유효성 검사
             document.getElementById('registerForm').addEventListener('submit', function(e) {
                 const pwd = document.getElementById('custPwd').value;
                 const pwdConfirm = document.getElementById('pwdConfirm').value;
                 const custName = document.getElementById('custName').value;
                 const custEmail = document.getElementById('custEmail').value;
+                const custPhone = document.getElementById('custPhone').value;
 
                 // 필수 필드 검사
                 if (!custEmail.trim()) {
@@ -176,8 +224,20 @@
                     return;
                 }
 
+                if (!custPhone.trim()) {
+                    alert('전화번호를 입력하세요.');
+                    e.preventDefault();
+                    return;
+                }
+
                 if (!emailChecked) {
                     alert('이메일 중복 확인을 해주세요.');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!phoneChecked) {
+                    alert('전화번호 중복 확인을 해주세요.');
                     e.preventDefault();
                     return;
                 }
@@ -265,7 +325,7 @@
                 <!-- 비밀번호 확인 -->
                 <div class="form-group">
                     <label for="pwdConfirm">비밀번호 확인 *</label>
-                    <input type="password" class="form-control" id="pwdConfirm"
+                    <input type="password" class="form-control" id="pwdConfirm" name="pwdConfirm"
                            required placeholder="비밀번호를 다시 입력하세요">
                     <div id="pwdCheckResult" class="check-result"></div>
                 </div>
@@ -280,8 +340,13 @@
                 <!-- 전화번호 -->
                 <div class="form-group">
                     <label for="custPhone">전화번호</label>
-                    <input type="tel" class="form-control" id="custPhone" name="custPhone"
-                           value="${cust.custPhone}" placeholder="010-1234-5678">
+                    <div class="input-group">
+                        <input type="tel" class="form-control" id="custPhone" name="custPhone"
+                               value="${cust.custPhone}" placeholder="010-1234-5678">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-check" onclick="checkPhoneDuplicate()">중복확인</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 제출 버튼 -->
