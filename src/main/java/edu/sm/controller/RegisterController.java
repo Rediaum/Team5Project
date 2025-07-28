@@ -34,14 +34,14 @@ public class RegisterController {
      */
     @PostMapping("")
     public String register(@ModelAttribute Cust cust,
-                           @RequestParam String pwdConfirm,
+                           @RequestParam String custPwd,
                            RedirectAttributes redirectAttributes,
                            Model model) {
         try {
             log.info("회원가입 처리 시작: {}", cust.getCustEmail());
 
             // 비밀번호 확인 검사
-            if (!cust.getCustPwd().equals(pwdConfirm)) {
+            if (!cust.getCustPwd().equals(custPwd)) {
                 model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
                 model.addAttribute("cust", cust);
                 return "register";
