@@ -24,7 +24,7 @@ public class CartController {
      * 고객 ID를 받아 장바구니 목록 페이지를 보여줌
      */
     @RequestMapping("")
-    public String cartList(Model model, @RequestParam("id") String custId) {
+    public String cartList(Model model, @RequestParam("id") Integer custId) {
         try {
             List<Cart> list = cartService.findByCustId(custId);
             model.addAttribute("cartlist", list); // JSP에서 사용할 이름은 cartlist로 통일

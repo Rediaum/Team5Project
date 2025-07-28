@@ -4,27 +4,75 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.repository.CartRepository">
 
-    <select id="findByCustId" parameterType="String" resultType="Cart">
-        SELECT
-            c.cart_id, c.cust_id, c.product_id, c.product_qt,
-            p.product_name, p.product_price, p.product_img
-        FROM Cart c
-                 JOIN Product p ON c.product_id = p.product_id
-        WHERE c.cust_id = #{custId}
+    <!-- 기본 조회 (cart_id로) -->
+    <select id="select" parameterType="Integer" resultType="Cart">
+        SELECT * FROM cart WHERE cart_id = #{cartId}
     </select>
 
+    <!-- 전체 조회 -->
+    <select id="selectAll" resultType="Cart">
+        SELECT
+            c.cart_id,
+            c.cust_id,
+            c.product_id,
+            c.product_qt,
+            c.cart_regdate,
+            p.product_name,
+            p.product_price,
+            p.product_img
+        FROM cart c
+                 INNER JOIN product p ON c.product_id = p.product_id
+        ORDER BY c.cart_regdate DESC
+    </select>
+
+    <!-- ✅ 특정 고객의 장바구니 조회 (수정됨) -->
+    <select id="findByCustId" parameterType="Integer" resultType="Cart">
+        SELECT
+            c.cart_id AS cartId,
+            c.cust_id AS custId,
+            c.product_id AS productId,
+            c.product_qt AS productQt,
+            c.cart_regdate AS cartRegdate,
+            p.product_name AS productName,
+            p.product_price AS productPrice,
+            p.product_img AS productImg
+        FROM cart c
+                 INNER JOIN product p ON c.product_id = p.product_id
+        WHERE c.cust_id = #{custId}
+        ORDER BY c.cart_regdate DESC
+    </select>
+
+    <!-- ✅ 장바구니 추가 (ON DUPLICATE KEY UPDATE 유지) -->
     <insert id="insert" parameterType="Cart">
-        INSERT INTO Cart (cust_id, product_id, product_qt, cart_regdate)
-        VALUES (#{cust_id}, #{product_id}, #{product_qt}, NOW())
-            ON DUPLICATE KEY UPDATE product_qt = product_qt + VALUES(product_qt)
+        INSERT INTO cart (cust_id, product_id, product_qt, cart_regdate)
+        VALUES (#{custId}, #{productId}, #{productQt}, NOW())
+            ON DUPLICATE KEY UPDATE
+                                 product_qt = product_qt + #{productQt}
     </insert>
 
+    <!-- ✅ 수량 수정 (cart_id 기준으로 변경) -->
     <update id="update" parameterType="Cart">
-        UPDATE Cart SET product_qt = #{product_qt} WHERE cart_id = #{cart_id}
+        UPDATE cart SET
+            product_qt = #{productQt}
+        WHERE cart_id = #{cartId}
     </update>
 
+    <!-- ✅ 삭제 (cart_id 기준으로 변경) -->
     <delete id="delete" parameterType="Integer">
-        DELETE FROM Cart WHERE cart_id = #{cart_id}
+        DELETE FROM cart WHERE cart_id = #{cartId}
     </delete>
+
+    <!-- ✅ 중복 상품 체크 (새로 추가) -->
+    <select id="findByCustomerAndProduct" resultType="Cart">
+        SELECT * FROM cart
+        WHERE cust_id = #{custId} AND product_id = #{productId}
+    </select>
+
+    <!-- ✅ 중복 상품 수량 업데이트 (새로 추가) -->
+    <update id="updateQuantity">
+        UPDATE cart SET
+            product_qt = product_qt + #{quantity}
+        WHERE cust_id = #{custId} AND product_id = #{productId}
+    </update>
 
 </mapper>

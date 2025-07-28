@@ -4,15 +4,17 @@ import edu.sm.dto.Cart;
 import edu.sm.frame.ProjectService;
 import edu.sm.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CartService implements ProjectService<Cart, Integer> { // <-- ProjectService를 구현
+@Slf4j
+public class CartService implements ProjectService<Cart, Integer> {
 
-    final CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public void register(Cart cart) throws Exception {
@@ -31,18 +33,49 @@ public class CartService implements ProjectService<Cart, Integer> { // <-- Proje
 
     @Override
     public Cart get(Integer cartId) throws Exception {
-        // return cartRepository.select(cartId); // Mapper에 select 쿼리가 있다면 구현
-        return null;
+        return cartRepository.select(cartId);
     }
 
     @Override
     public List<Cart> get() throws Exception {
-        // return cartRepository.selectAll(); // Mapper에 selectAll 쿼리가 있다면 구현
-        return null;
+        return cartRepository.selectAll();
     }
 
-    // CartService에만 필요한 별도의 메서드
-    public List<Cart> findByCustId(String custId) throws Exception {
+    /**
+     * ✅ 특정 고객의 장바구니 목록 조회 (Integer 타입으로 수정)
+     */
+    public List<Cart> findByCustId(Integer custId) throws Exception {
+        log.info("고객 {}의 장바구니 조회", custId);
         return cartRepository.findByCustId(custId);
+    }
+
+    /**
+     * ✅ 장바구니 총 가격 계산
+     */
+    public int calculateTotalPrice(Integer custId) throws Exception {
+        List<Cart> cartItems = cartRepository.findByCustId(custId);
+        int totalPrice = 0;
+
+        for (Cart item : cartItems) {
+            totalPrice += item.getProductPrice() * item.getProductQt();
+        }
+
+        log.info("고객 {}의 장바구니 총 가격: {}원", custId, totalPrice);
+        return totalPrice;
+    }
+
+    /**
+     * ✅ 장바구니 총 상품 개수
+     */
+    public int getCartItemCount(Integer custId) throws Exception {
+        List<Cart> cartItems = cartRepository.findByCustId(custId);
+        int totalCount = 0;
+
+        for (Cart item : cartItems) {
+            totalCount += item.getProductQt();
+        }
+
+        log.info("고객 {}의 장바구니 총 상품 개수: {}개", custId, totalCount);
+        return totalCount;
     }
 }
