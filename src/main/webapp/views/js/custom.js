@@ -1,3 +1,5 @@
+console.log('Custom.js loaded');
+
 // to get current year
 function getYear() {
     var currentDate = new Date();
@@ -6,7 +8,6 @@ function getYear() {
 }
 
 getYear();
-
 
 // client section owl carousel
 $(".client_owl-carousel").owlCarousel({
@@ -44,3 +45,4 @@ function myMap() {
     };
     var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 }
+

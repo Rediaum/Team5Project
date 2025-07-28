@@ -16,6 +16,10 @@
         SELECT * FROM cust WHERE cust_email = #{custEmail}
     </select>
 
+    <select id="selectByPhone" parameterType="String" resultType="Cust">
+        SELECT * FROM cust WHERE cust_phone = #{custPhone}
+    </select>
+
     <insert id="insert" parameterType="Cust">
         INSERT INTO cust (cust_email, cust_pwd, cust_name, cust_phone, cust_regdate, cust_update)
         VALUES (#{custEmail}, #{custPwd}, #{custName}, #{custPhone}, NOW(), NOW())
@@ -36,6 +40,11 @@
     <!-- ✅ Admin 테이블에서 이메일 존재 여부 확인 (단순 쿼리) -->
     <select id="checkAdminEmailExists" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM admin WHERE admin_email=#{email}
+    </select>
+
+    <!-- ✅ Admin 테이블에서 전화번호 존재 여부 확인 (단순 쿼리) -->
+    <select id="checkAdminPhoneExists" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM admin WHERE admin_phone=#{phone}
     </select>
 
 </mapper>

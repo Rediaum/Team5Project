@@ -54,6 +54,13 @@ public class RegisterController {
                 return "register";
             }
 
+            // --- Tambahkan validasi duplikasi nomor telepon di sini (server-side final check) ---
+            if (custService.checkPhoneDuplicate(cust.getCustPhone())) {
+                model.addAttribute("error", "이미 사용중인 전화번호입니다.");
+                model.addAttribute("cust", cust);
+                return "register";
+            }
+
             // 회원가입 처리
             custService.register(cust);
             log.info("회원가입 완료: {}", cust.getCustEmail());
@@ -89,6 +96,27 @@ public class RegisterController {
         } catch (Exception e) {
             log.error("이메일 중복 체크 오류: ", e);
             return ResponseEntity.ok(false); // 오류 시 사용 불가로 처리
+        }
+    }
+
+    /**
+     * 전화번호 중복 체크 (AJAX)
+     */
+    @PostMapping("/check-phone")
+    @ResponseBody
+    public ResponseEntity<Boolean> checkPhoneDuplicate(@RequestParam String phone) {
+        try {
+            log.info("전화번호 중복 체크: {}", phone);
+            boolean isDuplicate = custService.checkPhoneDuplicate(phone);
+
+            boolean isAvailable = !isDuplicate;
+
+            log.info("전화번호 {} - 중복: {}, 사용가능: {}", phone, isDuplicate, isAvailable);
+            return ResponseEntity.ok(isAvailable);
+
+        } catch (Exception e) {
+            log.error("전화번호 중복 체크 오류: ", e);
+            return ResponseEntity.ok(false);
         }
     }
 }

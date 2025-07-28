@@ -54,10 +54,15 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/blog_list">Blog</a>
-                  </li>
-                  <li class="nav-item active">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
+                  </li>
+                  <%-- Account dropdown menu --%>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Account <span class="caret"></span></span></a>
+                     <ul class="dropdown-menu">
+                        <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
+                        <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
+                     </ul>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">

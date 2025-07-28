@@ -13,10 +13,10 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-
+  
   <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
   <title>로그인 - Shop Project Team 5</title>
-
+  
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
   <!-- font awesome style -->
@@ -27,36 +27,36 @@
   <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
   <!-- login 전용 CSS -->
   <link href="${pageContext.request.contextPath}/views/css/login.css" rel="stylesheet" />
-
+  
   <!-- jQuery -->
   <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
   <!-- Bootstrap Popper.js -->
   <script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
   <!-- Bootstrap JavaScript -->
   <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-
+  
   <script>
     $(document).ready(function() {
       // 로그인 폼 제출 처리
       $('#loginForm').submit(function(e) {
         e.preventDefault();
-
+        
         let email = $('#email').val().trim();
         let pwd = $('#pwd').val().trim();
-
+        
         // 클라이언트 유효성 검사
         if (!email) {
           alert('이메일을 입력하세요.');
           $('#email').focus();
           return false;
         }
-
+        
         if (!pwd) {
           alert('비밀번호를 입력하세요.');
           $('#pwd').focus();
           return false;
         }
-
+        
         // AJAX 로그인 요청
         $.ajax({
           url: '${pageContext.request.contextPath}/loginimpl',
@@ -70,7 +70,7 @@
           },
           success: function(response) {
             console.log('서버 응답:', response); // 디버깅용
-
+            
             // ✅ 응답 내용 확인 후 분기 처리
             if (response && response.success === true) {
               // 로그인 성공
@@ -91,7 +91,7 @@
               statusText: xhr.statusText,
               responseText: xhr.responseText
             });
-
+            
             // AJAX 요청 자체 실패
             alert('서버와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
             $('#loginBtn').prop('disabled', false).html('<i class="fa fa-sign-in"></i> 로그인');
@@ -176,7 +176,7 @@
               <span>로그인</span>
             </h2>
           </div>
-
+          
           <!-- 로그인 폼 -->
           <form id="loginForm">
             <div class="form-group">
@@ -186,7 +186,7 @@
               <input type="email" class="form-control" id="email" name="email"
                      placeholder="이메일을 입력하세요" required>
             </div>
-
+            
             <div class="form-group">
               <label for="pwd">
                 <i class="fa fa-lock"></i> 비밀번호
@@ -194,21 +194,21 @@
               <input type="password" class="form-control" id="pwd" name="pwd"
                      placeholder="비밀번호를 입력하세요" required>
             </div>
-
+            
             <div class="form-check mb-3">
               <input type="checkbox" class="form-check-input" id="rememberMe">
               <label class="form-check-label" for="rememberMe">
                 로그인 상태 유지
               </label>
             </div>
-
+            
             <div class="btn-box">
               <button type="submit" id="loginBtn" class="btn btn-login">
                 <i class="fa fa-sign-in"></i> 로그인
               </button>
             </div>
           </form>
-
+          
           <!-- 추가 링크들 -->
           <div class="login-links">
             <div class="text-center mt-4">
@@ -273,6 +273,7 @@
     Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
   </p>
 </div>
+<!-- footer section -->
 
 <!-- Custom JavaScript -->
 <script src="${pageContext.request.contextPath}/views/js/custom.js"></script>

@@ -47,9 +47,6 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/blog_list">Blog</a>
-                  </li>
-                  <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
                   <li class="nav-item dropdown">
