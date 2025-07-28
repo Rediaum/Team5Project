@@ -36,6 +36,7 @@ public class connectTestController {
         return "blog_list"; // blog_list.jsp로 이동
     }
 
+
     /**
      * Contact 페이지
      */
