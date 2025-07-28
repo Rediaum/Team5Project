@@ -18,7 +18,7 @@ public class CustInsertTest {
 
     @Test
     void insert() {
-        Cust cust = Cust.builder().custEmail("abc@abc.com").custPwd("abc").custName("abc").custPhone("010-1234-5678").build();
+        Cust cust = Cust.builder().custEmail("test@test.com").custPwd("test").custName("test").custPhone("010-1234-5678").build();
         try {
             custService.register(cust);
             log.info("Insert End ------------------------------------------");

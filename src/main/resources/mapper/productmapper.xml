@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.repository.ProductRepository">
+
+    <resultMap id="productResultMap" type="edu.sm.dto.Product">
+        <id property="productId" column="product_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="description" column="description"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="discountRate" column="discount_rate"/>
+        <result property="productImg" column="product_img"/>
+        <result property="productRegdate" column="product_regdate"/>
+        <result property="productUpdate" column="product_update"/>
+    </resultMap>
+
+    <select id="select" parameterType="Integer" resultMap="productResultMap">
+        SELECT * FROM product p
+                          LEFT JOIN category c ON p.category_id=c.category_id
+        WHERE p.product_id=#{productId}
+    </select>
+
+    <select id="selectAll" resultMap="productResultMap">
+        SELECT * FROM product p
+                          LEFT JOIN category c ON p.category_id = c.category_id
+        ORDER BY p.product_id DESC
+    </select>
+
+    <insert id="insert" parameterType="edu.sm.dto.Product">
+        INSERT INTO product (category_id, product_name, description, product_price, discount_rate, product_img, product_regdate, product_update)
+        VALUES (#{categoryId},#{productName},#{description},#{productPrice},#{discountRate},#{productImg}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="edu.sm.dto.Product">
+        UPDATE product SET
+                           product_name = #{productName},
+                           description = #{description},
+                           product_price = #{productPrice},
+                           discount_rate = #{discountRate},
+                           product_img = #{productImg},
+                           product_update = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM product WHERE product_id=#{productId}
+    </delete>
+
+</mapper>
