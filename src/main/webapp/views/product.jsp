@@ -121,6 +121,10 @@
                         </a>
                            <%-- 장바구니 추가 링크 (productId 사용) --%>
                         <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
+                           Add Cart
+                        </a>
+                           <%-- 상품 구매 링크 (productId 사용) 경로 설정 예정 --%>
+                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
                            Buy Now
                         </a>
                      </div>

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,6 +81,115 @@
             border-bottom-left-radius: 0;
         }
     </style>
+
+    <script>
+        let emailChecked = false;
+
+        // 이메일 중복 검사
+        function checkEmailDuplicate() {
+            const custEmail = document.getElementById('custEmail').value;
+            const resultDiv = document.getElementById('emailCheckResult');
+
+            if (!custEmail.trim()) {
+                resultDiv.innerHTML = '<span class="check-error">이메일을 입력하세요.</span>';
+                return;
+            }
+
+            // 이메일 형식 검사
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(custEmail)) {
+                resultDiv.innerHTML = '<span class="check-error">올바른 이메일 형식이 아닙니다.</span>';
+                return;
+            }
+
+            // AJAX 요청
+            fetch('${pageContext.request.contextPath}/register/check-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'email=' + encodeURIComponent(custEmail)
+            })
+                .then(response => response.json())
+                .then(available => {
+                    if (available) {
+                        resultDiv.innerHTML = '<span class="check-success">사용 가능한 이메일입니다.</span>';
+                        emailChecked = true;
+                    } else {
+                        resultDiv.innerHTML = '<span class="check-error">이미 사용중인 이메일입니다.</span>';
+                        emailChecked = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resultDiv.innerHTML = '<span class="check-error">오류가 발생했습니다. 다시 시도해주세요.</span>';
+                    emailChecked = false;
+                });
+        }
+
+        // 페이지 로드 후 이벤트 리스너 등록
+        document.addEventListener('DOMContentLoaded', function() {
+            // 비밀번호 확인 검사
+            document.getElementById('pwdConfirm').addEventListener('input', function() {
+                const pwd = document.getElementById('custPwd').value;
+                const pwdConfirm = this.value;
+                const resultDiv = document.getElementById('pwdCheckResult');
+
+                if (pwdConfirm && pwd !== pwdConfirm) {
+                    resultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>';
+                } else if (pwdConfirm && pwd === pwdConfirm) {
+                    resultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>';
+                } else {
+                    resultDiv.innerHTML = '';
+                }
+            });
+
+            // 이메일 입력값이 변경되면 중복 검사 상태 초기화
+            document.getElementById('custEmail').addEventListener('input', function() {
+                emailChecked = false;
+                document.getElementById('emailCheckResult').innerHTML = '';
+            });
+
+            // 폼 제출 시 유효성 검사
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                const pwd = document.getElementById('custPwd').value;
+                const pwdConfirm = document.getElementById('pwdConfirm').value;
+                const custName = document.getElementById('custName').value;
+                const custEmail = document.getElementById('custEmail').value;
+
+                // 필수 필드 검사
+                if (!custEmail.trim()) {
+                    alert('이메일을 입력하세요.');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!custName.trim()) {
+                    alert('이름을 입력하세요.');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!pwd.trim()) {
+                    alert('비밀번호를 입력하세요.');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!emailChecked) {
+                    alert('이메일 중복 확인을 해주세요.');
+                    e.preventDefault();
+                    return;
+                }
+
+                if (pwd !== pwdConfirm) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    e.preventDefault();
+                    return;
+                }
+            });
+        });
+    </script>
 </head>
 
 <body class="sub_page">
@@ -155,7 +265,7 @@
                 <!-- 비밀번호 확인 -->
                 <div class="form-group">
                     <label for="pwdConfirm">비밀번호 확인 *</label>
-                    <input type="password" class="form-control" id="pwdConfirm" name="pwdConfirm"
+                    <input type="password" class="form-control" id="pwdConfirm"
                            required placeholder="비밀번호를 다시 입력하세요">
                     <div id="pwdCheckResult" class="check-result"></div>
                 </div>
@@ -232,110 +342,5 @@
 <!-- custom js -->
 <script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 
-<script>
-    let emailChecked = false;
-
-    // 이메일 중복 검사
-    function checkEmailDuplicate() {
-        const custEmail = document.getElementById('custEmail').value;
-        const resultDiv = document.getElementById('emailCheckResult');
-
-        if (!custEmail.trim()) {
-            resultDiv.innerHTML = '<span class="check-error">이메일을 입력하세요.</span>';
-            return;
-        }
-
-        // 이메일 형식 검사
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(custEmail)) {
-            resultDiv.innerHTML = '<span class="check-error">올바른 이메일 형식이 아닙니다.</span>';
-            return;
-        }
-
-        // AJAX 요청
-        fetch('${pageContext.request.contextPath}/register/check-email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'email=' + encodeURIComponent(custEmail)
-        })
-            .then(response => response.json())
-            .then(available => {
-                if (available) {
-                    resultDiv.innerHTML = '<span class="check-success">사용 가능한 이메일입니다.</span>';
-                    emailChecked = true;
-                } else {
-                    resultDiv.innerHTML = '<span class="check-error">이미 사용중인 이메일입니다.</span>';
-                    emailChecked = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                resultDiv.innerHTML = '<span class="check-error">오류가 발생했습니다. 다시 시도해주세요.</span>';
-                emailChecked = false;
-            });
-    }
-
-    // 비밀번호 확인 검사
-    document.getElementById('pwdConfirm').addEventListener('input', function() {
-        const pwd = document.getElementById('custPwd').value;
-        const pwdConfirm = this.value;
-        const resultDiv = document.getElementById('pwdCheckResult');
-
-        if (pwdConfirm && pwd !== pwdConfirm) {
-            resultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>';
-        } else if (pwdConfirm && pwd === pwdConfirm) {
-            resultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>';
-        } else {
-            resultDiv.innerHTML = '';
-        }
-    });
-
-    // 이메일 입력값이 변경되면 중복 검사 상태 초기화
-    document.getElementById('custEmail').addEventListener('input', function() {
-        emailChecked = false;
-        document.getElementById('emailCheckResult').innerHTML = '';
-    });
-
-    // 폼 제출 시 유효성 검사
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        const pwd = document.getElementById('custPwd').value;
-        const pwdConfirm = document.getElementById('pwdConfirm').value;
-        const custName = document.getElementById('custName').value;
-        const custEmail = document.getElementById('custEmail').value;
-
-        // 필수 필드 검사
-        if (!custEmail.trim()) {
-            alert('이메일을 입력하세요.');
-            e.preventDefault();
-            return;
-        }
-
-        if (!custName.trim()) {
-            alert('이름을 입력하세요.');
-            e.preventDefault();
-            return;
-        }
-
-        if (!pwd.trim()) {
-            alert('비밀번호를 입력하세요.');
-            e.preventDefault();
-            return;
-        }
-
-        if (!emailChecked) {
-            alert('이메일 중복 확인을 해주세요.');
-            e.preventDefault();
-            return;
-        }
-
-        if (pwd !== pwdConfirm) {
-            alert('비밀번호가 일치하지 않습니다.');
-            e.preventDefault();
-            return;
-        }
-    });
-</script>
 </body>
 </html>

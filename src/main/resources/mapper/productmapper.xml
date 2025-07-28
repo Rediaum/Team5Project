@@ -48,4 +48,34 @@
         DELETE FROM product WHERE product_id=#{productId}
     </delete>
 
+    <!-- 최신 상품 조회 -->
+    <select id="getRecentProducts" resultType="Product">
+        SELECT
+            product_id,
+            product_name,
+            product_price,
+            product_img,
+            product_date,
+            category_id
+        FROM product
+        ORDER BY product_date DESC
+            LIMIT ${limit}
+    </select>
+
+    <!-- 또는 카테고리명도 함께 조회하려면 -->
+    <select id="getRecentProductsWithCategory" resultType="Product">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_price,
+            p.product_img,
+            p.product_date,
+            p.category_id,
+            c.category_name
+        FROM product p
+                 LEFT JOIN category c ON p.category_id = c.category_id
+        ORDER BY p.product_date DESC
+            LIMIT ${limit}
+    </select>
+
 </mapper>
