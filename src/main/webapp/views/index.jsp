@@ -27,34 +27,6 @@
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
    <!-- responsive style -->
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
-
-   <style>
-      .dropdown-menu {
-         border: 1px solid #ddd;
-         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-         border-radius: 5px;
-      }
-
-      .dropdown-item {
-         padding: 8px 16px;
-         color: #333;
-         transition: background-color 0.2s;
-      }
-
-      .dropdown-item:hover {
-         background-color: #f8f9fa;
-         color: #f7444e;
-      }
-
-      .dropdown-divider {
-         margin: 5px 0;
-      }
-
-      .dropdown-item i {
-         margin-right: 8px;
-         width: 16px;
-      }
-   </style>
 </head>
 <body>
 <div class="hero_area">
@@ -90,37 +62,9 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
 
-                  <%-- 사용자 드롭다운 메뉴로 교체 --%>
-                  <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
-                        <!-- 사람 아이콘 -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                           <circle cx="12" cy="7" r="4"/>
-                           <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-                        </svg>
-                     </a>
-
-                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <c:choose>
-                           <c:when test="${sessionScope.logincust == null}">
-                              <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
-                                 <i class="fa fa-sign-in" aria-hidden="true"></i> Login
-                              </a>
-                              <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
-                                 <i class="fa fa-user-plus" aria-hidden="true"></i> Register
-                              </a>
-                           </c:when>
-                           <c:otherwise>
-                              <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
-                                 <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
-                              </a>
-                              <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                                 <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
-                              </a>
-                           </c:otherwise>
-                        </c:choose>
-                     </div>
+                  <%-- ✅ 회원가입 링크 추가 --%>
+                  <li class="nav-item">
+                     <a class="nav-link" href="${pageContext.request.contextPath}/register" style="color: #f7444e; font-weight: bold;">Register</a>
                   </li>
 
                   <li class="nav-item">
@@ -517,50 +461,309 @@
          </h2>
       </div>
       <div class="row">
-         <%-- DB에서 가져온 상품 목록을 동적으로 표시 --%>
-         <c:forEach var="product" items="${productList}" varStatus="status">
-            <%-- 메인 페이지에서는 처음 8개 상품만 표시 --%>
-            <c:if test="${status.index < 8}">
-               <div class="col-sm-6 col-md-4 col-lg-3">
-                  <div class="box">
-                     <div class="option_container">
-                        <div class="options">
-                           <a href="${pageContext.request.contextPath}/product/${product.productId}" class="option1">
-                                 ${product.productName}
-                           </a>
-                           <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
-                              Add Cart
-                           </a>
-                           <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
-                              Buy Now
-                           </a>
-                        </div>
-                     </div>
-                     <div class="img-box">
-                        <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                              ${product.productName}
-                        </h5>
-                        <h6>
-                              ${product.productPrice}
-                        </h6>
-                     </div>
+         <%-- 이 부분은 JSTL을 사용하여 DB에서 가져온 상품 목록으로 동적으로 채워야 합니다. --%>
+         <%-- 아래는 정적인 예시입니다. --%>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Men's Shirt
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
                   </div>
                </div>
-            </c:if>
-         </c:forEach>
-
-         <%-- 상품이 없을 경우 메시지 표시 --%>
-         <c:if test="${empty productList}">
-            <div class="col-12">
-               <div class="text-center">
-                  <h4>상품이 준비 중입니다.</h4>
-                  <p>곧 다양한 상품을 만나보실 수 있습니다!</p>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p1.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $75
+                  </h6>
                </div>
             </div>
-         </c:if>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p2.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $80
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p3.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $68
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <%-- ... 나머지 상품들도 동일하게 경로 수정 ... --%>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p4.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $70
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p5.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $75
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p6.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $58
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p7.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $80
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p8.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $65
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p9.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $65
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p10.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $65
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p11.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Men's Shirt
+                  </h5>
+                  <h6>
+                     $65
+                  </h6>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-md-4 col-lg-4">
+            <div class="box">
+               <div class="option_container">
+                  <div class="options">
+                     <a href="" class="option1">
+                        Add To Cart
+                     </a>
+                     <a href="" class="option2">
+                        Buy Now
+                     </a>
+                  </div>
+               </div>
+               <div class="img-box">
+                  <img src="${pageContext.request.contextPath}/views/images/p12.png" alt="">
+               </div>
+               <div class="detail-box">
+                  <h5>
+                     Women's Dress
+                  </h5>
+                  <h6>
+                     $65
+                  </h6>
+               </div>
+            </div>
+         </div>
       </div>
       <div class="btn-box">
          <a href="${pageContext.request.contextPath}/product">
@@ -726,7 +929,7 @@
                               <li><a href="#">Account</a></li>
                               <li><a href="#">Checkout</a></li>
                               <li><a href="#">Login</a></li>
-                              <%-- 푸터에도 회원가입 링크 추가 --%>
+                              <%-- ✅ 푸터에도 회원가입 링크 추가 --%>
                               <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
                               <li><a href="#">Shopping</a></li>
                               <li><a href="#">Widget</a></li>
