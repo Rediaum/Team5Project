@@ -6,35 +6,115 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
 
     final ProductService productService;
-
-//     String dir = "product/";  <-- 이 줄을 삭제하거나 주석 처리하세요.
-
-    @RequestMapping("")
-    public String product(Model model) throws Exception{
-        log.info("Product 페이지 요청이 들어왔습니다.");
-        List<Product> productList = null;
-        productList  = productService.get();
-
-        // 이 model.addAttribute가 가장 중요합니다.
-        model.addAttribute("productList", productList);
-
-
-        // ▼▼▼ 아래 두 줄을 삭제하거나 주석 처리하세요. ▼▼▼
-        // model.addAttribute("left", dir + "left");
-        // model.addAttribute("center", dir + "center");
-
-        // ViewResolver가 "product"라는 이름으로 바로 product.jsp를 찾아갑니다.
+    /**
+     * 상품 목록 페이지
+     */
+    @RequestMapping("/product")
+    public String product(Model model) {
+        log.info("Start Product...");
+        try {
+            List<Product> productList = productService.get();
+            model.addAttribute("productList", productList);
+            log.info("상품 목록 페이지에 {} 개의 상품을 표시합니다.", productList.size());
+        } catch (Exception e) {
+            log.error("상품 목록 로딩 오류", e);
+            model.addAttribute("productList", new ArrayList<>());
+        }
         return "product";
+    }
+
+    /**
+     * 상품 상세 페이지
+     */
+    @RequestMapping("/product/detail/{productId}")
+    public String productDetail(@PathVariable int productId, Model model) {
+        log.info("Start Product Detail... productId: {}", productId);
+        try {
+            Product product = productService.get(productId);
+            model.addAttribute("product", product);
+            return "product-detail";
+        } catch (Exception e) {
+            log.error("상품 상세 정보 로딩 오류: {}", productId, e);
+            return "redirect:/product";
+        }
+    }
+
+    /**
+     * About 페이지
+     */
+    @RequestMapping("/about")
+    public String about(Model model) {
+        log.info("Start About...");
+        return "about";
+    }
+
+    /**
+     * Testimonial 페이지
+     */
+    @RequestMapping("/testimonial")
+    public String testimonial(Model model) {
+        log.info("Start Testimonial...");
+        return "testimonial";
+    }
+
+    /**
+     * Blog 페이지
+     */
+    @RequestMapping("/blog_list")
+    public String blog(Model model) {
+        log.info("Start Blog...");
+        return "blog_list";
+    }
+
+    /**
+     * Contact 페이지
+     */
+    @RequestMapping("/contact")
+    public String contact(Model model) {
+        log.info("Start Contact...");
+        return "contact";
+    }
+
+    /**
+     * Search 기능
+     */
+    @RequestMapping("/search")
+    public String search(@RequestParam(required = false) String keyword, Model model) {
+        log.info("Start Search... keyword: {}", keyword);
+        try {
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                List<Product> allProducts = productService.get();
+                List<Product> searchResults = new ArrayList<>();
+
+                for (Product product : allProducts) {
+                    if (product.getProductName().toLowerCase().contains(keyword.toLowerCase())) {
+                        searchResults.add(product);
+                    }
+                }
+
+                model.addAttribute("productList", searchResults);
+                model.addAttribute("keyword", keyword);
+                log.info("검색 키워드 '{}': {} 개의 상품을 찾았습니다.", keyword, searchResults.size());
+            } else {
+                model.addAttribute("productList", new ArrayList<>());
+            }
+        } catch (Exception e) {
+            log.error("검색 중 오류 발생", e);
+            model.addAttribute("productList", new ArrayList<>());
+        }
+        return "product"; // product.jsp 재사용
     }
 }
