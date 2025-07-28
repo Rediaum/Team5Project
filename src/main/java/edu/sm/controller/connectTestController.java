@@ -43,5 +43,3 @@ public class connectTestController {
         model.addAttribute("pageTitle", "Contact Us");
         return "contact"; // contact.jsp로 이동
     }
-
-}
