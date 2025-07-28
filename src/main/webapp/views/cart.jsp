@@ -2,99 +2,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-  <title>장바구니 - Shop Project Team 5</title>
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
-  <!-- font awesome style -->
-  <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
-  <!-- Custom styles for this template -->
-  <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
-
-  <!-- jQuery -->
-  <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
-  <!-- Bootstrap JavaScript -->
-  <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-
-  <script>
-    let cart = {
-      init: function() {},
-      del: function(cartId) {
-        if (confirm('이 상품을 장바구니에서 삭제하시겠습니까?')) {
-          location.href = '${pageContext.request.contextPath}/cart/delete?cartId=' + cartId;
-        }
-      },
-      mod: function(cartId) {
-        let cnt = $('#' + cartId).val();
-        if (cnt < 1) {
-          alert('수량은 1개 이상이어야 합니다.');
-          return;
-        }
-        location.href = '${pageContext.request.contextPath}/cart/update?cartId=' + cartId + '&quantity=' + cnt;
+<script>
+  let cart = {
+    init: function() {},
+    del: function(cartId) {
+      if (confirm('이 상품을 장바구니에서 삭제하시겠습니까?')) {
+        location.href = '${pageContext.request.contextPath}/cart/delete?cartId=' + cartId;
       }
+    },
+    mod: function(cartId) {
+      let cnt = $('#' + cartId).val();
+      if (cnt < 1) {
+        alert('수량은 1개 이상이어야 합니다.');
+        return;
+      }
+      location.href = '${pageContext.request.contextPath}/cart/update?cartId=' + cartId + '&quantity=' + cnt;
     }
-  </script>
-</head>
+  }
+</script>
 
-<body class="sub_page">
-<div class="hero_area">
-  <!-- header section starts -->
-  <header class="header_section">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg custom_nav-container">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-          <img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" />
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class=""> </span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/about">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </header>
-  <!-- end header section -->
-</div>
-
-<!-- Cart Page Content -->
-<section class="inner_page_head">
-  <div class="container_fuild">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="full">
-          <h3>장바구니</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<%-- 장바구니 페이지 내용 --%>
 <section class="layout_padding">
   <div class="container">
     <%-- 성공/오류 메시지 표시 --%>
@@ -118,7 +45,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h2>장바구니</h2>
+        <h2><i class="fa fa-shopping-cart"></i> ${sessionScope.logincust.custName}님의 장바구니</h2>
 
         <c:choose>
           <%-- 장바구니가 비어있는 경우 --%>
@@ -215,46 +142,6 @@
   </div>
 </section>
 
-<!-- footer section -->
-<footer class="footer_section">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 footer-col">
-        <div class="footer_contact">
-          <h4>Reach at..</h4>
-          <div class="contact_link_box">
-            <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
-            <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call +01 1234567890</span></a>
-            <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>demo@gmail.com</span></a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 footer-col">
-        <div class="footer_info">
-          <h4>Newsletter</h4>
-          <form action="#">
-            <input type="text" placeholder="Enter email" />
-            <button type="submit">Subscribe</button>
-          </form>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="footer_info">
-          <h5>Products</h5>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- copyright -->
-<div class="cpy_">
-  <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
-    Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-  </p>
-</div>
-
 <script>
   function proceedToCheckout() {
     alert('주문 기능은 곧 구현될 예정입니다!');
@@ -267,6 +154,3 @@
     }, 5000);
   });
 </script>
-
-</body>
-</html>
