@@ -1,0 +1,255 @@
+/* 로그인 페이지 전용 스타일 */
+
+/* 로그인 컨테이너 배경 */
+.login-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 50px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 로그인 카드 스타일 */
+.login-page .card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 50px;
+    background: #ffffff;
+}
+
+.login-page .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+    padding: 20px;
+}
+
+.login-page .card-header h4 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.login-page .card-body {
+    padding: 30px;
+}
+
+.login-page .card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 15px 30px;
+}
+
+/* 폼 요소 스타일 */
+.login-page .form-group {
+    margin-bottom: 20px;
+}
+
+.login-page label {
+    color: #495057;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.login-page label i {
+    color: #667eea;
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+.login-page .form-control {
+    height: 48px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background-color: #fafbfc;
+}
+
+.login-page .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background-color: #ffffff;
+}
+
+.login-page .form-control:valid {
+    border-color: #28a745;
+}
+
+/* 체크박스 스타일 */
+.login-page .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.login-page .form-check-input {
+    margin-right: 10px;
+    transform: scale(1.1);
+}
+
+.login-page .form-check-label {
+    color: #6c757d;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+/* 버튼 스타일 */
+.login-page .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.login-page .btn-primary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.login-page .btn-primary:active {
+    transform: translateY(0);
+}
+
+.login-page .btn-primary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 링크 스타일 */
+.login-page .btn-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    padding: 5px 10px;
+}
+
+.login-page .btn-link:hover {
+    color: #764ba2;
+    text-decoration: none;
+}
+
+.login-page .btn-link i {
+    margin-right: 5px;
+}
+
+/* 알림 메시지 스타일 */
+.login-page .alert {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    position: relative;
+}
+
+.login-page .alert i {
+    margin-right: 8px;
+}
+
+.login-page .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.login-page .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.login-page .alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+/* 애니메이션 효과 */
+.login-page .card {
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 로딩 스피너 */
+.fa-spin {
+    animation: fa-spin 1s infinite linear;
+}
+
+@keyframes fa-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .login-page {
+        padding: 20px 0;
+    }
+
+    .login-page .card {
+        margin: 20px 15px;
+    }
+
+    .login-page .card-body {
+        padding: 20px;
+    }
+
+    .login-page .card-footer {
+        padding: 15px 20px;
+    }
+
+    .login-page .form-control {
+        height: 44px;
+        font-size: 14px;
+    }
+
+    .login-page .btn-primary {
+        padding: 10px 15px;
+        font-size: 15px;
+    }
+
+    .login-page .card-footer .row .col-6 {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-page .card-footer .row {
+        flex-direction: column;
+    }
+
+    .login-page .card-footer .col-6 {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}

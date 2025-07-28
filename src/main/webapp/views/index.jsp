@@ -928,7 +928,7 @@
                            <ul>
                               <li><a href="#">Account</a></li>
                               <li><a href="#">Checkout</a></li>
-                              <li><a href="#">Login</a></li>
+                              <li><a href="/login">Login</a></li>
                               <%-- ✅ 푸터에도 회원가입 링크 추가 --%>
                               <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
                               <li><a href="#">Shopping</a></li>
