@@ -43,3 +43,19 @@ public class connectTestController {
         model.addAttribute("pageTitle", "Contact Us");
         return "contact"; // contact.jsp로 이동
     }
+
+//    /**
+//     * Search 기능
+//     */
+//    @GetMapping("/search")
+//    public String search(@RequestParam(required = false) String keyword, Model model) {
+//        model.addAttribute("pageTitle", "Search Results");
+//        if (keyword != null && !keyword.trim().isEmpty()) {
+//            model.addAttribute("keyword", keyword);
+//            // 검색 로직 추가
+//            // List<Product> searchResults = productService.searchProducts(keyword);
+//            // model.addAttribute("searchResults", searchResults);
+//        }
+//        return "search"; // search.jsp로 이동 또는 검색 결과 페이지
+//    }
+}
