@@ -347,6 +347,7 @@
                             <button type="button" class="btn btn-check" onclick="checkPhoneDuplicate()">중복확인</button>
                         </div>
                     </div>
+                    <div id="phoneCheckResult" class="check-result"></div>
                 </div>
 
                 <!-- 제출 버튼 -->

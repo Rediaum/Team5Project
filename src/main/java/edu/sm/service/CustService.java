@@ -74,6 +74,14 @@ public class CustService implements ProjectService<Cust, Integer> { // PK 타입
     }
 
     /**
+     * 전화번호로 회원 정보를 조회합니다. (로그인, 전화번호 중복 체크 시 사용)
+     * @param custPhone 고객 전화번호
+     * @return 고객 정보 객체 (없으면 null)
+     */
+    public Cust getByPhone(String custPhone) throws Exception {
+        return custRepository.selectByPhone(custPhone);
+    }
+    /**
      * 전화번호 중복 체크 - Admin 우선, 그 다음 Cust 확인
      */
     public boolean checkPhoneDuplicate(String phone) throws Exception {

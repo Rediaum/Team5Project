@@ -56,7 +56,7 @@ public class RegisterController {
 
             // --- Tambahkan validasi duplikasi nomor telepon di sini (server-side final check) ---
             if (custService.checkPhoneDuplicate(cust.getCustPhone())) {
-                model.addAttribute("error", "이미 사용중인 전화번호입니다."); // Nomor telepon sudah digunakan
+                model.addAttribute("error", "이미 사용중인 전화번호입니다.");
                 model.addAttribute("cust", cust);
                 return "register";
             }

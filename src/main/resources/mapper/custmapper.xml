@@ -16,6 +16,10 @@
         SELECT * FROM cust WHERE cust_email = #{custEmail}
     </select>
 
+    <select id="selectByPhone" parameterType="String" resultType="Cust">
+        SELECT * FROM cust WHERE cust_phone = #{custPhone}
+    </select>
+
     <insert id="insert" parameterType="Cust">
         INSERT INTO cust (cust_email, cust_pwd, cust_name, cust_phone, cust_regdate, cust_update)
         VALUES (#{custEmail}, #{custPwd}, #{custName}, #{custPhone}, NOW(), NOW())
