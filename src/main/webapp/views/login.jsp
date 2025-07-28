@@ -28,6 +28,13 @@
   <!-- login 전용 CSS -->
   <link href="${pageContext.request.contextPath}/views/css/login.css" rel="stylesheet" />
 
+  <!-- jQuery -->
+  <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap Popper.js -->
+  <script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
+
   <script>
     $(document).ready(function() {
       // 로그인 폼 제출 처리
@@ -62,13 +69,31 @@
             $('#loginBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> 로그인 중...');
           },
           success: function(response) {
-            // 성공 시 메인 페이지로 리다이렉트
-            alert('로그인 성공!');
-            window.location.href = '${pageContext.request.contextPath}/';
+            console.log('서버 응답:', response); // 디버깅용
+
+            // ✅ 응답 내용 확인 후 분기 처리
+            if (response && response.success === true) {
+              // 로그인 성공
+              alert(response.message + ' ' + response.custName + '님 환영합니다!');
+              window.location.href = '${pageContext.request.contextPath}/';
+            } else {
+              // 로그인 실패 (서버에서 실패 응답)
+              let errorMsg = response && response.message ? response.message : '로그인에 실패했습니다.';
+              alert(errorMsg);
+              $('#loginBtn').prop('disabled', false).html('<i class="fa fa-sign-in"></i> 로그인');
+              $('#pwd').val(''); // 비밀번호 필드 초기화
+              $('#pwd').focus();
+            }
           },
           error: function(xhr, status, error) {
-            // 실패 시 에러 메시지 표시
-            alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
+            console.error('AJAX 오류:', {
+              status: xhr.status,
+              statusText: xhr.statusText,
+              responseText: xhr.responseText
+            });
+
+            // AJAX 요청 자체 실패
+            alert('서버와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
             $('#loginBtn').prop('disabled', false).html('<i class="fa fa-sign-in"></i> 로그인');
           }
         });
@@ -223,12 +248,6 @@
   </p>
 </div>
 
-<!-- jQuery -->
-<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
-<!-- Bootstrap Popper.js -->
-<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
-<!-- Bootstrap JavaScript -->
-<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
 <!-- Custom JavaScript -->
 <script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 </body>
