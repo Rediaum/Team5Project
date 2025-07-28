@@ -1,6 +1,7 @@
 <%-- 1. JSP 페이지 기본 설정 및 JSTL 태그 라이브러리 선언 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -48,13 +49,34 @@
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
-                  <%-- Account dropdown menu --%>
                   <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Account <span class="caret"></span></span></a>
-                     <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
-                        <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
-                     </ul>
+                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                           <circle cx="12" cy="7" r="4"/>
+                           <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                        </svg>
+                     </a>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust == null}">
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
+                                 <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+                              </a>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
+                                 <i class="fa fa-user-plus" aria-hidden="true"></i> Register
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                                 <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                              </a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                                 <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
+                     </div>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/cart">
@@ -120,31 +142,79 @@
                <div class="box">
                   <div class="option_container">
                      <div class="options">
-                           <%-- 상품 상세 페이지 링크 (productId 사용) --%>
-                        <a href="${pageContext.request.contextPath}/product/${product.productId}" class="option1">
+                           <%-- 상품 상세 페이지 링크 --%>
+                        <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="option1">
                               ${product.productName}
                         </a>
-                           <%-- 장바구니 추가 링크 (productId 사용) --%>
-                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
-                           Add Cart
-                        </a>
-                           <%-- 상품 구매 링크 (productId 사용) 경로 설정 예정 --%>
-                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
-                           Buy Now
-                        </a>
+
+                           <%-- 장바구니 추가 버튼 (로그인 체크) --%>
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust != null}">
+                              <%-- 로그인시: 장바구니 추가 --%>
+                              <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
+                                 Add To Cart
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <%-- 비로그인시: 로그인 페이지로 --%>
+                              <a href="${pageContext.request.contextPath}/login" class="option2"
+                                 onclick="alert('장바구니에 상품을 담으려면 로그인이 필요합니다.'); return true;">
+                                 Add To Cart
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
+
+                           <%-- 바로 구매 버튼 (로그인 체크) --%>
+                        <c:choose>
+                           <c:when test="${sessionScope.logincust != null}">
+                              <%-- 로그인시: 바로 구매 --%>
+                              <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
+                                 Buy Now
+                              </a>
+                           </c:when>
+                           <c:otherwise>
+                              <%-- 비로그인시: 로그인 페이지로 --%>
+                              <a href="${pageContext.request.contextPath}/login" class="option3"
+                                 onclick="alert('구매하려면 로그인이 필요합니다.'); return true;">
+                                 Buy Now
+                              </a>
+                           </c:otherwise>
+                        </c:choose>
                      </div>
                   </div>
                   <div class="img-box">
                         <%-- 이미지 경로: ${pageContext.request.contextPath}/views/images/상품이미지파일명 --%>
                      <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
                   </div>
-                  <div class="detail-box">
-                     <h5>
-                           ${product.productName}
-                     </h5>
-                     <h6>
-                        $${product.productPrice}
-                     </h6>
+                  <!-- 상품 정보 (이름, 가격) - 할인 적용 버전 -->
+                  <div class="detail-box" style="display: block !important">
+                     <h5>${product.productName}</h5>
+
+                     <!-- 할인율에 따른 가격 표시 -->
+                     <c:choose>
+                        <c:when test="${product.discountRate > 0}">
+                           <!-- 할인이 있는 경우 -->
+                           <c:set var="discountedPrice" value="${product.productPrice * (100 - (product.discountRate*100)) / 100}" />
+                           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                              <!-- 할인된 가격 (크게) -->
+                              <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
+                                 <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                              </h6>
+                              <!-- 원래 가격 (취소선) -->
+                              <span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
+                                       <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                    </span>
+                              <!-- 할인율 배지 -->
+                              <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
+                                       ${product.discountRate*100}% 할인
+                                    </span>
+                           </div>
+                        </c:when>
+                        <c:otherwise>
+                           <!-- 할인이 없는 경우 -->
+                           <h6><fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" /></h6>
+                        </c:otherwise>
+                     </c:choose>
                   </div>
                </div>
             </div>

@@ -10,9 +10,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CartService implements ProjectService<Cart, Integer> { // <-- ProjectService를 구현
+public class CartService implements ProjectService<Cart, Integer> {
 
-    final CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public void register(Cart cart) throws Exception {
@@ -31,18 +31,35 @@ public class CartService implements ProjectService<Cart, Integer> { // <-- Proje
 
     @Override
     public Cart get(Integer cartId) throws Exception {
-        // return cartRepository.select(cartId); // Mapper에 select 쿼리가 있다면 구현
-        return null;
+        return cartRepository.select(cartId);
     }
 
     @Override
     public List<Cart> get() throws Exception {
-        // return cartRepository.selectAll(); // Mapper에 selectAll 쿼리가 있다면 구현
-        return null;
+        return cartRepository.selectAll();
     }
 
-    // CartService에만 필요한 별도의 메서드
-    public List<Cart> findByCustId(String custId) throws Exception {
+    // ===== 장바구니 전용 메소드 =====
+
+    public List<Cart> findByCustId(Integer custId) throws Exception {
         return cartRepository.findByCustId(custId);
+    }
+
+    public int calculateTotalPrice(Integer custId) throws Exception {
+        List<Cart> cartItems = cartRepository.findByCustId(custId);
+        int totalPrice = 0;
+        for (Cart item : cartItems) {
+            totalPrice += item.getProductPrice() * item.getProductQt();
+        }
+        return totalPrice;
+    }
+
+    public int getCartItemCount(Integer custId) throws Exception {
+        List<Cart> cartItems = cartRepository.findByCustId(custId);
+        int totalCount = 0;
+        for (Cart item : cartItems) {
+            totalCount += item.getProductQt();
+        }
+        return totalCount;
     }
 }
