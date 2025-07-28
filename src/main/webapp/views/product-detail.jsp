@@ -248,6 +248,34 @@
             color: white;
         }
 
+        /* 드롭다운 메뉴 스타일 */
+        .dropdown-menu {
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .dropdown-item {
+            padding: 8px 16px;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        .dropdown-item i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
         @media (max-width: 768px) {
             .product-title {
                 font-size: 2rem;
@@ -293,6 +321,38 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="7" r="4"/>
+                                    <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                                </svg>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <c:choose>
+                                    <c:when test="${sessionScope.logincust == null}">
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
+                                            <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+                                        </a>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
+                                            <i class="fa fa-user-plus" aria-hidden="true"></i> Register
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                                            <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/cart">
                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -360,12 +420,23 @@
 
                     <!-- 가격 정보 -->
                     <div class="price-section">
-                            <span class="current-price">
-                                <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
-                            </span>
-                        <c:if test="${product.discountRate > 0}">
-                            <span class="discount-rate">${product.discountRate}% 할인</span>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${product.discountRate > 0}">
+                                <c:set var="discountedPrice" value="${product.productPrice * (100 - (product.discountRate*100)) / 100}" />
+                                <span class="current-price">
+                                        <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                                    </span>
+                                <span style="font-size: 1.2rem; color: #999; text-decoration: line-through; margin-right: 10px;">
+                                        <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                    </span>
+                                <span class="discount-rate">${product.discountRate*100}% 할인</span>
+                            </c:when>
+                            <c:otherwise>
+                                    <span class="current-price">
+                                        <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                    </span>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
                     <!-- 제품 상세 정보 -->

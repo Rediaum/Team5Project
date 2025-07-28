@@ -134,13 +134,35 @@
                         <%-- 이미지 경로: ${pageContext.request.contextPath}/views/images/상품이미지파일명 --%>
                      <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
                   </div>
-                  <div class="detail-box" style="display: block !important;">
-                     <h5>
-                           ${product.productName}
-                     </h5>
-                     <h6>
-                        <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
-                     </h6>
+                  <!-- 상품 정보 (이름, 가격) - 할인 적용 버전 -->
+                  <div class="detail-box" style="display: block !important">
+                     <h5>${product.productName}</h5>
+
+                     <!-- 할인율에 따른 가격 표시 -->
+                     <c:choose>
+                        <c:when test="${product.discountRate > 0}">
+                           <!-- 할인이 있는 경우 -->
+                           <c:set var="discountedPrice" value="${product.productPrice * (100 - (product.discountRate*100)) / 100}" />
+                           <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                              <!-- 할인된 가격 (크게) -->
+                              <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
+                                 <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                              </h6>
+                              <!-- 원래 가격 (취소선) -->
+                              <span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
+                                       <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                    </span>
+                              <!-- 할인율 배지 -->
+                              <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
+                                       ${product.discountRate*100}% 할인
+                                    </span>
+                           </div>
+                        </c:when>
+                        <c:otherwise>
+                           <!-- 할인이 없는 경우 -->
+                           <h6><fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" /></h6>
+                        </c:otherwise>
+                     </c:choose>
                   </div>
                </div>
             </div>
