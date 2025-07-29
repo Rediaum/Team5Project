@@ -82,6 +82,20 @@
         });
       });
     });
+    document.getElementById("profileForm").addEventListener("submit", function (e) {
+      const newPwd = document.getElementById("custPwd").value.trim();
+      const confirmPwd = document.getElementById("pwdConfirm").value.trim();
+      const resultDiv = document.getElementById("pwdCheckResult");
+      
+      // Jika password baru diisi, pastikan konfirmasi cocok
+      if (newPwd !== "" && newPwd !== confirmPwd) {
+        e.preventDefault();
+        resultDiv.textContent = "비밀번호가 일치하지 않습니다.";
+        return;
+      }
+      
+      resultDiv.textContent = "비밀번호가 일치합니다.";
+    });
   </script>
 
 </head>
@@ -150,13 +164,18 @@
           <input type="text" name="custPhone" value="${cust.custPhone}" required />
         </p>
         
+        <p>현비밀번호:*
+          <input type="password" name="currentPwd" required placeholder="기존 비밀번호를 입력하세요." />
+        </p>
+        
         <p>새비밀번호:
           <input type="password" name="custPwd" placeholder="비밀번호를 변경하지 않을 경우 비워두세요." />
         </p>
         
-        <p>현비밀번호:*
-          <input type="password" name="currentPwd" required placeholder="기존 비밀번호를 입력하세요." />
+        <p>새비밀번호 확인:
+          <input type="password" id="pwdconfirm" name="pwdConfirm" placeholder="비밀번호를 변경하지 않을 경우 비워두세요." />
         </p>
+        <div id="pwdCheckResult" class="check-result"></div>
         
         <button type="submit" class="btn btn-update btn-lg btn-block">Update Profile</button>
       </form>
