@@ -27,6 +27,10 @@ public class CustService implements ProjectService<Cust, Integer> { // PK 타입
     @Override
     public void modify(Cust cust) throws Exception {
         // 비밀번호 변경 시에도 암호화 로직이 필요합니다.
+        if (cust.getCustPwd() == null || cust.getCustPwd().isEmpty()) {
+            Cust oldCust = custRepository.select(cust.getCustId());
+            cust.setCustPwd(oldCust.getCustPwd());
+        }
         custRepository.update(cust);
     }
 
@@ -119,4 +123,6 @@ public class CustService implements ProjectService<Cust, Integer> { // PK 타입
 
         return true;
     }
+
+
 }
