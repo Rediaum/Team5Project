@@ -5,12 +5,9 @@
 ### 🕺구성원/역할
 1. 주민성(Rediaum)          <https://github.com/Rediaum>
 
-2. 주희성(jhs0106)        <https://github.com/jhs0106> // Readme 수정 후 작성자
+2. 주희성(jhs0106)        <https://github.com/jhs0106> 
 
 3. 라마단 비에리(vieri)          <https://github.com/vieri4643>
-
-4. 김혜림(kimhyerim0000)  <https://github.com/kimhyerim0000> // Readme 원본 작성자
-
 
 
 ### 🗂️ ERD
