@@ -801,5 +801,124 @@ a:focus {
     }
   }
 }
+/* ===== 기존 style.css 파일 맨 아래에 추가할 블랙프라이데이 스타일 ===== */
 
+/* 블랙프라이데이 텍스트 기본 스타일 */
+.blackfriday-text {
+  color: #ffffff !important;
+}
+
+.blackfriday-title {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7) !important;
+}
+
+.blackfriday-desc {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7) !important;
+}
+
+/* 슬라이드별 컬러 테마 */
+.blackfriday-red {
+  color: #ff4757 !important;
+}
+
+.blackfriday-orange {
+  color: #ffa502 !important;
+}
+
+.blackfriday-green {
+  color: #2ed573 !important;
+}
+
+/* 블랙프라이데이 버튼 스타일 */
+.blackfriday-btn-red {
+  background-color: #ff4757 !important;
+  border-color: #ff4757 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-red:hover {
+  background-color: #ff3838 !important;
+  border-color: #ff3838 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-orange {
+  background-color: #ffa502 !important;
+  border-color: #ffa502 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-orange:hover {
+  background-color: #ff9500 !important;
+  border-color: #ff9500 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-green {
+  background-color: #2ed573 !important;
+  border-color: #2ed573 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-green:hover {
+  background-color: #26c165 !important;
+  border-color: #26c165 !important;
+  color: #ffffff !important;
+}
+
+.blackfriday-btn-white {
+  margin-left: 15px !important;
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.blackfriday-btn-white:hover {
+  background-color: #f8f9fa !important;
+  border-color: #f8f9fa !important;
+  color: #000000 !important;
+}
+
+/* 배경 이미지 전환 효과 */
+.slider_bg_box img {
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 767px) {
+  .blackfriday-title {
+    font-size: 3rem !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
+  }
+
+  .blackfriday-desc {
+    font-size: 14px !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+  }
+
+  .blackfriday-btn-white {
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .blackfriday-title {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .btn-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .blackfriday-btn-white {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+}
 // end footer section
