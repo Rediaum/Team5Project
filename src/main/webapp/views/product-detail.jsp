@@ -53,6 +53,9 @@
                 $('#back_btn').click(() => {
                     history.back();
                 });
+
+                // 페이지 로드 시 초기 가격 계산
+                updateTotalPrice();
             }
         }
 
@@ -60,10 +63,27 @@
             let quantityInput = document.getElementById('quantity');
             let currentQuantity = parseInt(quantityInput.value);
             let newQuantity = currentQuantity + delta;
+            let maxQuantity = parseInt(quantityInput.max); // input의 max 속성값 가져오기
 
-            if (newQuantity >= 1 && newQuantity <= 10) {
+            if (newQuantity >= 1 && newQuantity <= maxQuantity) {
                 quantityInput.value = newQuantity;
+                updateTotalPrice(); // 수량 변경 시 총 가격 업데이트
             }
+        }
+
+        // 총 가격 업데이트 함수
+        function updateTotalPrice() {
+            let quantity = parseInt(document.getElementById('quantity').value);
+            let unitPrice = parseFloat(document.getElementById('final-unit-price').value);
+
+            // 총 가격 계산
+            let totalPrice = unitPrice * quantity;
+
+            // 가격을 천 단위 구분자와 함께 표시
+            let formattedPrice = Math.floor(totalPrice).toLocaleString('ko-KR') + '원';
+
+            // 총 가격 표시 업데이트
+            document.getElementById('total-price').textContent = formattedPrice;
         }
 
         $(document).ready(() => {
@@ -422,19 +442,59 @@
                     <div class="price-section">
                         <c:choose>
                             <c:when test="${product.discountRate > 0}">
-                                <c:set var="discountedPrice" value="${product.productPrice * (100 - (product.discountRate*100)) / 100}" />
-                                <span class="current-price">
+                                <!-- 할인율이 0.1 형태(10%)인지 70 형태(70%)인지 확인 -->
+                                <c:set var="displayDiscountRate" value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" />
+                                <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+
+                                <!-- 단위 가격 표시 -->
+                                <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                                    <span style="font-size: 1.2rem; color: #666; margin-right: 10px;">단위 가격:</span>
+                                    <span class="current-price" id="unit-price" style="font-size: 1.5rem;">
                                         <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
                                     </span>
-                                <span style="font-size: 1.2rem; color: #999; text-decoration: line-through; margin-right: 10px;">
+                                    <span style="font-size: 1.2rem; color: #999; text-decoration: line-through; margin-left: 10px;">
                                         <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
                                     </span>
-                                <span class="discount-rate">${product.discountRate*100}% 할인</span>
+                                    <span class="discount-rate" style="margin-left: 10px;">
+                                        <fmt:formatNumber type="number" pattern="##" value="${displayDiscountRate}" />% 할인
+                                    </span>
+                                </div>
+
+                                <!-- 총 가격 표시 -->
+                                <div>
+                                    <span style="font-size: 1.4rem; color: #666; margin-right: 10px;">총 가격:</span>
+                                    <span class="current-price" id="total-price" style="font-size: 2.2rem; color: #e74c3c;">
+                                        <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                                    </span>
+                                </div>
+
+                                <!-- 숨겨진 필드 -->
+                                <input type="hidden" id="original-price" value="${product.productPrice}" />
+                                <input type="hidden" id="discount-rate" value="${actualDiscountRate}" />
+                                <input type="hidden" id="final-unit-price" value="${discountedPrice}" />
                             </c:when>
                             <c:otherwise>
-                                    <span class="current-price">
+                                <!-- 단위 가격 표시 -->
+                                <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                                    <span style="font-size: 1.2rem; color: #666; margin-right: 10px;">단위 가격:</span>
+                                    <span class="current-price" id="unit-price" style="font-size: 1.5rem;">
                                         <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
                                     </span>
+                                </div>
+
+                                <!-- 총 가격 표시 -->
+                                <div>
+                                    <span style="font-size: 1.4rem; color: #666; margin-right: 10px;">총 가격:</span>
+                                    <span class="current-price" id="total-price" style="font-size: 2.2rem; color: #e74c3c;">
+                                        <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                    </span>
+                                </div>
+
+                                <!-- 숨겨진 필드 -->
+                                <input type="hidden" id="original-price" value="${product.productPrice}" />
+                                <input type="hidden" id="discount-rate" value="0" />
+                                <input type="hidden" id="final-unit-price" value="${product.productPrice}" />
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -469,12 +529,28 @@
                         </c:if>
                     </div>
 
+                    <!-- 상품 설명 섹션 -->
+                    <div class="product-description" style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #007bff;">
+                        <h5 style="color: #333; margin-bottom: 15px; font-weight: 600;">상품 설명</h5>
+                        <div style="color: #666; line-height: 1.6;">
+                            <c:choose>
+                                <c:when test="${product.description != null && !empty product.description}">
+                                    ${product.description}
+                                </c:when>
+                                <c:otherwise>
+                                    이 상품에 대한 자세한 설명이 준비 중입니다.
+                                    <br>궁금한 사항이 있으시면 고객센터로 문의해 주세요.
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+
                     <!-- 수량 선택 -->
                     <div class="quantity-section">
                         <label for="quantity" class="info-label">수량:</label>
                         <div class="quantity-controls">
                             <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="10">
+                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99" onchange="updateTotalPrice()">
                             <button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button>
                         </div>
                     </div>
