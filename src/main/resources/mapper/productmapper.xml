@@ -49,33 +49,143 @@
     </delete>
 
     <!-- 최신 상품 조회 -->
-    <select id="getRecentProducts" resultType="Product">
+    <select id="getRecentProducts" parameterType="int" resultMap="productResultMap">
         SELECT
             product_id,
             product_name,
             product_price,
             product_img,
-            product_date,
+            product_regdate,
             category_id
         FROM product
-        ORDER BY product_date DESC
-            LIMIT ${limit}
+        ORDER BY product_regdate DESC
+            LIMIT #{limit}
     </select>
 
-    <!-- 또는 카테고리명도 함께 조회하려면 -->
-    <select id="getRecentProductsWithCategory" resultType="Product">
+    <!-- 카테고리명과 함께 조회 -->
+    <select id="getRecentProductsWithCategory" parameterType="int" resultMap="productResultMap">
         SELECT
             p.product_id,
             p.product_name,
             p.product_price,
             p.product_img,
-            p.product_date,
+            p.product_regdate,
             p.category_id,
             c.category_name
         FROM product p
                  LEFT JOIN category c ON p.category_id = c.category_id
-        ORDER BY p.product_date DESC
-            LIMIT ${limit}
+        ORDER BY p.product_regdate DESC
+            LIMIT #{limit}
+    </select>
+
+    <!-- 키워드 검색 (상품명 + 설명) -->
+    <select id="searchByKeyword" parameterType="String" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE (product_name LIKE CONCAT('%', #{keyword}, '%')
+            OR description LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY product_regdate DESC
+    </select>
+
+    <!-- 가격 범위 검색 -->
+    <select id="searchByPriceRange" parameterType="map" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE 1=1
+        <if test="minPrice != null and minPrice > 0">
+            AND product_price >= #{minPrice}
+        </if>
+        <if test="maxPrice != null and maxPrice > 0">
+            AND product_price &lt;= #{maxPrice}
+        </if>
+        ORDER BY product_price ASC
+    </select>
+
+    <!-- 카테고리별 검색 -->
+    <select id="searchByCategory" parameterType="Integer" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE category_id = #{categoryId}
+        ORDER BY product_regdate DESC
+    </select>
+
+    <!-- 고급 복합 검색 -->
+    <select id="advancedSearch" parameterType="map" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE 1=1
+
+        <!-- 키워드 조건 -->
+        <if test="keyword != null and keyword != ''">
+            AND (product_name LIKE CONCAT('%', #{keyword}, '%')
+            OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+
+        <!-- 카테고리 조건 -->
+        <if test="categoryId != null and categoryId > 0">
+            AND category_id = #{categoryId}
+        </if>
+
+        <!-- 가격 범위 조건 -->
+        <if test="minPrice != null and minPrice > 0">
+            AND product_price >= #{minPrice}
+        </if>
+        <if test="maxPrice != null and maxPrice > 0">
+            AND product_price &lt;= #{maxPrice}
+        </if>
+
+        <!-- 정렬 -->
+        ORDER BY
+        <choose>
+            <when test="sortBy == 'price'">
+                product_price
+            </when>
+            <when test="sortBy == 'name'">
+                product_name
+            </when>
+            <when test="sortBy == 'regdate'">
+                product_regdate
+            </when>
+            <otherwise>
+                product_regdate
+            </otherwise>
+        </choose>
+
+        <choose>
+            <when test="sortOrder == 'ASC'">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 인기 상품 (주문 데이터와 조인) -->
+    <select id="getPopularProducts" parameterType="int" resultMap="productResultMap">
+        SELECT p.*, COALESCE(order_count, 0) as order_count
+        FROM product p
+                 LEFT JOIN (
+            SELECT oi.product_id, COUNT(*) as order_count
+            FROM orderitem oi
+                     JOIN custorder co ON oi.order_id = co.order_id
+            WHERE co.order_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            GROUP BY oi.product_id
+        ) popular ON p.product_id = popular.product_id
+        ORDER BY order_count DESC, p.product_regdate DESC
+            LIMIT #{limit}
+    </select>
+
+    <!-- 할인 상품 -->
+    <select id="getDiscountedProducts" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE discount_rate > 0
+        ORDER BY discount_rate DESC, product_regdate DESC
+    </select>
+
+    <!-- 자동완성 제안 -->
+    <select id="getProductNameSuggestions" parameterType="map" resultType="String">
+        SELECT DISTINCT product_name
+        FROM product
+        WHERE product_name LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY product_name ASC
+            LIMIT #{limit}
     </select>
 
 </mapper>
