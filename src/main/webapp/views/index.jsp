@@ -490,7 +490,11 @@
                            <c:choose>
                               <c:when test="${product.discountRate > 0}">
                                  <!-- 할인이 있는 경우 -->
-                                 <c:set var="discountedPrice" value="${product.productPrice * (100 - (product.discountRate*100)) / 100}" />
+                                 <!-- 할인율이 0.1 형태(10%)인지 70 형태(70%)인지 확인 -->
+                                 <c:set var="displayDiscountRate" value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" />
+                                 <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                 <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+
                                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                     <!-- 할인된 가격 (크게) -->
                                     <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
@@ -502,7 +506,7 @@
                                     </span>
                                     <!-- 할인율 배지 -->
                                     <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
-                                       ${product.discountRate*100}% 할인
+                                       <fmt:formatNumber type="number" pattern="##" value="${displayDiscountRate}" />% 할인
                                     </span>
                                  </div>
                               </c:when>
