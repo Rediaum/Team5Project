@@ -72,6 +72,47 @@
             <li class="nav-item active">
               <a class="nav-link" href="${pageContext.request.contextPath}/cart">Cart</a>
             </li>
+            <li class="nav-item dropdown">
+              <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
+                <!-- 사람 아이콘 SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="7" r="4"/><!-- 머리 -->
+                  <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><!-- 몸통 -->
+                </svg>
+              </a>
+
+              <%-- 드롭다운 메뉴 내용 --%>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <%-- 로그인 상태에 따른 메뉴 분기 --%>
+                <c:choose>
+                  <%-- 로그인하지 않은 경우 --%>
+                  <c:when test="${sessionScope.logincust == null}">
+                    <%-- 로그인 메뉴 --%>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
+                      <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+                    </a>
+                    <%-- 회원가입 메뉴 --%>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
+                      <i class="fa fa-user-plus" aria-hidden="true"></i> Register
+                    </a>
+                  </c:when>
+                  <%-- 로그인한 경우 --%>
+                  <c:otherwise>
+                    <%-- 사용자 프로필 메뉴 (사용자 이름 표시) --%>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                      <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                    </a>
+                    <%-- 구분선 --%>
+                    <div class="dropdown-divider"></div>
+                    <%-- 로그아웃 메뉴 --%>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                      <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
+                    </a>
+                  </c:otherwise>
+                </c:choose>
+              </div>
+            </li>
           </ul>
         </div>
       </nav>

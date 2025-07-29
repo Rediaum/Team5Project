@@ -9,7 +9,26 @@
     </select>
 
     <select id="selectAll" resultType="Address">
+        SELECT * FROM address ORDER BY is_default DESC, address_update DESC
+    </select>
+
+    <!-- 특정 고객의 모든 배송지 조회 (기본 배송지가 먼저 오도록 정렬) -->
+    <select id="selectByCustomerId" parameterType="Integer" resultType="Address">
         SELECT * FROM address
+        WHERE cust_id = #{custId}
+        ORDER BY is_default DESC, address_update DESC
+    </select>
+
+    <!-- 특정 고객의 기본 배송지 조회 -->
+    <select id="selectDefaultByCustomerId" parameterType="Integer" resultType="Address">
+        SELECT * FROM address
+        WHERE cust_id = #{custId} AND is_default = true
+            LIMIT 1
+    </select>
+
+    <!-- 특정 고객의 배송지 개수 조회 -->
+    <select id="countByCustomerId" parameterType="Integer" resultType="int">
+        SELECT COUNT(*) FROM address WHERE cust_id = #{custId}
     </select>
 
     <insert id="insert" parameterType="Address">
@@ -19,12 +38,18 @@
 
     <update id="update" parameterType="Address">
         UPDATE address SET address_name=#{addressName},
-                        postal_code=#{postalCode},
-                        address=#{address},
-                        detail_address=#{detailAddress},
-                        is_default=#{isDefault},
-                        address_update=NOW()
+                           postal_code=#{postalCode},
+                           address=#{address},
+                           detail_address=#{detailAddress},
+                           is_default=#{isDefault},
+                           address_update=NOW()
         WHERE address_id=#{addressId}
+    </update>
+
+    <!-- 특정 고객의 모든 배송지를 기본 배송지가 아닌 상태로 변경 -->
+    <update id="resetDefaultByCustomerId" parameterType="Integer">
+        UPDATE address SET is_default = false, address_update = NOW()
+        WHERE cust_id = #{custId}
     </update>
 
     <delete id="delete" parameterType="Integer">
