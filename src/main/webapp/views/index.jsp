@@ -29,7 +29,7 @@
    <!-- responsive style -->
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
-   <%-- 3. 사용자 드롭다운 메뉴 스타일 --%>
+   <%-- 드롭다운 메뉴 스타일 --%>
    <style>
       /* 드롭다운 메뉴 기본 스타일 */
       .dropdown-menu {
@@ -65,7 +65,7 @@
 </head>
 <body>
 <div class="hero_area">
-   <%-- 4. 헤더 섹션 시작 --%>
+   <%-- 헤더 섹션 시작 --%>
    <header class="header_section">
       <div class="container">
          <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -86,28 +86,27 @@
                   </li>
 
                   <%-- Pages 드롭다운 메뉴 --%>
-                  <li class="nav-item dropdown">
-                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Pages <span class="caret"></span></a>
-                     <ul class="dropdown-menu">
-                        <li><a href="${pageContext.request.contextPath}/about">About</a></li>
-                        <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                     </ul>
-                  </li>
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #000;">
+                           <span class="nav-label">Pages <span class="caret"></span></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pagesDropdown">
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/about">About</a>
+                           <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
+                        </div>
+                     </li>
 
                   <%-- Products 메뉴 --%>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
-
-
-
-
+                  
                   <%-- Contact 메뉴 --%>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
 
-                  <%-- 5. 사용자 관리 드롭다운 메뉴 (사람 아이콘) --%>
+                  <%-- 사용자 관리 드롭다운 메뉴 (사람 아이콘) --%>
                   <li class="nav-item dropdown">
                      <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
                      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
@@ -116,6 +115,7 @@
                            <circle cx="12" cy="7" r="4"/><!-- 머리 -->
                            <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><!-- 몸통 -->
                         </svg>
+                        <span class="nav-label"><span class="caret"></span></span>
                      </a>
 
                      <%-- 드롭다운 메뉴 내용 --%>
@@ -195,7 +195,6 @@
                            <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
                         </div>
                      </form>
-
                </ul>
             </div>
          </nav>
