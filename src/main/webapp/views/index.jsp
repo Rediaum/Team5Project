@@ -99,10 +99,8 @@
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
 
-                  <%-- Blog 메뉴 --%>
-                  <li class="nav-item">
-                     <a class="nav-link" href="${pageContext.request.contextPath}/blog_list">Blog</a>
-                  </li>
+
+
 
                   <%-- Contact 메뉴 --%>
                   <li class="nav-item">
@@ -199,9 +197,9 @@
    </header>
    <!-- end header section -->
 
-   <%-- 8. 슬라이더 섹션 시작 --%>
-   <section class="slider_section ">
-      <%-- 슬라이더 배경 이미지 --%>
+   <%-- 8. 슬라이더 섹션 시작 (블랙프라이데이 - 간단 버전) --%>
+   <section class="slider_section">
+      <%-- 슬라이더 배경 이미지 (기존 구조 유지) --%>
       <div class="slider_bg_box">
          <img src="${pageContext.request.contextPath}/views/images/slider-bg.jpg" alt="">
       </div>
@@ -209,30 +207,25 @@
       <%-- Bootstrap 캐러셀 --%>
       <div id="customCarousel1" class="carousel slide" data-ride="carousel">
          <div class="carousel-inner">
-            <%-- 첫 번째 슬라이드 (활성화 상태) --%>
+            <%-- 첫 번째 슬라이드 - 메인 블랙프라이데이 --%>
             <div class="carousel-item active">
-               <div class="container ">
+               <div class="container">
                   <div class="row">
-                     <div class="col-md-7 col-lg-6 ">
-                        <div class="detail-box">
-                           <%-- 메인 제목 --%>
-                           <h1>
-                              <span>Sale 20% Off</span>
+                     <div class="col-md-7 col-lg-6">
+                        <div class="detail-box blackfriday-text">
+                           <h1 class="blackfriday-title">
+                              <span class="blackfriday-red">Black Friday 70% Off</span>
                               <br>
                               On Everything
                            </h1>
-                           <%-- 설명 텍스트 --%>
-                           <p>
-                              Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                           <p class="blackfriday-desc">
+                              🔥 올해 최대 규모의 블랙프라이데이 세일이 시작되었습니다! 모든 카테고리에서 진행되는 특별 할인 혜택을 놓치지 마세요. 다양한 전자제품들과 함께하는 기간 한정 특가입니다.
                            </p>
-                           <%-- 액션 버튼들 --%>
                            <div class="btn-box">
-                              <%-- 쇼핑하기 버튼 --%>
-                              <a href="${pageContext.request.contextPath}/product" class="btn1">
+                              <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-red">
                                  Shop Now
                               </a>
-                              <%-- 회원가입 버튼 (녹색) --%>
-                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
+                              <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
                                  Join Now
                               </a>
                            </div>
@@ -242,53 +235,53 @@
                </div>
             </div>
 
-            <%-- 두 번째 슬라이드 --%>
-            <div class="carousel-item ">
-               <div class="container ">
-                  <div class="row">
-                     <div class="col-md-7 col-lg-6 ">
-                        <div class="detail-box">
-                           <h1>
-                              <span>Sale 20% Off</span>
-                              <br>
-                              On Everything
-                           </h1>
-                           <p>
-                              Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
-                           </p>
-                           <div class="btn-box">
-                              <a href="${pageContext.request.contextPath}/product" class="btn1">
-                                 Shop Now
-                              </a>
-                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
-                                 Join Now
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <%-- 세 번째 슬라이드 --%>
+            <%-- 두 번째 슬라이드 - 특가 상품 --%>
             <div class="carousel-item">
-               <div class="container ">
+               <div class="container">
                   <div class="row">
-                     <div class="col-md-7 col-lg-6 ">
-                        <div class="detail-box">
-                           <h1>
-                              <span>Sale 20% Off</span>
+                     <div class="col-md-7 col-lg-6">
+                        <div class="detail-box blackfriday-text">
+                           <h1 class="blackfriday-title">
+                              <span class="blackfriday-orange">Special Deals 50% Off</span>
                               <br>
-                              On Everything
+                              Selected Items
                            </h1>
-                           <p>
-                              Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                           <p class="blackfriday-desc">
+                              ⚡ 프리미엄 상품들의 Flash Deal이 진행 중입니다! 엄선된 인기 아이템들을 특가로 만나보세요. 블랙프라이데이 주말 동안만 제공되는 독점 혜택이니 서둘러 주세요!
                            </p>
                            <div class="btn-box">
-                              <a href="${pageContext.request.contextPath}/product" class="btn1">
+                              <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-orange">
                                  Shop Now
                               </a>
-                              <a href="${pageContext.request.contextPath}/register" class="btn1" style="margin-left: 15px; background-color: #28a745; border-color: #28a745;">
+                              <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
+                                 Join Now
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <%-- 세 번째 슬라이드 - 신규 회원 혜택 --%>
+            <div class="carousel-item">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-7 col-lg-6">
+                        <div class="detail-box blackfriday-text">
+                           <h1 class="blackfriday-title">
+                              <span class="blackfriday-green">New Members Get 80% Off</span>
+                              <br>
+                              First Purchase
+                           </h1>
+                           <p class="blackfriday-desc">
+                              🎁 지금 회원가입하시면 평생 멤버 특권을 누리실 수 있습니다! 신규 고객님께는 블랙프라이데이 할인에 추가로 10% 더 드립니다. 오늘 가입하고 특별한 혜택을 받아보세요.
+                           </p>
+                           <div class="btn-box">
+                              <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-green">
+                                 Shop Now
+                              </a>
+                              <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
                                  Join Now
                               </a>
                            </div>
@@ -681,7 +674,6 @@
                               <li><a href="${pageContext.request.contextPath}/about">About</a></li>
                               <li><a href="#">Services</a></li>
                               <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                              <li><a href="${pageContext.request.contextPath}/blog_list">Blog</a></li>
                               <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
                            </ul>
                         </div>
