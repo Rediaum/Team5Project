@@ -30,6 +30,7 @@ public class InfoController {
     @PostMapping("/info/update")
     public String updateProfile(@ModelAttribute Cust cust,
                                 @RequestParam("currentPwd") String currentPwd,
+                                @RequestParam("pwdConfirm") String pwdConfirm,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) throws Exception {
         Cust loginUser = (Cust) session.getAttribute("logincust");
@@ -45,29 +46,42 @@ public class InfoController {
             return "redirect:/info";
         }
 
-        // 데이터 변경 사항 확인
+        // 변경 여부 체크
         boolean isPhoneChanged = cust.getCustPhone() != null && !cust.getCustPhone().equals(loginUser.getCustPhone());
-        boolean isPwdChanged = cust.getCustPwd() != null && !cust.getCustPwd().isEmpty() && !cust.getCustPwd().equals(loginUser.getCustPwd());
+        boolean isPwdChanged = cust.getCustPwd() != null && !cust.getCustPwd().isEmpty();
 
+        // 비밀번호 확인 필드와 일치 여부 체크
+        if (isPwdChanged && (pwdConfirm == null || !cust.getCustPwd().equals(pwdConfirm))) {
+            redirectAttributes.addFlashAttribute("errorMsg", "새 비밀번호와 확인이 일치하지 않습니다.");
+            return "redirect:/info";
+        }
+
+        // 새 비밀번호가 현재와 동일한지 확인
+        if (isPwdChanged && cust.getCustPwd().equals(currentPwd)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
+            return "redirect:/info";
+        }
+
+        // 데이터 변경 없으면 리턴
         if (!isPhoneChanged && !isPwdChanged) {
             redirectAttributes.addFlashAttribute("errorMsg", "수정된 데이터가 없습니다.");
             return "redirect:/info";
         }
 
-        // 비밀번호를 변경하지 않았다면 기존 비밀번호를 사용하세요.
+        // 비밀번호를 변경하지 않는다면 기존 것을 유지
         if (!isPwdChanged) {
             cust.setCustPwd(loginUser.getCustPwd());
         }
 
-        // 폼에서 전송되지 않은 다른 데이터를 추가하여 업데이트 시 null이 되지 않도록 합니다.
+        // 폼에서 누락된 필드를 덮어쓰기 방지
         cust.setCustName(loginUser.getCustName());
         cust.setCustEmail(loginUser.getCustEmail());
         cust.setCustRegdate(loginUser.getCustRegdate());
 
-        // Update database
+        // 저장
         custService.modify(cust);
 
-        // Update session
+        // 세션 업데이트
         session.setAttribute("logincust", cust);
 
         redirectAttributes.addFlashAttribute("successMsg", "프로필 수정되었읍니다..");
