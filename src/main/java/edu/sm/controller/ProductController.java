@@ -118,33 +118,32 @@ public class ProductController {
         return "contact";
     }
 
-    /**
-     * Search 기능
-     */
-    @RequestMapping("/search")
-    public String search(@RequestParam(required = false) String keyword, Model model) {
-        log.info("Start Search... keyword: {}", keyword);
-        try {
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                List<Product> allProducts = productService.get();
-                List<Product> searchResults = new ArrayList<>();
-
-                for (Product product : allProducts) {
-                    if (product.getProductName().toLowerCase().contains(keyword.toLowerCase())) {
-                        searchResults.add(product);
-                    }
-                }
-
-                model.addAttribute("productList", searchResults);
-                model.addAttribute("keyword", keyword);
-                log.info("검색 키워드 '{}': {} 개의 상품을 찾았습니다.", keyword, searchResults.size());
-            } else {
-                model.addAttribute("productList", new ArrayList<>());
-            }
-        } catch (Exception e) {
-            log.error("검색 중 오류 발생", e);
-            model.addAttribute("productList", new ArrayList<>());
-        }
-        return "product"; // product.jsp 재사용
-    }
+//    //Search 기능
+//
+//    @RequestMapping("/search")
+//    public String search(@RequestParam(required = false) String keyword, Model model) {
+//        log.info("Start Search... keyword: {}", keyword);
+//        try {
+//            if (keyword != null && !keyword.trim().isEmpty()) {
+//                List<Product> allProducts = productService.get();
+//                List<Product> searchResults = new ArrayList<>();
+//
+//                for (Product product : allProducts) {
+//                    if (product.getProductName().toLowerCase().contains(keyword.toLowerCase())) {
+//                        searchResults.add(product);
+//                    }
+//                }
+//
+//                model.addAttribute("productList", searchResults);
+//                model.addAttribute("keyword", keyword);
+//                log.info("검색 키워드 '{}': {} 개의 상품을 찾았습니다.", keyword, searchResults.size());
+//            } else {
+//                model.addAttribute("productList", new ArrayList<>());
+//            }
+//        } catch (Exception e) {
+//            log.error("검색 중 오류 발생", e);
+//            model.addAttribute("productList", new ArrayList<>());
+//        }
+//        return "product"; // product.jsp 재사용
+//    }
 }

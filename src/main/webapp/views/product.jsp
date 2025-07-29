@@ -15,7 +15,7 @@
 
    <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 수정 --%>
    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-   <title>Famms - Fashion HTML Template</title>
+   <title>Shop - Team5Project</title>
    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
    <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
@@ -207,10 +207,15 @@
                               </svg>
                      </a>
                   </li>
-                  <form class="form-inline" action="${pageContext.request.contextPath}/search">
-                     <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                     </button>
+                  <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
+                     <div class="search-input-container">
+                        <input type="text" name="keyword" class="form-control search-input-header"
+                               placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
+                        <button class="btn search-btn-header" type="submit">
+                           <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
+                     </div>
                   </form>
                </ul>
             </div>
@@ -439,7 +444,7 @@
          <div class="col-md-4 footer-col">
             <div class="footer_detail">
                <a href="${pageContext.request.contextPath}/" class="footer-logo">
-                  Famms
+                  Electro Shop
                </a>
                <p>
                   Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with
