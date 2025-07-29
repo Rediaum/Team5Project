@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.repository.ProductRepository">
 
+    <!-- ResultMap 정의 -->
     <resultMap id="productResultMap" type="edu.sm.dto.Product">
         <id property="productId" column="product_id"/>
         <result property="categoryId" column="category_id"/>
@@ -16,25 +17,43 @@
         <result property="productUpdate" column="product_update"/>
     </resultMap>
 
+    <!-- 기본 CRUD 쿼리들 -->
     <select id="select" parameterType="Integer" resultMap="productResultMap">
-        SELECT * FROM product p
-                          LEFT JOIN category c ON p.category_id=c.category_id
-        WHERE p.product_id=#{productId}
+        SELECT * FROM product
+        WHERE product_id = #{productId}
     </select>
 
     <select id="selectAll" resultMap="productResultMap">
-        SELECT * FROM product p
-                          LEFT JOIN category c ON p.category_id = c.category_id
-        ORDER BY p.product_id DESC
+        SELECT * FROM product
+        ORDER BY product_regdate DESC
     </select>
 
     <insert id="insert" parameterType="edu.sm.dto.Product">
-        INSERT INTO product (category_id, product_name, description, product_price, discount_rate, product_img, product_regdate, product_update)
-        VALUES (#{categoryId},#{productName},#{description},#{productPrice},#{discountRate},#{productImg}, NOW(), NOW())
+        INSERT INTO product (
+            category_id,
+            product_name,
+            description,
+            product_price,
+            discount_rate,
+            product_img,
+            product_regdate,
+            product_update
+        )
+        VALUES (
+                   #{categoryId},
+                   #{productName},
+                   #{description},
+                   #{productPrice},
+                   #{discountRate},
+                   #{productImg},
+                   NOW(),
+                   NOW()
+               )
     </insert>
 
     <update id="update" parameterType="edu.sm.dto.Product">
         UPDATE product SET
+                           category_id = #{categoryId},
                            product_name = #{productName},
                            description = #{description},
                            product_price = #{productPrice},
@@ -45,19 +64,16 @@
     </update>
 
     <delete id="delete" parameterType="Integer">
-        DELETE FROM product WHERE product_id=#{productId}
+        DELETE FROM product WHERE product_id = #{productId}
     </delete>
+
+    <!-- ========================================
+         검색 관련 쿼리들 (Search Queries)
+         ======================================== -->
 
     <!-- 최신 상품 조회 -->
     <select id="getRecentProducts" parameterType="int" resultMap="productResultMap">
-        SELECT
-            product_id,
-            product_name,
-            product_price,
-            product_img,
-            product_regdate,
-            category_id
-        FROM product
+        SELECT * FROM product
         ORDER BY product_regdate DESC
             LIMIT #{limit}
     </select>
@@ -65,12 +81,7 @@
     <!-- 카테고리명과 함께 조회 -->
     <select id="getRecentProductsWithCategory" parameterType="int" resultMap="productResultMap">
         SELECT
-            p.product_id,
-            p.product_name,
-            p.product_price,
-            p.product_img,
-            p.product_regdate,
-            p.category_id,
+            p.*,
             c.category_name
         FROM product p
                  LEFT JOIN category c ON p.category_id = c.category_id
@@ -81,8 +92,10 @@
     <!-- 키워드 검색 (상품명 + 설명) -->
     <select id="searchByKeyword" parameterType="String" resultMap="productResultMap">
         SELECT * FROM product
-        WHERE (product_name LIKE CONCAT('%', #{keyword}, '%')
-            OR description LIKE CONCAT('%', #{keyword}, '%'))
+        WHERE (
+                  product_name LIKE CONCAT('%', #{keyword}, '%')
+                      OR description LIKE CONCAT('%', #{keyword}, '%')
+                  )
         ORDER BY product_regdate DESC
     </select>
 
@@ -106,15 +119,17 @@
         ORDER BY product_regdate DESC
     </select>
 
-    <!-- 고급 복합 검색 -->
+    <!-- 고급 복합 검색 (핵심 검색 쿼리) -->
     <select id="advancedSearch" parameterType="map" resultMap="productResultMap">
         SELECT * FROM product
         WHERE 1=1
 
         <!-- 키워드 조건 -->
         <if test="keyword != null and keyword != ''">
-            AND (product_name LIKE CONCAT('%', #{keyword}, '%')
-            OR description LIKE CONCAT('%', #{keyword}, '%'))
+            AND (
+            product_name LIKE CONCAT('%', #{keyword}, '%')
+            OR description LIKE CONCAT('%', #{keyword}, '%')
+            )
         </if>
 
         <!-- 카테고리 조건 -->
@@ -130,7 +145,7 @@
             AND product_price &lt;= #{maxPrice}
         </if>
 
-        <!-- 정렬 -->
+        <!-- 동적 정렬 -->
         ORDER BY
         <choose>
             <when test="sortBy == 'price'">
@@ -157,35 +172,98 @@
         </choose>
     </select>
 
-    <!-- 인기 상품 (주문 데이터와 조인) -->
+    <!-- 인기 상품 조회 (최근 30일 주문 기준) -->
     <select id="getPopularProducts" parameterType="int" resultMap="productResultMap">
-        SELECT p.*, COALESCE(order_count, 0) as order_count
+        SELECT
+            p.*,
+            COALESCE(order_stats.order_count, 0) as order_count
         FROM product p
                  LEFT JOIN (
-            SELECT oi.product_id, COUNT(*) as order_count
+            SELECT
+                oi.product_id,
+                COUNT(*) as order_count
             FROM orderitem oi
                      JOIN custorder co ON oi.order_id = co.order_id
             WHERE co.order_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
             GROUP BY oi.product_id
-        ) popular ON p.product_id = popular.product_id
+        ) order_stats ON p.product_id = order_stats.product_id
         ORDER BY order_count DESC, p.product_regdate DESC
             LIMIT #{limit}
     </select>
 
-    <!-- 할인 상품 -->
+    <!-- 할인 상품 조회 -->
     <select id="getDiscountedProducts" resultMap="productResultMap">
         SELECT * FROM product
         WHERE discount_rate > 0
         ORDER BY discount_rate DESC, product_regdate DESC
     </select>
 
-    <!-- 자동완성 제안 -->
+    <!-- 자동완성 제안 (상품명 기반) -->
     <select id="getProductNameSuggestions" parameterType="map" resultType="String">
         SELECT DISTINCT product_name
         FROM product
         WHERE product_name LIKE CONCAT('%', #{keyword}, '%')
         ORDER BY product_name ASC
             LIMIT #{limit}
+    </select>
+
+    <!-- ========================================
+         추가 유용한 쿼리들 (Additional Queries)
+         ======================================== -->
+
+    <!-- 카테고리별 상품 개수 -->
+    <select id="getProductCountByCategory" resultType="map">
+        SELECT
+            c.category_id,
+            c.category_name,
+            COUNT(p.product_id) as product_count
+        FROM category c
+                 LEFT JOIN product p ON c.category_id = p.category_id
+        GROUP BY c.category_id, c.category_name
+        ORDER BY c.category_name
+    </select>
+
+    <!-- 가격대별 상품 개수 -->
+    <select id="getProductCountByPriceRange" resultType="map">
+        SELECT
+            CASE
+                WHEN product_price &lt; 50000 THEN '5만원 미만'
+                WHEN product_price &lt; 100000 THEN '5만원-10만원'
+                WHEN product_price &lt; 200000 THEN '10만원-20만원'
+                WHEN product_price &lt; 500000 THEN '20만원-50만원'
+                ELSE '50만원 이상'
+                END as price_range,
+            COUNT(*) as product_count
+        FROM product
+        GROUP BY
+            CASE
+                WHEN product_price &lt; 50000 THEN '5만원 미만'
+                WHEN product_price &lt; 100000 THEN '5만원-10만원'
+                WHEN product_price &lt; 200000 THEN '10만원-20만원'
+                WHEN product_price &lt; 500000 THEN '20만원-50만원'
+                ELSE '50만원 이상'
+                END
+        ORDER BY MIN(product_price)
+    </select>
+
+    <!-- 최근 등록된 상품 (관리자용) -->
+    <select id="getRecentProductsForAdmin" parameterType="map" resultMap="productResultMap">
+        SELECT
+        p.*,
+        c.category_name
+        FROM product p
+        LEFT JOIN category c ON p.category_id = c.category_id
+        ORDER BY p.product_regdate DESC
+        <if test="limit != null and limit > 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 재고 부족 상품 (향후 확장용) -->
+    <select id="getLowStockProducts" parameterType="int" resultMap="productResultMap">
+        SELECT * FROM product
+        WHERE stock_quantity &lt; #{threshold}
+        ORDER BY stock_quantity ASC, product_name ASC
     </select>
 
 </mapper>
