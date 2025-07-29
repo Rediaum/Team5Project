@@ -12,11 +12,9 @@ public interface CustRepository extends ProjectRepository<Cust, Integer> {
 
     // ProjectRepository에 없는, email로 조회하는 특별한 기능
     public Cust selectByEmail(String custEmail) throws Exception;
-    public Cust selectByPhone(String custPhone) throws Exception;
 
     /**
      * Admin 테이블에서 이메일 중복 체크 (단순 카운트)
      */
     int checkAdminEmailExists(String email) throws Exception;
-    int checkAdminPhoneExists(String phone) throws Exception;
 }

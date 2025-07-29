@@ -38,27 +38,39 @@ public class InfoController {
         }
 
         cust.setCustId(loginUser.getCustId());
+
+        // 기존 비밀번호 확인
+        if (!loginUser.getCustPwd().equals(currentPwd)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "현비밀번호가 잘못되었습니다!");
+            return "redirect:/info";
+        }
+
+        // 데이터 변경 사항 확인
+        boolean isPhoneChanged = cust.getCustPhone() != null && !cust.getCustPhone().equals(loginUser.getCustPhone());
+        boolean isPwdChanged = cust.getCustPwd() != null && !cust.getCustPwd().isEmpty() && !cust.getCustPwd().equals(loginUser.getCustPwd());
+
+        if (!isPhoneChanged && !isPwdChanged) {
+            redirectAttributes.addFlashAttribute("errorMsg", "수정된 데이터가 없습니다.");
+            return "redirect:/info";
+        }
+
+        // 비밀번호를 변경하지 않았다면 기존 비밀번호를 사용하세요.
+        if (!isPwdChanged) {
+            cust.setCustPwd(loginUser.getCustPwd());
+        }
+
+        // 폼에서 전송되지 않은 다른 데이터를 추가하여 업데이트 시 null이 되지 않도록 합니다.
         cust.setCustName(loginUser.getCustName());
         cust.setCustEmail(loginUser.getCustEmail());
         cust.setCustRegdate(loginUser.getCustRegdate());
 
-        // Cek password dulu, jika salah set error dan kembali
-        if (!loginUser.getCustPwd().equals(currentPwd)) {
-            redirectAttributes.addFlashAttribute("error", "Password lama salah!");
-            return "redirect:/info";
-        }
-
-        // Update field yang valid, contohnya: jika password kosong, pakai password lama
-        if (cust.getCustPwd() == null || cust.getCustPwd().trim().isEmpty()) {
-            cust.setCustPwd(loginUser.getCustPwd());
-        }
-
+        // Update database
         custService.modify(cust);
 
-        // Update session user
+        // Update session
         session.setAttribute("logincust", cust);
 
-        redirectAttributes.addFlashAttribute("success", "Profil berhasil diperbarui.");
+        redirectAttributes.addFlashAttribute("successMsg", "프로필 수정되었읍니다..");
         return "redirect:/info";
     }
 

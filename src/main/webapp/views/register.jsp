@@ -12,7 +12,7 @@
     <meta name="author" content="" />
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
     <title>${pageTitle}</title>
-
+    
     <!-- bootstrap core css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
     <!-- font awesome style -->
@@ -21,7 +21,7 @@
     <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
-
+    
     <style>
         .register-container {
             max-width: 600px;
@@ -81,7 +81,7 @@
             border-bottom-left-radius: 0;
         }
     </style>
-
+    
     <script>
         let emailChecked = false;
         // 이메일 중복 검사
@@ -125,7 +125,7 @@
                     emailChecked = false;
                 });
         }
-        
+
         let phoneChecked = false;
         function checkPhoneDuplicate() {
             const custPhone = document.getElementById('custPhone').value;
@@ -236,12 +236,6 @@
                     return;
                 }
 
-                if (!phoneChecked) {
-                    alert('전화번호 중복 확인을 해주세요.');
-                    e.preventDefault();
-                    return;
-                }
-
                 if (pwd !== pwdConfirm) {
                     alert('비밀번호가 일치하지 않습니다.');
                     e.preventDefault();
@@ -322,14 +316,14 @@
             <div class="heading_container heading_center">
                 <h2>회원가입</h2>
             </div>
-
+            
             <!-- 오류 메시지 표시 -->
             <c:if test="${not empty error}">
                 <div class="alert alert-danger" role="alert">
                         ${error}
                 </div>
             </c:if>
-
+            
             <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
                 <!-- 이메일 -->
                 <div class="form-group">
@@ -343,14 +337,14 @@
                     </div>
                     <div id="emailCheckResult" class="check-result"></div>
                 </div>
-
+                
                 <!-- 비밀번호 -->
                 <div class="form-group">
                     <label for="custPwd">비밀번호 *</label>
                     <input type="password" class="form-control" id="custPwd" name="custPwd"
                            required placeholder="비밀번호를 입력하세요">
                 </div>
-
+                
                 <!-- 비밀번호 확인 -->
                 <div class="form-group">
                     <label for="pwdConfirm">비밀번호 확인 *</label>
@@ -358,27 +352,24 @@
                            required placeholder="비밀번호를 다시 입력하세요">
                     <div id="pwdCheckResult" class="check-result"></div>
                 </div>
-
+                
                 <!-- 이름 -->
                 <div class="form-group">
                     <label for="custName">이름 *</label>
                     <input type="text" class="form-control" id="custName" name="custName"
                            value="${cust.custName}" required placeholder="이름을 입력하세요">
                 </div>
-
+                
                 <!-- 전화번호 -->
                 <div class="form-group">
                     <label for="custPhone">전화번호</label>
                     <div class="input-group">
                         <input type="tel" class="form-control" id="custPhone" name="custPhone"
                                value="${cust.custPhone}" placeholder="010-1234-5678">
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-check" onclick="checkPhoneDuplicate()">중복확인</button>
-                        </div>
                     </div>
                     <div id="phoneCheckResult" class="check-result"></div>
                 </div>
-
+                
                 <!-- 제출 버튼 -->
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-register btn-lg btn-block">회원가입</button>

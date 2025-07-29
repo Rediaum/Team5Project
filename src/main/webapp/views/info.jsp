@@ -65,20 +65,18 @@
   <script>
     $(document).ready(function () {
       $('#profileForm').on('submit', function (e) {
-        e.preventDefault(); // Mencegah submit bawaan form
+        e.preventDefault();
         
         $.ajax({
           url: $(this).attr('action'),
           type: 'POST',
-          data: $(this).serialize(), // Mengambil semua data form
+          data: $(this).serialize(),
           success: function (data, textStatus, xhr) {
-            // Jika berhasil, arahkan ke halaman info untuk menampilkan flash message
             window.location.href = '/info';
           },
           error: function (xhr, status, error) {
-            // Error 4xx atau 5xx, tampilkan alert umum
             $('#notification').html(
-                    '<div class="alert alert-danger">Terjadi kesalahan saat memperbarui profil.</div>'
+                    '<div class="alert alert-danger">프로필을 업데이트하는 과정에서 오류가 발생했습니다.</div>'
             );
           }
         });
@@ -134,30 +132,30 @@
       </div>
       
       <!-- 오류 메시지 표시 -->
-      <c:if test="${not empty error}">
-        <div class="alert alert-danger">${error}</div>
+      <c:if test="${not empty errorMsg}">
+        <div class="alert alert-danger">${errorMsg}</div>
       </c:if>
-      <c:if test="${not empty success}">
-        <div class="alert alert-success">${success}</div>
+      <c:if test="${not empty successMsg}">
+        <div class="alert alert-success">${successMsg}</div>
       </c:if>
       
       <div id="notification"></div>
       <form id="profileform" action="${pageContext.request.contextPath}/info/update" method="post">
         <input type="hidden" name="custId" value="${cust.custId}" />
         
-        <p>Name: <strong>${cust.custName}</strong></p>
-        <p>Email: <strong>${cust.custEmail}</strong></p>
+        <p>이름: <strong>${cust.custName}</strong></p>
+        <p>이메일: <strong>${cust.custEmail}</strong></p>
         
-        <p>Nomor HP:
+        <p>전화번호:
           <input type="text" name="custPhone" value="${cust.custPhone}" required />
         </p>
         
-        <p>Password Baru:
-          <input type="password" name="custPwd" placeholder="Kosongkan jika tidak ganti password" />
+        <p>새비밀번호:
+          <input type="password" name="custPwd" placeholder="비밀번호를 변경하지 않을 경우 비워두세요." />
         </p>
         
-        <p>Password Saat Ini:
-          <input type="password" name="currentPwd" required placeholder="Masukkan password lama" />
+        <p>현비밀번호:*
+          <input type="password" name="currentPwd" required placeholder="기존 비밀번호를 입력하세요." />
         </p>
         
         <button type="submit" class="btn btn-update btn-lg btn-block">Update Profile</button>
