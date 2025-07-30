@@ -45,15 +45,31 @@ public class CartService implements ProjectService<Cart, Integer> {
         return cartRepository.findByCustId(custId);
     }
 
+    // 총 가격 계산 - 할인 적용 버전
+
     public int calculateTotalPrice(Integer custId) throws Exception {
         List<Cart> cartItems = cartRepository.findByCustId(custId);
         int totalPrice = 0;
+
         for (Cart item : cartItems) {
-            totalPrice += item.getProductPrice() * item.getProductQt();
+            // 할인율 적용 계산
+            int originalPrice = item.getProductPrice();
+            double discountRate = item.getDiscountRate();
+
+            // 할인율이 1보다 크면 퍼센트 형태(예: 70), 작으면 소수 형태(예: 0.7)
+            double actualDiscountRate = discountRate > 1 ? discountRate / 100 : discountRate;
+
+            // 할인된 가격 계산
+            int discountedPrice = (int) (originalPrice * (1 - actualDiscountRate));
+
+            // 총 가격에 수량 곱해서 누적
+            totalPrice += discountedPrice * item.getProductQt();
         }
+
         return totalPrice;
     }
 
+    // 장바구니 상품 개수 계산
     public int getCartItemCount(Integer custId) throws Exception {
         List<Cart> cartItems = cartRepository.findByCustId(custId);
         int totalCount = 0;

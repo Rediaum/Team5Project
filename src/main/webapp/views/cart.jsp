@@ -19,7 +19,7 @@
   <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
-  
+
   <style>
     /* 드롭다운 메뉴 기본 스타일 */
     .dropdown-menu {
@@ -27,29 +27,41 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       border-radius: 5px;
     }
-    
+
     /* 드롭다운 아이템 스타일 */
     .dropdown-item {
       padding: 8px 16px;
       color: #333;
       transition: background-color 0.2s;
     }
-    
+
     /* 드롭다운 아이템 호버 효과 */
     .dropdown-item:hover {
       background-color: #f8f9fa;
       color: #f7444e;
     }
-    
+
     /* 드롭다운 구분선 스타일 */
     .dropdown-divider {
       margin: 5px 0;
     }
-    
+
     /* 드롭다운 아이템 내 아이콘 스타일 */
     .dropdown-item i {
       margin-right: 8px;
       width: 16px;
+    }
+
+    /* 상품명 링크 스타일 */
+    .product-name-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .product-name-link:hover {
+      color: #f7444e;
+      text-decoration: none;
     }
   </style>
 
@@ -87,12 +99,12 @@
       <nav class="navbar navbar-expand-lg custom_nav-container ">
         <%-- 로고 - 홈페이지로 링크 --%>
         <a class="navbar-brand" href="${pageContext.request.contextPath}/"><img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" /></a>
-        
+
         <%-- 모바일 메뉴 토글 버튼 --%>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class=""> </span>
         </button>
-        
+
         <%-- 네비게이션 메뉴 --%>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav">
@@ -100,7 +112,7 @@
             <li class="nav-item active">
               <a class="nav-link" href="${pageContext.request.contextPath}/">Home <span class="sr-only">(current)</span></a>
             </li>
-            
+
             <%-- Pages 드롭다운 메뉴 --%>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #000;">
@@ -111,17 +123,17 @@
                 <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
               </div>
             </li>
-            
+
             <%-- Products 메뉴 --%>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
             </li>
-            
+
             <%-- Contact 메뉴 --%>
             <li class="nav-item">
               <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
             </li>
-            
+
             <%-- 사용자 관리 드롭다운 메뉴 (사람 아이콘) --%>
             <li class="nav-item dropdown">
               <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
@@ -133,7 +145,7 @@
                 </svg>
                 <span class="nav-label"><span class="caret"></span></span>
               </a>
-              
+
               <%-- 드롭다운 메뉴 내용 --%>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                 <%-- 로그인 상태에 따른 메뉴 분기 --%>
@@ -165,7 +177,7 @@
                 </c:choose>
               </div>
             </li>
-            
+
             <%-- 장바구니 아이콘 메뉴 (로그인시에만 표시) --%>
             <c:if test="${sessionScope.logincust != null}">
               <li class="nav-item">
@@ -199,7 +211,7 @@
                 </a>
               </li>
             </c:if>
-            
+
             <%-- 7. 검색 폼 --%>
             <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
               <div class="search-input-container">
@@ -280,21 +292,57 @@
             <!-- 장바구니 상품 목록 -->
             <div class="cart-items">
               <c:forEach var="c" items="${cartItems}">
+                <!-- 할인율 계산 -->
+                <c:set var="actualDiscountRate" value="${c.discountRate > 1 ? c.discountRate / 100 : c.discountRate}" />
+                <c:set var="discountedPrice" value="${c.productPrice * (1 - actualDiscountRate)}" />
+                <c:set var="itemTotalPrice" value="${discountedPrice * c.productQt}" />
+
                 <div class="card mb-3">
                   <div class="card-body">
                     <div class="row align-items-center">
                       <!-- 상품 이미지 -->
                       <div class="col-md-2">
-                        <img src="${pageContext.request.contextPath}/views/images/${c.productImg}"
-                             width="100%" alt="${c.productName}" style="border-radius: 8px;">
+                        <a href="${pageContext.request.contextPath}/product/detail/${c.productId}">
+                          <img src="${pageContext.request.contextPath}/views/images/${c.productImg}"
+                               width="100%" alt="${c.productName}" style="border-radius: 8px;">
+                        </a>
                       </div>
 
                       <!-- 상품 정보 -->
                       <div class="col-md-3">
-                        <h5 class="mb-1">${c.productName}</h5>
-                        <p class="text-muted mb-0">
-                          <fmt:formatNumber value="${c.productPrice}" pattern="#,###" />원
-                        </p>
+                        <!-- 상품명 - 클릭 시 상세페이지로 이동 -->
+                        <h5 class="mb-1">
+                          <a href="${pageContext.request.contextPath}/product/detail/${c.productId}"
+                             class="product-name-link">
+                              ${c.productName}
+                          </a>
+                        </h5>
+
+                        <!-- 가격 표시 (할인 적용) -->
+                        <div class="price-info">
+                          <c:choose>
+                            <c:when test="${c.discountRate > 0}">
+                              <!-- 할인이 있는 경우 -->
+                              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                <span class="text-danger font-weight-bold" style="font-size: 1.1rem;">
+                                  <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                                </span>
+                                <span class="text-muted" style="text-decoration: line-through; font-size: 0.9rem;">
+                                  <fmt:formatNumber type="number" pattern="###,###원" value="${c.productPrice}" />
+                                </span>
+                                <span class="badge badge-danger">
+                                  <fmt:formatNumber type="number" pattern="##" value="${c.discountRate > 1 ? c.discountRate : c.discountRate * 100}" />% 할인
+                                </span>
+                              </div>
+                            </c:when>
+                            <c:otherwise>
+                              <!-- 할인이 없는 경우 -->
+                              <p class="text-muted mb-0">
+                                <fmt:formatNumber value="${c.productPrice}" pattern="#,###" />원
+                              </p>
+                            </c:otherwise>
+                          </c:choose>
+                        </div>
                       </div>
 
                       <!-- 수량 조절 -->
@@ -313,10 +361,10 @@
                         </div>
                       </div>
 
-                      <!-- 소계 -->
+                      <!-- 소계 (할인 적용된 가격으로 계산) -->
                       <div class="col-md-2 text-center">
                         <strong style="font-size: 18px; color: #f7444e;">
-                          <fmt:formatNumber value="${c.productPrice * c.productQt}" pattern="#,###" />원
+                          <fmt:formatNumber value="${itemTotalPrice}" pattern="#,###" />원
                         </strong>
                       </div>
 

@@ -158,14 +158,14 @@
                </div>
                <div class="col-md-2">
                   <div class="form-group">
-                     <label>최소 가격</label>
-                     <input type="number" name="minPrice" class="form-control" placeholder="0" value="${minPrice}">
+                     <label>최소 금액</label>
+                     <input type="number" name="minPrice" class="form-control" placeholder="최소가격"  step="10000" value="${minPrice}">
                   </div>
                </div>
                <div class="col-md-2">
                   <div class="form-group">
-                     <label>최대 가격</label>
-                     <input type="number" name="maxPrice" class="form-control" placeholder="무제한" value="${maxPrice}">
+                     <label>최대 금액</label>
+                     <input type="number" name="maxPrice" class="form-control" placeholder= "최대가격" step="10000" value="${maxPrice}">
                   </div>
                </div>
                <div class="col-md-1">
@@ -259,12 +259,12 @@
                                  <fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원
                               </div>
                               <div class="btn_container">
-                                 <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="btn btn-primary btn-sm">
+                                 <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="btn btn-dark btn-sm">
                                     상세보기
                                  </a>
                                  <c:choose>
                                     <c:when test="${sessionScope.logincust != null}">
-                                       <a href="javascript:void(0)" onclick="addToCart(${product.productId})" class="btn btn-success btn-sm ml-2">
+                                       <a href="javascript:void(0)" onclick="addToCart(${product.productId})" class="btn btn-light btn-sm ml-2">
                                           장바구니
                                        </a>
                                     </c:when>

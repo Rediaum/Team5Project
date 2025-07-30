@@ -1359,7 +1359,7 @@ form input[type="submit"]:focus {
     transform: translateY(-50%) scale(1.1);
 }
 
-/* 자동완성 드롭다운 */
+/* 자동완성 드롭다운 (이번엔 삭제된 기능 )*/
 .suggestions-dropdown, .header-suggestions-dropdown {
     position: absolute;
     top: 100%;
