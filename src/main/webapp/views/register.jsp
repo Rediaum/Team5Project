@@ -163,7 +163,7 @@
             const custPwdInput = document.getElementById('custPwd');
             const pwdConfirmInput = document.getElementById('pwdConfirm');
             const pwdLengthResultDiv = document.getElementById('pwdLengthResult');
-            const pwdCheckResultDiv = document.getElementById('pwdCheckResult'); // Untuk konfirmasi password
+            const pwdCheckResultDiv = document.getElementById('pwdCheckResult');
 
             // 비밀번호 길이 검사 (Real-time)
             custPwdInput.addEventListener('input', function() {
@@ -254,6 +254,13 @@
                 }
             });
         });
+
+        // 오료 메시지 받아 alert 표시
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get("error");
+        if (error) {
+            alert(error);
+        }
 
     </script>
 </head>
@@ -401,13 +408,6 @@
                 <h2>회원가입</h2>
             </div>
             
-            <!-- 오류 메시지 표시 -->
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger" role="alert">
-                        ${error}
-                </div>
-            </c:if>
-            
             <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
                 <!-- 이메일 -->
                 <div class="form-group">
@@ -448,11 +448,7 @@
                 <!-- 전화번호 -->
                 <div class="form-group">
                     <label for="custPhone">전화번호</label>
-                    <div class="input-group">
-                        <input type="tel" class="form-control" id="custPhone" name="custPhone"
-                               value="${cust.custPhone}" placeholder="010-1234-5678">
-                    </div>
-                    <div id="phoneCheckResult" class="check-result"></div>
+                    <input type="tel" class="form-control" id="custPhone" name="custPhone" value="${cust.custPhone}" placeholder="010-1234-5678">
                 </div>
                 
                 <!-- 제출 버튼 -->
