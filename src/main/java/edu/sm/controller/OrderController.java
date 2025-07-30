@@ -1,22 +1,19 @@
 package edu.sm.controller;
 
-import edu.sm.dto.Cart;
-import edu.sm.dto.CustOrder;
-import edu.sm.dto.Cust;
-import edu.sm.dto.OrderItem;
-import edu.sm.service.CartService;
-import edu.sm.service.OrderItemService;
-import edu.sm.service.OrderService;
+import edu.sm.dto.*;
+import edu.sm.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -28,42 +25,30 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     private final CartService cartService;
+    private final AddressService addressService;
+    private final ProductService productService;
 
-    /**
-     * 장바구니에서 주문 페이지로 이동
-     */
     @RequestMapping("/from-cart")
     public String orderFromCart(HttpSession session, Model model) {
-        // 로그인 체크
         Cust loginCust = (Cust) session.getAttribute("logincust");
-        if (loginCust == null) {
-            return "redirect:/login";
-        }
-
-        log.info("장바구니 주문 요청 - 고객: {}", loginCust.getCustName());
+        if (loginCust == null) return "redirect:/login";
 
         try {
-            // 장바구니 데이터 조회
             List<Cart> cartItems = cartService.findByCustId(loginCust.getCustId());
-
             if (cartItems.isEmpty()) {
-                log.warn("빈 장바구니로 주문 시도 - 고객: {}", loginCust.getCustName());
                 model.addAttribute("error", "장바구니가 비어있습니다.");
                 return "redirect:/cart";
             }
 
-            // 총 주문 금액 계산
-            int totalAmount = cartService.calculateTotalPrice(loginCust.getCustId());
+            List<Address> addresses = addressService.getAddressByCustomerId(loginCust.getCustId());
+            Address defaultAddress = addressService.getDefaultAddress(loginCust.getCustId());
 
-            // 주문 페이지에 필요한 데이터 전달
             model.addAttribute("cartItems", cartItems);
-            model.addAttribute("totalAmount", totalAmount);
-            model.addAttribute("orderType", "cart"); // 장바구니 주문임을 표시
-
-            log.info("장바구니 주문 데이터 전달 완료 - 상품 {}개, 총액 {}원", cartItems.size(), totalAmount);
+            model.addAttribute("addresses", addresses);
+            model.addAttribute("defaultAddress", defaultAddress);
+            model.addAttribute("orderType", "cart");
 
         } catch (Exception e) {
-            log.error("장바구니 주문 처리 오류: ", e);
             model.addAttribute("error", "주문 처리 중 오류가 발생했습니다.");
             return "redirect:/cart";
         }
@@ -71,136 +56,213 @@ public class OrderController {
         return "order";
     }
 
-    /**
-     * 상품페이지에서 바로 주문
-     */
-    @RequestMapping({"/direct", "/buy"})
-    public String directOrder(@RequestParam("productId") Integer productId,
+    @RequestMapping("/direct")
+    public String orderDirect(@RequestParam("productId") Integer productId,
                               @RequestParam(value = "quantity", defaultValue = "1") Integer quantity,
                               HttpSession session, Model model) {
-        // 로그인 체크
         Cust loginCust = (Cust) session.getAttribute("logincust");
-        if (loginCust == null) {
-            return "redirect:/login";
-        }
-
-        log.info("직접 주문 요청 - 고객: {}, 상품ID: {}, 수량: {}", loginCust.getCustName(), productId, quantity);
+        if (loginCust == null) return "redirect:/login";
 
         try {
-            // TODO: ProductService를 통해 상품 정보 조회
-            // Product product = productService.get(productId);
-            // 임시로 직접 주문 데이터 구성 (실제로는 Product 정보가 필요)
+            // ★ 이 부분이 중요! 상품 정보 조회
+            Product product = productService.get(productId);  // ProductService 필요
 
-            model.addAttribute("productId", productId);
+            List<Address> addresses = addressService.getAddressByCustomerId(loginCust.getCustId());
+            Address defaultAddress = addressService.getDefaultAddress(loginCust.getCustId());
+
+            model.addAttribute("product", product);  // ★ 상품 정보 전달
             model.addAttribute("quantity", quantity);
-            model.addAttribute("orderType", "direct"); // 직접 주문임을 표시
-
-            log.info("직접 주문 데이터 전달 완료");
+            model.addAttribute("addresses", addresses);
+            model.addAttribute("defaultAddress", defaultAddress);
+            model.addAttribute("orderType", "direct");
 
         } catch (Exception e) {
-            log.error("직접 주문 처리 오류: ", e);
-            model.addAttribute("error", "주문 처리 중 오류가 발생했습니다.");
+            model.addAttribute("error", "상품 정보를 불러올 수 없습니다.");
             return "redirect:/product";
         }
 
         return "order";
     }
 
-    /**
-     * 주문 내역 조회 (고객의 모든 주문)
-     */
-    @RequestMapping("/history")
-    public String orderHistory(HttpSession session, Model model) {
-        // 로그인 체크
-        Cust loginCust = (Cust) session.getAttribute("logincust");
-        if (loginCust == null) {
-            return "redirect:/login";
-        }
+    @PostMapping("/submit")
+    public String submitOrder(@RequestParam("orderType") String orderType,
+                              @RequestParam("selectedAddress") String selectedAddress,
+                              @RequestParam(value = "productId", required = false) Integer productId,
+                              @RequestParam(value = "quantity", required = false, defaultValue = "1") Integer quantity,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
 
-        log.info("주문 내역 요청 - 고객: {}", loginCust.getCustName());
+        Cust loginCust = (Cust) session.getAttribute("logincust");
+        if (loginCust == null) return "redirect:/login";
 
         try {
-            // 고객의 모든 주문 조회
-            List<CustOrder> orderHistory = orderService.getOrdersByCustId(loginCust.getCustId());
+            Address address = addressService.get(Integer.parseInt(selectedAddress));
+            if (address == null || address.getCustId() != loginCust.getCustId()) {
+                redirectAttributes.addFlashAttribute("error", "유효하지 않은 배송지입니다.");
+                return "redirect:/order/from-cart";
+            }
 
-            model.addAttribute("orderHistory", orderHistory);
-            log.info("주문 내역 조회 완료 - {}건", orderHistory.size());
+            Integer orderId;
+            if ("cart".equals(orderType)) {
+                orderId = processCartOrder(loginCust, address);
+            } else {
+                orderId = processDirectOrder(loginCust, productId, quantity, address);
+            }
+
+            return "redirect:/order/complete/" + orderId;
 
         } catch (Exception e) {
-            log.error("주문 내역 조회 오류: ", e);
-            model.addAttribute("error", "주문 내역을 불러오는 중 오류가 발생했습니다.");
+            redirectAttributes.addFlashAttribute("error", "주문 처리 중 오류가 발생했습니다.");
+            return "redirect:/cart";
         }
-
-        return "order-history"; // 주문 내역 전용 JSP
     }
 
-    /**
-     * 특정 주문 상세 조회
-     */
-    @RequestMapping("/detail/{orderId}")
-    public String orderDetail(@PathVariable Integer orderId, HttpSession session, Model model) {
-        // 로그인 체크
-        Cust loginCust = (Cust) session.getAttribute("logincust");
-        if (loginCust == null) {
-            return "redirect:/login";
+    private Integer processCartOrder(Cust customer, Address address) throws Exception {
+        log.info("장바구니 주문 처리 시작 - 고객ID: {}", customer.getCustId());
+
+        List<Cart> cartItems = cartService.findByCustId(customer.getCustId());
+        log.info("장바구니 아이템 수: {}", cartItems.size());
+
+        int totalAmount = cartService.calculateTotalPrice(customer.getCustId());
+        log.info("총 금액: {}", totalAmount);
+
+        CustOrder order = CustOrder.builder()
+                .custId(customer.getCustId())
+                .totalAmount(totalAmount)
+                .shippingName(address.getAddressName())
+                .shippingPhone(customer.getCustPhone())
+                .shippingAddress(address.getAddress() + " " + (address.getDetailAddress() != null ? address.getDetailAddress() : ""))
+                .orderDate(new java.sql.Timestamp(System.currentTimeMillis())) // 현재 시간 추가
+                .build();
+
+        log.info("주문 객체 생성 완료");
+        try {
+            orderService.register(order);
+            log.info("주문 등록 완료");
+        } catch (Exception e) {
+            log.error("주문 등록 실패: {}", e.getMessage(), e);
+            throw e;
         }
 
-        log.info("주문 상세 요청 - 고객: {}, 주문ID: {}", loginCust.getCustName(), orderId);
+        List<CustOrder> recentOrders = orderService.getOrdersByCustId(customer.getCustId());
+        Integer orderId = recentOrders.get(0).getOrderId();
+        log.info("생성된 주문ID: {}", orderId);
+
+        for (Cart cartItem : cartItems) {
+            double actualDiscountRate = cartItem.getDiscountRate() > 1 ?
+                    cartItem.getDiscountRate() / 100 : cartItem.getDiscountRate();
+            int unitPrice = (int) (cartItem.getProductPrice() * (1 - actualDiscountRate));
+
+            OrderItem orderItem = OrderItem.builder()
+                    .orderId(orderId)
+                    .productId(cartItem.getProductId())
+                    .quantity(cartItem.getProductQt())
+                    .unitPrice(unitPrice)
+                    .build();
+            orderItemService.register(orderItem);
+            log.info("주문 아이템 등록 완료 - 상품ID: {}", cartItem.getProductId());
+        }
+
+        for (Cart cartItem : cartItems) {
+            cartService.remove(cartItem.getCartId());
+            log.info("장바구니 아이템 삭제 완료 - ID: {}", cartItem.getCartId());
+        }
+
+        log.info("장바구니 주문 처리 완료 - 주문ID: {}", orderId);
+        return orderId;
+    }
+
+    private Integer processDirectOrder(Cust customer, Integer productId, Integer quantity, Address address) throws Exception {
+        log.info("직접 주문 처리 시작 - 고객ID: {}, 상품ID: {}", customer.getCustId(), productId);
+
+        // 상품 정보 조회 (ProductService 필요)
+        Product product = productService.get(productId);
+
+        // 실제 상품 가격으로 계산
+        double actualDiscountRate = product.getDiscountRate() > 1 ?
+                product.getDiscountRate() / 100 : product.getDiscountRate();
+        int unitPrice = (int)(product.getProductPrice() * (1 - actualDiscountRate));
+        int totalAmount = unitPrice * quantity;
+
+        // 주문 생성
+        CustOrder order = CustOrder.builder()
+                .custId(customer.getCustId())
+                .totalAmount(totalAmount)
+                .shippingName(address.getAddressName())
+                .shippingPhone(customer.getCustPhone())
+                .shippingAddress(address.getAddress() + " " + (address.getDetailAddress() != null ? address.getDetailAddress() : ""))
+                .orderDate(new java.sql.Timestamp(System.currentTimeMillis()))
+                .build();
+
+        orderService.register(order);
+
+        // 생성된 주문 ID 조회
+        List<CustOrder> recentOrders = orderService.getOrdersByCustId(customer.getCustId());
+        Integer orderId = recentOrders.get(0).getOrderId();
+
+        // 주문 아이템 생성
+        OrderItem orderItem = OrderItem.builder()
+                .orderId(orderId)
+                .productId(productId)
+                .quantity(quantity)
+                .unitPrice(unitPrice)
+                .build();
+
+        orderItemService.register(orderItem);
+
+        return orderId;
+    }
+
+    @RequestMapping("/complete/{orderId}")
+    public String orderComplete(@PathVariable Integer orderId, HttpSession session, Model model) {
+        Cust loginCust = (Cust) session.getAttribute("logincust");
+        if (loginCust == null) return "redirect:/login";
 
         try {
-            // 주문 기본 정보 조회
             CustOrder order = orderService.get(orderId);
-
-            // 보안 체크: 본인의 주문인지 확인
             if (order == null || !Objects.equals(order.getCustId(), loginCust.getCustId())) {
-                log.warn("타인의 주문 조회 시도 - 고객: {}, 주문ID: {}", loginCust.getCustName(), orderId);
                 return "redirect:/order/history";
             }
 
-            // 주문 상품 목록 조회
             List<OrderItem> orderItems = orderItemService.getItemsByOrderId(orderId);
 
             model.addAttribute("order", order);
             model.addAttribute("orderItems", orderItems);
 
-            log.info("주문 상세 조회 완료 - 주문ID: {}, 상품 {}개", orderId, orderItems.size());
-
         } catch (Exception e) {
-            log.error("주문 상세 조회 오류: ", e);
             model.addAttribute("error", "주문 정보를 불러오는 중 오류가 발생했습니다.");
-            return "redirect:/order/history";
         }
 
-        return "order-detail"; // 주문 상세 전용 JSP
+        return "order-complete";
     }
 
-    /**
-     * 주문 취소
-     */
-    @RequestMapping("/cancel/{orderId}")
-    public String cancelOrder(@PathVariable Integer orderId, HttpSession session) {
-        // 로그인 체크
+    @RequestMapping("/history")
+    public String orderHistory(HttpSession session, Model model) {
         Cust loginCust = (Cust) session.getAttribute("logincust");
-        if (loginCust == null) {
-            return "redirect:/login";
-        }
-
-        log.info("주문 취소 요청 - 고객: {}, 주문ID: {}", loginCust.getCustName(), orderId);
+        if (loginCust == null) return "redirect:/login";
 
         try {
-            // 주문 정보 조회 및 본인 확인
-            CustOrder order = orderService.get(orderId);
-            if (order == null || !Objects.equals(order.getCustId(), loginCust.getCustId())) {
-                log.warn("타인의 주문 취소 시도 - 고객: {}, 주문ID: {}", loginCust.getCustName(), orderId);
-                return "redirect:/order/history";
-            }
-
-            // 주문 취소 (삭제)
-            orderService.remove(orderId);
-            log.info("주문 취소 완료 - 주문ID: {}", orderId);
-
+            List<CustOrder> orderHistory = orderService.getOrdersByCustId(loginCust.getCustId());
+            model.addAttribute("orderHistory", orderHistory);
         } catch (Exception e) {
-            log.error("주문 취소 오류: ", e);
+            model.addAttribute("error", "주문 내역을 불러오는 중 오류가 발생했습니다.");
+        }
+
+        return "order-history";
+    }
+
+    @RequestMapping("/cancel/{orderId}")
+    public String cancelOrder(@PathVariable Integer orderId, HttpSession session) {
+        Cust loginCust = (Cust) session.getAttribute("logincust");
+        if (loginCust == null) return "redirect:/login";
+
+        try {
+            CustOrder order = orderService.get(orderId);
+            if (order != null && Objects.equals(order.getCustId(), loginCust.getCustId())) {
+                orderService.remove(orderId);
+            }
+        } catch (Exception e) {
+            // 무시
         }
 
         return "redirect:/order/history";

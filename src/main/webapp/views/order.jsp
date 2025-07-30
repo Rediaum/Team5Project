@@ -19,32 +19,189 @@
     <!-- responsive style -->
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
-    <!-- 드롭다운 메뉴 스타일 -->
+    <!-- Custom styles for order page -->
     <style>
-        .dropdown-menu {
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
+        .address-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+            position: relative;
         }
 
-        .dropdown-item {
+        .address-info {
+            line-height: 1.8;
+            color: #495057;
+        }
+
+        .address-name {
+            font-weight: bold;
+            color: #343a40;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .address-detail {
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+
+        .btn-address-edit {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
             padding: 8px 16px;
-            color: #333;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
 
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #f7444e;
+        .btn-address-edit:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
         }
 
-        .dropdown-divider {
-            margin: 5px 0;
+        .no-address {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
         }
 
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
+        /* 배송지 변경 모달 스타일 */
+        .address-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .address-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .address-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .address-modal-body {
+            padding: 20px;
+        }
+
+        .address-modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+            background: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .order-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .price-discounted {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .total-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+
+        .total-row:last-child {
+            border-top: 2px solid #dee2e6;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #dc3545;
+        }
+
+        .address-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .address-option:hover {
+            border-color: #007bff;
+        }
+
+        .address-option.selected {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+
+        .address-option input[type="radio"] {
+            margin-right: 10px;
         }
     </style>
 
@@ -52,148 +209,57 @@
     <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            // 주문 완료 버튼 클릭 시 확인
-            $('#orderBtn').click(function(e) {
-                e.preventDefault();
-                if (confirm('주문을 완료하시겠습니까?')) {
-                    $(this).closest('form').submit();
-                }
-            });
-
-            // 전화번호 자동 하이픈 추가
-            $('#shippingPhone').on('input', function() {
-                let value = this.value.replace(/[^0-9]/g, '');
-                if (value.length >= 11) {
-                    value = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-                } else if (value.length >= 7) {
-                    value = value.replace(/(\d{3})(\d{4})/, '$1-$2');
-                }
-                this.value = value;
-            });
-
-            // 알림 메시지 자동 숨김
-            setTimeout(function() {
-                $('.alert').fadeOut();
-            }, 5000);
-        });
-    </script>
 </head>
 
 <body class="sub_page">
-<!-- header section -->
+
 <div class="hero_area">
     <header class="header_section">
         <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container ">
-                <%-- 로고 --%>
+            <nav class="navbar navbar-expand-lg custom_nav-container">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/">
                     <img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" />
                 </a>
 
-                <%-- 모바일 메뉴 토글 버튼 --%>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class=""> </span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                    <span class=""></span>
                 </button>
 
-                <%-- 네비게이션 메뉴 --%>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #000;">
-                                <span class="nav-label">Pages <span class="caret"></span></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pagesDropdown">
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/about">About</a>
-                                <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
-                            </div>
-                        </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
-                        </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="7" r="4"/>
-                                    <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-                                </svg>
-                                <span class="nav-label"><span class="caret"></span></span>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                <c:choose>
-                                    <c:when test="${sessionScope.logincust == null}">
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
-                                            <i class="fa fa-sign-in" aria-hidden="true"></i> Login
-                                        </a>
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
-                                            <i class="fa fa-user-plus" aria-hidden="true"></i> Register
-                                        </a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
-                                            <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
-                                        </a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </li>
-
                         <c:if test="${sessionScope.logincust != null}">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                    <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                                        <i class="fa fa-user"></i> 프로필
+                                    </a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/address">
+                                        <i class="fa fa-map-marker"></i> 배송지 관리
+                                    </a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
+                                        <i class="fa fa-list-alt"></i> 주문 내역
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                                        <i class="fa fa-sign-out"></i> 로그아웃
+                                    </a>
+                                </div>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/cart">
-                                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
-                                        <g>
-                                            <g>
-                                                <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
-                                                   c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
-                                            </g>
-                                        </g>
-                                        <g>
-                                            <g>
-                                                <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
-                                                   C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
-                                                   c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
-                                                   C457.728,97.71,450.56,86.958,439.296,84.91z" />
-                                            </g>
-                                        </g>
-                                        <g>
-                                            <g>
-                                                <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
-                                                 c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
-                                            </g>
-                                        </g>
-                                    </svg>
+                                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </c:if>
-
-                        <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
-                            <div class="search-input-container">
-                                <input type="text" name="keyword" class="form-control search-input-header"
-                                       placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
-                                <button class="btn search-btn-header" type="submit">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </button>
-                                <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
-                            </div>
-                        </form>
                     </ul>
                 </div>
             </nav>
@@ -237,29 +303,61 @@
 
                 <!-- 배송 정보 입력 폼 -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="fa fa-truck"></i> 배송 정보</h5>
+                        <a href="${pageContext.request.contextPath}/address" class="btn btn-secondary btn-sm">
+                            <i class="fa fa-cog"></i> 배송지 관리
+                        </a>
                     </div>
                     <div class="card-body">
-                        <form action="${pageContext.request.contextPath}/order/process" method="post" id="orderForm">
-                            <div class="form-group">
-                                <label for="shippingName">받는 사람 <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="shippingName" name="shippingName"
-                                       value="${sessionScope.logincust.custName}" required>
-                                <small class="form-text text-muted">주문자와 다른 경우 수정해주세요</small>
+                        <form id="orderForm" action="${pageContext.request.contextPath}/order/submit" method="post">
+                            <!-- 주문 타입 히든 필드 -->
+                            <c:choose>
+                                <c:when test="${cartItems != null && !empty cartItems}">
+                                    <input type="hidden" name="orderType" value="cart">
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="hidden" name="orderType" value="direct">
+                                    <input type="hidden" name="productId" value="${product.productId}">
+                                    <input type="hidden" name="quantity" value="${quantity}">
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- 배송지 정보 섹션 -->
+                            <div class="address-section">
+                                <h6><i class="fa fa-map-marker"></i> 배송지 정보</h6>
+                                <c:choose>
+                                    <c:when test="${not empty defaultAddress}">
+                                        <div class="address-info" id="selectedAddressInfo">
+                                            <div class="address-name">${defaultAddress.addressName}
+                                                <c:if test="${defaultAddress.isDefault()}">
+                                                    <span class="badge badge-primary">기본</span>
+                                                </c:if>
+                                            </div>
+                                            <div class="address-detail">${defaultAddress.address}</div>
+                                            <c:if test="${not empty defaultAddress.detailAddress}">
+                                                <div class="address-detail">${defaultAddress.detailAddress}</div>
+                                            </c:if>
+                                            <div class="address-detail" style="color: #6c757d; font-size: 14px;">
+                                                우편번호: ${defaultAddress.postalCode}
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn-address-edit" onclick="openAddressModal()">
+                                            <i class="fa fa-edit"></i> 배송지 변경
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="no-address">
+                                            <i class="fa fa-exclamation-circle"></i>
+                                            등록된 배송지가 없습니다.
+                                            <a href="${pageContext.request.contextPath}/address">배송지를 등록해주세요</a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
 
-                            <div class="form-group">
-                                <label for="shippingPhone">연락처 <span class="text-danger">*</span></label>
-                                <input type="tel" class="form-control" id="shippingPhone" name="shippingPhone"
-                                       placeholder="010-1234-5678" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="shippingAddress">배송 주소 <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="shippingAddress" name="shippingAddress"
-                                          rows="3" placeholder="상세 주소를 입력해주세요" required></textarea>
-                            </div>
+                            <!-- 히든 필드 -->
+                            <input type="hidden" name="selectedAddress" id="selectedAddressId" value="${defaultAddress.addressId}">
 
                             <div class="form-group">
                                 <label for="orderMemo">주문 메모</label>
@@ -291,104 +389,151 @@
                         <c:choose>
                             <%-- 장바구니에서 주문하는 경우 --%>
                             <c:when test="${cartItems != null && !empty cartItems}">
+                                <c:set var="totalOriginalPrice" value="0" />
+                                <c:set var="totalDiscountedPrice" value="0" />
+
                                 <c:forEach var="item" items="${cartItems}">
-                                    <div class="order-item mb-3">
-                                        <div class="d-flex justify-content-between">
-                                            <span>${item.productName}</span>
-                                            <span>${item.productQt}개</span>
-                                        </div>
-                                        <div class="text-right">
-                                            <small class="text-muted">
-                                                <fmt:formatNumber value="${item.productPrice * item.productQt}" pattern="#,###" />원
-                                            </small>
+                                    <!-- 할인 가격 계산 -->
+                                    <c:set var="actualDiscountRate" value="${item.discountRate > 1 ? item.discountRate / 100 : item.discountRate}" />
+                                    <c:set var="discountedPrice" value="${item.productPrice * (1 - actualDiscountRate)}" />
+                                    <c:set var="itemOriginalTotal" value="${item.productPrice * item.productQt}" />
+                                    <c:set var="itemDiscountedTotal" value="${discountedPrice * item.productQt}" />
+
+                                    <!-- 총합 계산 -->
+                                    <c:set var="totalOriginalPrice" value="${totalOriginalPrice + itemOriginalTotal}" />
+                                    <c:set var="totalDiscountedPrice" value="${totalDiscountedPrice + itemDiscountedTotal}" />
+
+                                    <div class="order-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div style="flex: 1;">
+                                                <h6 class="mb-1">${item.productId}</h6>
+                                                <small class="text-muted">수량: ${item.productQt}개</small>
+
+                                                <!-- 가격 표시 -->
+                                                <div class="mt-2">
+                                                    <c:choose>
+                                                        <c:when test="${item.discountRate > 0}">
+                                                            <!-- 할인이 있는 경우 -->
+                                                            <div class="price-original">
+                                                                <fmt:formatNumber value="${itemOriginalTotal}" pattern="#,###" />원
+                                                            </div>
+                                                            <div class="price-discounted">
+                                                                <fmt:formatNumber value="${itemDiscountedTotal}" pattern="#,###" />원
+                                                                <span class="discount-badge">
+                                                                    <fmt:formatNumber value="${item.discountRate > 1 ? item.discountRate : item.discountRate * 100}" pattern="##" />% 할인
+                                                                </span>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <!-- 할인이 없는 경우 -->
+                                                            <div class="price-discounted">
+                                                                <fmt:formatNumber value="${itemOriginalTotal}" pattern="#,###" />원
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:forEach>
                             </c:when>
+
                             <%-- 직접 주문하는 경우 --%>
                             <c:when test="${product != null}">
-                                <div class="order-item mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <span>${product.productName}</span>
-                                        <span>${quantity}개</span>
-                                    </div>
-                                    <div class="text-right">
-                                        <small class="text-muted">
-                                            <fmt:formatNumber value="${product.productPrice * quantity}" pattern="#,###" />원
-                                        </small>
+                                <!-- 할인 가격 계산 -->
+                                <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+                                <c:set var="totalOriginalPrice" value="${product.productPrice * quantity}" />
+                                <c:set var="totalDiscountedPrice" value="${discountedPrice * quantity}" />
+
+                                <div class="order-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div style="flex: 1;">
+                                            <h6 class="mb-1">${product.productName}</h6>
+                                            <small class="text-muted">수량: ${quantity}개</small>
+
+                                            <!-- 가격 표시 -->
+                                            <div class="mt-2">
+                                                <c:choose>
+                                                    <c:when test="${product.discountRate > 0}">
+                                                        <!-- 할인이 있는 경우 -->
+                                                        <div class="price-original">
+                                                            <fmt:formatNumber value="${totalOriginalPrice}" pattern="#,###" />원
+                                                        </div>
+                                                        <div class="price-discounted">
+                                                            <fmt:formatNumber value="${totalDiscountedPrice}" pattern="#,###" />원
+                                                            <span class="discount-badge">
+                                                                <fmt:formatNumber value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" pattern="##" />% 할인
+                                                            </span>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <!-- 할인이 없는 경우 -->
+                                                        <div class="price-discounted">
+                                                            <fmt:formatNumber value="${totalOriginalPrice}" pattern="#,###" />원
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </c:when>
-                            <%-- 기본 표시 --%>
-                            <c:otherwise>
-                                <div class="order-item mb-3">
-                                    <div class="text-center text-muted">
-                                        <i class="fa fa-shopping-cart"></i><br>
-                                        주문 정보를 불러오는 중...
-                                    </div>
-                                </div>
-                            </c:otherwise>
                         </c:choose>
 
-                        <hr>
+                        <!-- 주문 총합 -->
+                        <div class="total-section">
+                            <c:set var="totalSavings" value="${totalOriginalPrice - totalDiscountedPrice}" />
 
-                        <!-- 결제 정보 -->
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>상품 금액:</span>
-                            <span>
-                                <fmt:formatNumber value="${totalAmount != null ? totalAmount : 0}" pattern="#,###" />원
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>배송비:</span>
-                            <span>무료</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>할인:</span>
-                            <span class="text-danger">
-                                -<fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />원
-                            </span>
-                        </div>
+                            <div class="total-row">
+                                <span>상품 금액:</span>
+                                <span><fmt:formatNumber value="${totalOriginalPrice}" pattern="#,###" />원</span>
+                            </div>
 
-                        <hr>
+                            <c:if test="${totalSavings > 0}">
+                                <div class="total-row">
+                                    <span style="color: #dc3545;">할인:</span>
+                                    <span style="color: #dc3545;">-<fmt:formatNumber value="${totalSavings}" pattern="#,###" />원</span>
+                                </div>
+                            </c:if>
 
-                        <div class="d-flex justify-content-between" style="font-size: 18px;">
-                            <span><strong>총 결제금액:</strong></span>
-                            <span class="text-danger">
-                                <strong>
-                                    <fmt:formatNumber value="${totalAmount != null ? totalAmount : 0}" pattern="#,###" />원
-                                </strong>
-                            </span>
+                            <div class="total-row">
+                                <span>배송비:</span>
+                                <span style="color: #28a745;">무료</span>
+                            </div>
+
+                            <div class="total-row">
+                                <span>총 결제금액:</span>
+                                <span><fmt:formatNumber value="${totalDiscountedPrice}" pattern="#,###" />원</span>
+                            </div>
                         </div>
 
-                        <!-- 결제 방법 -->
-                        <div class="mt-4">
+                        <!-- 결제 방법 선택 -->
+                        <div class="mt-3">
                             <h6>결제 방법</h6>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card" checked>
-                                <label class="form-check-label" for="card">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
+                                <label class="form-check-label" for="creditCard">
                                     <i class="fa fa-credit-card"></i> 신용카드
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="bank" value="bank">
-                                <label class="form-check-label" for="bank">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
+                                <label class="form-check-label" for="bankTransfer">
                                     <i class="fa fa-university"></i> 무통장입금
                                 </label>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- 주문 안내 -->
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h6><i class="fa fa-info-circle"></i> 주문 안내</h6>
-                        <small class="text-muted">
-                            - 주문 완료 후 변경/취소는 고객센터로 문의해주세요<br>
-                            - 배송은 영업일 기준 2-3일 소요됩니다<br>
-                            - 무료배송 기준: 50,000원 이상 구매시
-                        </small>
+                        <!-- 주문 안내 -->
+                        <div class="mt-3">
+                            <h6><i class="fa fa-info-circle"></i> 주문 안내</h6>
+                            <ul style="font-size: 0.9em; color: #6c757d; padding-left: 20px;">
+                                <li>주문 확인 후 변경이 어려우니 신중하게 검토해주세요.</li>
+                                <li>배송은 영업일 기준 2-3일 소요됩니다.</li>
+                                <li>무료배송 기준: 50,000원 이상 구매시</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -396,35 +541,164 @@
     </div>
 </section>
 
+<!-- 배송지 변경 모달 -->
+<div id="addressModal" class="address-modal">
+    <div class="address-modal-content">
+        <div class="address-modal-header">
+            <h5>배송지 변경</h5>
+            <span class="close" onclick="closeAddressModal()">&times;</span>
+        </div>
+        <div class="address-modal-body">
+            <c:if test="${not empty addresses}">
+                <c:forEach var="addr" items="${addresses}">
+                    <div class="address-option ${addr.isDefault() ? 'selected' : ''}" onclick="selectModalAddress(this, ${addr.addressId})">
+                        <input type="radio" name="modalAddress" value="${addr.addressId}" ${addr.isDefault() ? 'checked' : ''}>
+                        <div class="address-info">
+                            <div class="address-name">${addr.addressName}
+                                <c:if test="${addr.isDefault()}">
+                                    <span class="badge badge-primary">기본</span>
+                                </c:if>
+                            </div>
+                            <div class="address-detail">${addr.address}</div>
+                            <c:if test="${not empty addr.detailAddress}">
+                                <div class="address-detail">${addr.detailAddress}</div>
+                            </c:if>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:if>
+        </div>
+        <div class="address-modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeAddressModal()">취소</button>
+            <button type="button" class="btn btn-primary" onclick="confirmAddressChange()">확인</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // 주문 폼 제출 처리
+        $('#orderForm').on('submit', function(e) {
+            e.preventDefault();
+
+            // 배송지 선택 검증
+            const selectedAddressId = $('#selectedAddressId').val();
+            if (!selectedAddressId) {
+                alert('배송지를 선택해주세요.');
+                return false;
+            }
+
+            // 최종 확인
+            if (confirm('주문하시겠습니까?')) {
+                $('#orderBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> 처리중...');
+                this.submit();
+            }
+        });
+    });
+
+    function openAddressModal() {
+        $('#addressModal').show();
+    }
+
+    function closeAddressModal() {
+        $('#addressModal').hide();
+    }
+
+    function selectModalAddress(element, addressId) {
+        $('.address-option').removeClass('selected');
+        $(element).addClass('selected');
+        $(element).find('input[type="radio"]').prop('checked', true);
+    }
+
+    function confirmAddressChange() {
+        const selectedAddressId = $('input[name="modalAddress"]:checked').val();
+        const selectedOption = $('input[name="modalAddress"]:checked').closest('.address-option');
+
+        // 선택된 배송지 정보 가져오기
+        const addressName = selectedOption.find('.address-name').text().trim();
+        const addressDetail = selectedOption.find('.address-detail').first().text();
+
+        // 주문서의 배송지 정보 업데이트
+        $('#selectedAddressInfo .address-name').text(addressName);
+        $('#selectedAddressInfo .address-detail').first().text(addressDetail);
+        $('#selectedAddressId').val(selectedAddressId);
+
+        closeAddressModal();
+    }
+</script>
+
 <!-- footer section -->
 <footer class="footer_section">
     <div class="container">
         <div class="row">
             <div class="col-md-4 footer-col">
                 <div class="footer_contact">
-                    <h4>연락처</h4>
+                    <h4>Contact us</h4>
                     <div class="contact_link_box">
-                        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>서울시 강남구</span></a>
-                        <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>02-1234-5678</span></a>
-                        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>team5@shop.com</span></a>
+                        <a href="">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>Location</span>
+                        </a>
+                        <a href="">
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                            <span>Call +01 1234567890</span>
+                        </a>
+                        <a href="">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            <span>demo@gmail.com</span>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 footer-col">
-                <div class="footer_info">
-                    <h4>고객센터</h4>
-                    <p>평일 09:00 - 18:00<br>주말/공휴일 휴무</p>
+                <div class="footer_detail">
+                    <a href="" class="footer-logo">Electro</a>
+                    <p>
+                        최고의 전자제품을 합리적인 가격에 만나보세요.
+                        고객 만족이 저희의 최우선 목표입니다.
+                    </p>
+                    <div class="footer_social">
+                        <a href="">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                        </a>
+                        <a href="">
+                            <i class="fa fa-twitter" aria-hidden="true"></i>
+                        </a>
+                        <a href="">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                        </a>
+                        <a href="">
+                            <i class="fa fa-instagram" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="footer_info">
-                    <h5>Team 5 Shop</h5>
-                    <p>최고의 상품과 서비스를 제공합니다</p>
-                </div>
+            <div class="col-md-4 footer-col">
+                <h4>Subscribe</h4>
+                <form action="#">
+                    <input type="text" placeholder="Enter email" />
+                    <button type="submit">Subscribe</button>
+                </form>
             </div>
+        </div>
+        <div class="footer-info">
+            <p>
+                &copy; <span id="displayYear"></span> All Rights Reserved By
+                <a href="#">Team 5 Electronic Shop</a>
+            </p>
         </div>
     </div>
 </footer>
+<!-- footer section -->
+
+<!-- jQery -->
+<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
+<!-- popper js -->
+<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
+<!-- custom js -->
+<script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 
 </body>
 </html>
