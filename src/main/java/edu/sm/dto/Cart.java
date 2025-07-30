@@ -17,8 +17,9 @@ public class Cart {
     private int productQt;
     private Timestamp cartRegdate;
 
-    //  JOIN으로 가져오는 Product 정보 필드들 추가
+    // JOIN으로 가져오는 Product 정보 필드들 추가
     private String productName;      // 상품명
-    private int productPrice;        // 상품 가격 (이것이 누락되어 있었음!)
+    private int productPrice;        // 상품 가격
     private String productImg;       // 상품 이미지
+    private double discountRate;     // 할인율 (추가!)
 }
