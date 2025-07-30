@@ -42,23 +42,20 @@ public class RegisterController {
 
             // 유효성 검사
             if (!custService.validateCust(cust)) {
-                model.addAttribute("error", "입력 정보를 다시 확인해주세요. 이미 사용중인 이메일일 수 있습니다.");
-                model.addAttribute("cust", cust);
-                return "register";
+                redirectAttributes.addAttribute("error", "입력 정보를 다시 확인해주세요.");
+                return "redirect:/register";
             }
 
             // 회원가입 처리
             custService.register(cust);
             log.info("회원가입 완료: {}", cust.getCustEmail());
-
-            redirectAttributes.addFlashAttribute("success", "회원가입이 완료되었습니다!");
+            redirectAttributes.addAttribute("success", "회원가입이 완료되었습니다!");
             return "redirect:/"; // 메인 페이지로 이동
 
         } catch (Exception e) {
             log.error("회원가입 처리 중 오류: ", e);
-            model.addAttribute("error", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
-            model.addAttribute("cust", cust);
-            return "register";
+            redirectAttributes.addAttribute("error", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
+            return "redirect:/register";
         }
     }
 
