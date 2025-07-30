@@ -40,13 +40,6 @@ public class RegisterController {
         try {
             log.info("회원가입 처리 시작: {}", cust.getCustEmail());
 
-            // 비밀번호 확인 검사
-            if (!cust.getCustPwd().equals(custPwd)) {
-                model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-                model.addAttribute("cust", cust);
-                return "register";
-            }
-
             // 유효성 검사
             if (!custService.validateCust(cust)) {
                 model.addAttribute("error", "입력 정보를 다시 확인해주세요. 이미 사용중인 이메일일 수 있습니다.");

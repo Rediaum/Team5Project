@@ -115,6 +115,7 @@
     
     <script>
         let emailChecked = false;
+        let passwordLengthValid = false;
         // 이메일 중복 검사
         function checkEmailDuplicate() {
             const custEmail = document.getElementById('custEmail').value;
@@ -157,75 +158,48 @@
                 });
         }
 
-        let phoneChecked = false;
-        function checkPhoneDuplicate() {
-            const custPhone = document.getElementById('custPhone').value;
-            const resultDiv = document.getElementById('phoneCheckResult');
-
-            if (!custPhone.trim()) {
-                resultDiv.innerHTML = '<span class="check-error">전화번호를 입력하세요.</span>'; // Masukkan nomor telepon
-                return;
-            }
-
-            // Opsional: Validasi format nomor telepon (misal: hanya angka)
-            const phoneRegex = /^\d{10,11}$/; // Contoh: 10-11 digit angka
-            if (!phoneRegex.test(custPhone)) {
-                resultDiv.innerHTML = '<span class="check-error">올바른 전화번호 형식이 아닙니다. (예: 01012345678)</span>'; // Format nomor telepon tidak valid
-                return;
-            }
-
-            // AJAX 요청 ke server untuk memeriksa duplikasi nomor telepon
-            fetch('${pageContext.request.contextPath}/register/check-phone', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'phone=' + encodeURIComponent(custPhone)
-            })
-                .then(response => response.json())
-                .then(available => {
-                    if (available) {
-                        resultDiv.innerHTML = '<span class="check-success">사용 가능한 전화번호입니다.</span>'; // Nomor telepon tersedia
-                        phoneChecked = true;
-                    } else {
-                        resultDiv.innerHTML = '<span class="check-error">이미 사용중인 전화번호입니다.</span>'; // Nomor telepon sudah digunakan
-                        phoneChecked = false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    resultDiv.innerHTML = '<span class="check-error">오류가 발생했습니다. 다시 시도해주세요.</span>'; // Terjadi kesalahan. Coba lagi.
-                    phoneChecked = false;
-                });
-        }
-
         // 페이지 로드 후 이벤트 리스너 등록
         document.addEventListener('DOMContentLoaded', function() {
-            // 비밀번호 확인 검사
-            document.getElementById('pwdConfirm').addEventListener('input', function() {
-                const pwd = document.getElementById('custPwd').value;
-                const pwdConfirm = this.value;
-                const resultDiv = document.getElementById('pwdCheckResult');
+            const custPwdInput = document.getElementById('custPwd');
+            const pwdConfirmInput = document.getElementById('pwdConfirm');
+            const pwdLengthResultDiv = document.getElementById('pwdLengthResult');
+            const pwdCheckResultDiv = document.getElementById('pwdCheckResult'); // Untuk konfirmasi password
 
-                if (pwdConfirm && pwd !== pwdConfirm) {
-                    resultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>';
-                } else if (pwdConfirm && pwd === pwdConfirm) {
-                    resultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>';
+            // 비밀번호 길이 검사 (Real-time)
+            custPwdInput.addEventListener('input', function() {
+                const pwd = this.value;
+                if (pwd.length < 7) {
+                    pwdLengthResultDiv.innerHTML = '<span class="check-error">비밀번호는 7자 이상이어야 합니다.</span>'; // Password must be at least 7 characters.
+                    passwordLengthValid = false;
                 } else {
-                    resultDiv.innerHTML = '';
+                    pwdLengthResultDiv.innerHTML = '<span class="check-success">비밀번호 길이가 적절합니다.</span>'; // Password length is appropriate.
+                    passwordLengthValid = true;
                 }
+                checkPasswordConfirmation();
             });
+
+            // 비밀번호 확인 검사 (Real-time)
+            pwdConfirmInput.addEventListener('input', checkPasswordConfirmation);
+
+            function checkPasswordConfirmation() {
+                const pwd = custPwdInput.value;
+                const pwdConfirm = pwdConfirmInput.value;
+
+                if (pwdConfirm.length === 0) {
+                    pwdCheckResultDiv.innerHTML = '';
+                } else if (pwd.length > 0 && pwd.length < 7) {
+                    pwdCheckResultDiv.innerHTML = '<span class="check-error">비밀번호는 7자 이상이어야 합니다.</span>';
+                } else if (pwdConfirm.length > 0 && pwd !== pwdConfirm) {
+                    pwdCheckResultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>'; // Passwords do not match.
+                } else if (pwdConfirm.length > 0 && pwd === pwdConfirm) {
+                    pwdCheckResultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>'; // Passwords match.
+                }
+            }
 
             // 이메일 입력값이 변경되면 중복 검사 상태 초기화
             document.getElementById('custEmail').addEventListener('input', function() {
                 emailChecked = false;
                 document.getElementById('emailCheckResult').innerHTML = '';
-            });
-
-            // Tambahkan event listener untuk input nomor telepon
-            document.getElementById('custPhone').addEventListener('input', function() {
-                phoneChecked = false; // Reset status jika input berubah
-                document.getElementById('phoneCheckResult').innerHTML = '';
             });
 
             // 폼 제출 시 유효성 검사
@@ -261,6 +235,12 @@
                     return;
                 }
 
+                if (!passwordLengthValid) {
+                    alert('비밀번호는 7자 이상이어야 합니다.');
+                    e.preventDefault();
+                    return;
+                }
+
                 if (!emailChecked) {
                     alert('이메일 중복 확인을 해주세요.');
                     e.preventDefault();
@@ -274,6 +254,7 @@
                 }
             });
         });
+
     </script>
 </head>
 
@@ -446,6 +427,7 @@
                     <label for="custPwd">비밀번호 *</label>
                     <input type="password" class="form-control" id="custPwd" name="custPwd"
                            required placeholder="비밀번호를 입력하세요">
+                    <div id="pwdLengthResult" class="check-result"></div>
                 </div>
                 
                 <!-- 비밀번호 확인 -->
