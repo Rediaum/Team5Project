@@ -202,7 +202,7 @@
    </header>
    <!-- end header section -->
 
-   <%-- 8. 슬라이더 섹션 시작 (블랙프라이데이 - 간단 버전) --%>
+   <%-- 8. 슬라이더 섹션 시작 (블랙프라이데이) --%>
    <section class="slider_section">
       <%-- 슬라이더 배경 이미지 (기존 구조 유지) --%>
       <div class="slider_bg_box">
@@ -335,11 +335,11 @@
    </div>
 </c:if>
 
-<%-- 10. "Why Shop With Us" 섹션 --%>
+<%-- 10. "Electro Shop만의 혜택" 섹션 --%>
 <section class="why_section layout_padding">
    <div class="container">
       <div class="heading_container heading_center">
-         <h2>Why Shop With Us</h2>
+         <h2>Electro Shop만의 혜택</h2>
       </div>
       <div class="row">
          <%-- 빠른 배송 --%>
@@ -358,8 +358,8 @@
                   </svg>
                </div>
                <div class="detail-box">
-                  <h5>Fast Delivery</h5>
-                  <p>variations of passages of Lorem Ipsum available</p>
+                  <h5>빠른 배송</h5>
+                  <p>전문 배송업체와 계약하여 1~3일 정도의 빠른 배송 속도를 자랑합니다.</p>
                </div>
             </div>
          </div>
@@ -384,8 +384,8 @@
                   </svg>
                </div>
                <div class="detail-box">
-                  <h5>Free Shiping</h5>
-                  <p>variations of passages of Lorem Ipsum available</p>
+                  <h5>무료 배송</h5>
+                  <p>배송비를 저희가 부담하는 무료 배송 서비스를 제공합니다.</p>
                </div>
             </div>
          </div>
@@ -405,8 +405,8 @@
                   </svg>
                </div>
                <div class="detail-box">
-                  <h5>Best Quality</h5>
-                  <p>variations of passages of Lorem Ipsum available</p>
+                  <h5>최고의 품질</h5>
+                  <p>저희가 직접 보고 엄선하였기에 최고의 품질을 보장해드립니다.</p>
                </div>
             </div>
          </div>
@@ -547,7 +547,7 @@
 </section>
 <!-- end product section -->
 
-<%-- 15. 구독 섹션 --%>
+<%--  구독 섹션 --%>
 <section class="subscribe_section">
    <div class="container-fuild">
       <div class="box">
