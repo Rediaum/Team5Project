@@ -66,7 +66,7 @@ public class InfoController {
 
         // 기존 비밀번호 확인
         if (!loginUser.getCustPwd().equals(currentPwd)) {
-            redirectAttributes.addFlashAttribute("errorMsg", "현비밀번호가 잘못되었습니다!");
+            redirectAttributes.addFlashAttribute("error", "현비밀번호가 잘못되었습니다!");
             return "redirect:/info";
         }
 
@@ -74,21 +74,15 @@ public class InfoController {
         boolean isPhoneChanged = cust.getCustPhone() != null && !cust.getCustPhone().equals(loginUser.getCustPhone());
         boolean isPwdChanged = cust.getCustPwd() != null && !cust.getCustPwd().isEmpty();
 
-        // 비밀번호 확인 필드와 일치 여부 체크
-        if (isPwdChanged && (pwdConfirm == null || !cust.getCustPwd().equals(pwdConfirm))) {
-            redirectAttributes.addFlashAttribute("errorMsg", "새 비밀번호와 확인이 일치하지 않습니다.");
-            return "redirect:/info";
-        }
-
         // 새 비밀번호가 현재와 동일한지 확인
         if (isPwdChanged && cust.getCustPwd().equals(currentPwd)) {
-            redirectAttributes.addFlashAttribute("errorMsg", "새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
+            redirectAttributes.addFlashAttribute("error", "새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
             return "redirect:/info";
         }
 
         // 데이터 변경 없으면 리턴
         if (!isPhoneChanged && !isPwdChanged) {
-            redirectAttributes.addFlashAttribute("errorMsg", "수정된 데이터가 없습니다.");
+            redirectAttributes.addFlashAttribute("error", "수정된 데이터가 없습니다.");
             return "redirect:/info";
         }
 
@@ -105,10 +99,13 @@ public class InfoController {
         // 저장
         custService.modify(cust);
 
+        // 업데이트 로그 출력
+        log.info("프로필 수정 완료: {}", cust.getCustEmail());
+
         // 세션 업데이트
         session.setAttribute("logincust", cust);
 
-        redirectAttributes.addFlashAttribute("successMsg", "프로필 수정되었습니다..");
+        redirectAttributes.addFlashAttribute("success", "프로필 수정되었습니다..");
         return "redirect:/info";
     }
 

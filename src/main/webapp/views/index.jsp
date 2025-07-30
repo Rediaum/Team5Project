@@ -62,6 +62,16 @@
          width: 16px;
       }
    </style>
+   
+   <script>
+      document.addEventListener('DOMContentLoaded', function () {
+         const params = new URLSearchParams(window.location.search);
+         const successMessage = params.get('success');
+         if (successMessage) {
+            alert(successMessage);
+         }
+      });
+   </script>
 </head>
 <body>
 <div class="hero_area">
