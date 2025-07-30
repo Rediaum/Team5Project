@@ -97,6 +97,7 @@ public class ProductService implements ProjectService<Product, Integer> {
 
     // 검색 결과 통계
 
+    // 검색 결과 통계 (수정된 버전)
     public Map<String, Object> getSearchStatistics(List<Product> products) {
         Map<String, Object> stats = new HashMap<>();
 
@@ -114,7 +115,8 @@ public class ProductService implements ProjectService<Product, Integer> {
         double avgPrice = products.stream().mapToInt(Product::getProductPrice).average().orElse(0);
 
         stats.put("totalCount", totalCount);
-        stats.put("avgPrice", Math.round(avgPrice));
+        // Math.round() 문제 해결: int로 캐스팅
+        stats.put("avgPrice", (int) Math.round(avgPrice));
         stats.put("minPrice", minPrice);
         stats.put("maxPrice", maxPrice);
 
