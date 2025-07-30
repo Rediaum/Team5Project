@@ -6,7 +6,7 @@
 
     <!-- 주문 등록 -->
     <insert id="insert" parameterType="CustOrder">
-        INSERT INTO cust_order (cust_id, order_date, total_amount, shipping_address, shipping_name, shipping_phone)
+        INSERT INTO custorder (cust_id, order_date, total_amount, shipping_address, shipping_name, shipping_phone)
         VALUES (#{custId}, NOW(), #{totalAmount}, #{shippingAddress}, #{shippingName}, #{shippingPhone})
     </insert>
 
@@ -27,7 +27,7 @@
 
     <!-- 주문 삭제 (주문 취소) -->
     <delete id="delete" parameterType="Integer">
-        DELETE FROM cust_order WHERE order_id = #{orderId}
+        DELETE FROM custorder WHERE order_id = #{orderId}
     </delete>
 
     <!-- 주문 단건 조회 -->
@@ -40,7 +40,7 @@
             shipping_address AS shippingAddress,
             shipping_name AS shippingName,
             shipping_phone AS shippingPhone
-        FROM cust_order
+        FROM custorder
         WHERE order_id = #{orderId}
     </select>
 
@@ -54,7 +54,7 @@
             shipping_address AS shippingAddress,
             shipping_name AS shippingName,
             shipping_phone AS shippingPhone
-        FROM cust_order
+        FROM custorder
         ORDER BY order_date DESC
     </select>
 
@@ -68,7 +68,7 @@
             shipping_address AS shippingAddress,
             shipping_name AS shippingName,
             shipping_phone AS shippingPhone
-        FROM cust_order
+        FROM custorder
         WHERE cust_id = #{custId}
         ORDER BY order_date DESC
     </select>

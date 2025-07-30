@@ -146,8 +146,20 @@
             margin-top: 10px;
         }
         .address-actions button {
-            margin-right: 10px;
-            margin-bottom: 10px;
+            height: 30px; /* 원하는 높이로 조절 */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+        }
+        .address-actions button i {
+            margin-right: 5px; /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        /* Bootstrap .btn-sm의 기본 height 값을 오버라이드할 수 있도록 추가 */
+        .btn-sm {
+            height: auto; /* Bootstrap의 기본 btn-sm 높이 설정을 무효화 */
+            padding: .25rem .5rem; /* Bootstrap 기본 패딩 유지 또는 조절 */
         }
         .address-info {
             line-height: 1.6;
