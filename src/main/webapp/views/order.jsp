@@ -55,11 +55,32 @@
 
     <script>
         $(document).ready(function() {
-            // 주문 완료 버튼 클릭 시 확인
-            $('#orderBtn').click(function(e) {
+            // 주문 폼 유효성 검사 및 제출
+            $('#orderForm').on('submit', function(e) {
                 e.preventDefault();
-                if (confirm('주문을 완료하시겠습니까?')) {
-                    $(this).closest('form').submit();
+
+                // 필수 입력 검사
+                let shippingName = $('#shippingName').val().trim();
+                let shippingPhone = $('#shippingPhone').val().trim();
+                let shippingAddress = $('#shippingAddress').val().trim();
+
+                if (!shippingName || !shippingPhone || !shippingAddress) {
+                    alert('모든 배송 정보를 입력해주세요.');
+                    return false;
+                }
+
+                // 전화번호 형식 간단 검사
+                let phonePattern = /^010-?\d{4}-?\d{4}$/;
+                if (!phonePattern.test(shippingPhone.replace(/-/g, ''))) {
+                    alert('올바른 전화번호 형식을 입력해주세요. (예: 010-1234-5678)');
+                    return false;
+                }
+
+                // 최종 확인
+                if (confirm('주문하시겠습니까?')) {
+                    // 중복 제출 방지
+                    $('#orderBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> 처리 중...');
+                    this.submit();
                 }
             });
 
@@ -79,6 +100,19 @@
                 $('.alert').fadeOut();
             }, 5000);
         });
+
+        // 🔥 저장된 배송지 선택 함수 추가
+        function selectSavedAddress() {
+            const select = document.getElementById('savedAddressSelect');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.value) {
+                const address = selectedOption.getAttribute('data-address');
+                document.getElementById('shippingAddress').value = address;
+            } else {
+                document.getElementById('shippingAddress').value = '';
+            }
+        }
     </script>
 </head>
 
@@ -241,7 +275,16 @@
                         <h5><i class="fa fa-truck"></i> 배송 정보</h5>
                     </div>
                     <div class="card-body">
-                        <form action="${pageContext.request.contextPath}/order/process" method="post" id="orderForm">
+                        <!-- 🔥 핵심 수정: action을 /order/submit으로 변경 -->
+                        <form action="${pageContext.request.contextPath}/order/submit" method="post" id="orderForm">
+
+                            <!-- 🔥 핵심 추가: 숨겨진 필드들 -->
+                            <input type="hidden" name="orderType" value="${orderType}" />
+                            <c:if test="${orderType eq 'direct'}">
+                                <input type="hidden" name="productId" value="${product.productId}" />
+                                <input type="hidden" name="quantity" value="${quantity}" />
+                            </c:if>
+
                             <div class="form-group">
                                 <label for="shippingName">받는 사람 <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="shippingName" name="shippingName"
@@ -252,13 +295,35 @@
                             <div class="form-group">
                                 <label for="shippingPhone">연락처 <span class="text-danger">*</span></label>
                                 <input type="tel" class="form-control" id="shippingPhone" name="shippingPhone"
-                                       placeholder="010-1234-5678" required>
+                                       value="${sessionScope.logincust.custPhone}" placeholder="010-1234-5678" required>
                             </div>
+
+                            <!-- 🔥 배송지 선택 기능 추가 -->
+                            <c:if test="${not empty addresses}">
+                                <div class="form-group">
+                                    <label>저장된 배송지 선택</label>
+                                    <select class="form-control" id="savedAddressSelect" onchange="selectSavedAddress()">
+                                        <option value="">직접 입력</option>
+                                        <c:forEach var="addr" items="${addresses}">
+                                            <option value="${addr.addressId}"
+                                                    data-address="${addr.address} ${addr.detailAddress}"
+                                                ${addr.isDefault() ? 'selected' : ''}>
+                                                    ${addr.addressName} ${addr.isDefault() ? '(기본)' : ''}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </c:if>
 
                             <div class="form-group">
                                 <label for="shippingAddress">배송 주소 <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="shippingAddress" name="shippingAddress"
-                                          rows="3" placeholder="상세 주소를 입력해주세요" required></textarea>
+                                          rows="3" placeholder="상세 주소를 입력해주세요" required><c:if test="${defaultAddress != null}">${defaultAddress.address} ${defaultAddress.detailAddress}</c:if></textarea>
+                                <c:if test="${not empty addresses}">
+                                    <small class="form-text text-muted">
+                                        위 드롭다운에서 저장된 배송지를 선택하거나 직접 입력하세요.
+                                    </small>
+                                </c:if>
                             </div>
 
                             <div class="form-group">
@@ -292,14 +357,24 @@
                             <%-- 장바구니에서 주문하는 경우 --%>
                             <c:when test="${cartItems != null && !empty cartItems}">
                                 <c:forEach var="item" items="${cartItems}">
+                                    <!-- 할인 가격 계산 -->
+                                    <c:set var="actualDiscountRate" value="${item.discountRate > 1 ? item.discountRate / 100 : item.discountRate}" />
+                                    <c:set var="discountedPrice" value="${item.productPrice * (1 - actualDiscountRate)}" />
+                                    <c:set var="itemTotal" value="${discountedPrice * item.productQt}" />
+
                                     <div class="order-item mb-3">
                                         <div class="d-flex justify-content-between">
                                             <span>${item.productName}</span>
                                             <span>${item.productQt}개</span>
                                         </div>
                                         <div class="text-right">
-                                            <small class="text-muted">
-                                                <fmt:formatNumber value="${item.productPrice * item.productQt}" pattern="#,###" />원
+                                            <c:if test="${item.discountRate > 0}">
+                                                <small class="text-muted" style="text-decoration: line-through;">
+                                                    <fmt:formatNumber value="${item.productPrice * item.productQt}" pattern="#,###" />원
+                                                </small><br>
+                                            </c:if>
+                                            <small class="text-danger font-weight-bold">
+                                                <fmt:formatNumber value="${itemTotal}" pattern="#,###" />원
                                             </small>
                                         </div>
                                     </div>
@@ -307,14 +382,24 @@
                             </c:when>
                             <%-- 직접 주문하는 경우 --%>
                             <c:when test="${product != null}">
+                                <!-- 할인 가격 계산 -->
+                                <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+                                <c:set var="itemTotal" value="${discountedPrice * quantity}" />
+
                                 <div class="order-item mb-3">
                                     <div class="d-flex justify-content-between">
                                         <span>${product.productName}</span>
                                         <span>${quantity}개</span>
                                     </div>
                                     <div class="text-right">
-                                        <small class="text-muted">
-                                            <fmt:formatNumber value="${product.productPrice * quantity}" pattern="#,###" />원
+                                        <c:if test="${product.discountRate > 0}">
+                                            <small class="text-muted" style="text-decoration: line-through;">
+                                                <fmt:formatNumber value="${product.productPrice * quantity}" pattern="#,###" />원
+                                            </small><br>
+                                        </c:if>
+                                        <small class="text-danger font-weight-bold">
+                                            <fmt:formatNumber value="${itemTotal}" pattern="#,###" />원
                                         </small>
                                     </div>
                                 </div>
@@ -342,12 +427,6 @@
                         <div class="d-flex justify-content-between mb-2">
                             <span>배송비:</span>
                             <span>무료</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>할인:</span>
-                            <span class="text-danger">
-                                -<fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />원
-                            </span>
                         </div>
 
                         <hr>
