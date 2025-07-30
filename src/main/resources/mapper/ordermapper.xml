@@ -12,13 +12,13 @@
 
     <!-- 주문 등록 후 ID 반환 (핵심 추가!) -->
     <insert id="insertAndGetId" parameterType="CustOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO cust_order (cust_id, order_date, total_amount, shipping_address, shipping_name, shipping_phone)
+        INSERT INTO custorder (cust_id, order_date, total_amount, shipping_address, shipping_name, shipping_phone)
         VALUES (#{custId}, NOW(), #{totalAmount}, #{shippingAddress}, #{shippingName}, #{shippingPhone})
     </insert>
 
     <!-- 주문 수정 (사용하지 않음) -->
     <update id="update" parameterType="CustOrder">
-        UPDATE cust_order SET
+        UPDATE custorder SET
                               shipping_address = #{shippingAddress},
                               shipping_name = #{shippingName},
                               shipping_phone = #{shippingPhone}
@@ -83,7 +83,7 @@
         shipping_address AS shippingAddress,
         shipping_name AS shippingName,
         shipping_phone AS shippingPhone
-        FROM cust_order
+        FROM custorder
         WHERE cust_id = #{custId}
         <!-- 향후 order_status 컬럼 추가 시 사용 -->
         <!-- AND order_status = #{status} -->
