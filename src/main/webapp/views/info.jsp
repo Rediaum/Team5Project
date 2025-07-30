@@ -68,6 +68,15 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-control {
+      height: 45px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 0 15px;
+    }
     .btn-update {
       background: #f7444e;
       color: white;
@@ -79,6 +88,26 @@
     .btn-update:hover {
       background: #d63031;
       color: white;
+    }
+    .btn-check {
+      background: #74b9ff;
+      color: white;
+      border: none;
+      height: 45px;
+    }
+    .btn-check:hover {
+      background: #0984e3;
+      color: white;
+    }
+    .check-result {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .check-success {
+      color: #00b894;
+    }
+    .check-error {
+      color: #e17055;
     }
     .alert {
       border-radius: 5px;
@@ -187,54 +216,79 @@
   <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
 
   <script>
-    $(document).ready(function () {
-      // 비밀번호 확인 검증
-      $('#pwdconfirm').on('input', function() {
-        const pwd = $('input[name="custPwd"]').val();
-        const pwdConfirm = $(this).val();
-        const resultDiv = $('#pwdCheckResult');
-
-        if (!pwd && !pwdConfirm) {
-          resultDiv.text("");
-          return;
+    let passwordLengthValid = false;
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      const custPwdInput = document.getElementById('custPwd');
+      const pwdConfirmInput = document.getElementById('pwdConfirm');
+      const pwdLengthResultDiv = document.getElementById('pwdLengthResult');
+      const pwdCheckResultDiv = document.getElementById('pwdCheckResult');
+      const custPhoneInput = document.getElementById('custPhone');
+      
+      // 비밀번호 길이 검사 (Real-time)
+      custPwdInput.addEventListener('input', function () {
+        const pwd = this.value;
+        if (pwd.length === 0) {
+          pwdLengthResultDiv.innerHTML = ''; // kosongkan jika tidak diisi
+          passwordLengthValid = true; // tidak mengisi password = tidak update password = tidak perlu validasi
+        } else if (pwd.length < 7) {
+          pwdLengthResultDiv.innerHTML = '<span class="check-error">비밀번호는 7자 이상이어야 합니다.</span>';
+          passwordLengthValid = false;
+        } else {
+          pwdLengthResultDiv.innerHTML = '<span class="check-success">비밀번호 길이가 적절합니다.</span>';
+          passwordLengthValid = true;
         }
-
-        if (pwd !== pwdConfirm) {
-          resultDiv.html('<span style="color: red;">비밀번호가 일치하지 않습니다.</span>');
-          return;
-        }
-
-        resultDiv.html('<span style="color: green;">비밀번호가 일치합니다.</span>');
+        checkPasswordConfirmation();
       });
-
-      // AJAX 폼 제출 (기존 코드 유지)
-      $('#profileform').on('submit', function (e) {
-        e.preventDefault();
-
-        // 비밀번호 확인 검증
-        const newPwd = $('input[name="custPwd"]').val();
-        const confirmPwd = $('#pwdconfirm').val();
-
-        if (newPwd && newPwd !== confirmPwd) {
-          $('#pwdCheckResult').html('<span style="color: red;">비밀번호가 일치하지 않습니다.</span>');
+      
+      // 비밀번호 확인 검사 (Real-time)
+      pwdConfirmInput.addEventListener('input', checkPasswordConfirmation);
+      
+      function checkPasswordConfirmation() {
+        const pwd = custPwdInput.value;
+        const pwdConfirm = pwdConfirmInput.value;
+        
+        if (pwd.length === 0 && pwdConfirm.length === 0) {
+          pwdCheckResultDiv.innerHTML = '';
+        } else if (pwd.length < 7) {
+          pwdCheckResultDiv.innerHTML = '<span class="check-error">비밀번호는 7자 이상이어야 합니다.</span>';
+        } else if (pwd !== pwdConfirm) {
+          pwdCheckResultDiv.innerHTML = '<span class="check-error">비밀번호가 일치하지 않습니다.</span>';
+        } else {
+          pwdCheckResultDiv.innerHTML = '<span class="check-success">비밀번호가 일치합니다.</span>';
+        }
+      }
+      
+      // 폼 제출 시 유효성 검사
+      document.getElementById('profileForm').addEventListener('submit', function (e) {
+        const pwd = custPwdInput.value;
+        const pwdConfirm = pwdConfirmInput.value;
+        const phone = custPhoneInput.value.trim();
+        
+        // 전화번호는 필수
+        if (!phone) {
+          alert('전화번호를 입력하세요.');
+          e.preventDefault();
           return;
         }
-
-        $.ajax({
-          url: $(this).attr('action'),
-          type: 'POST',
-          data: $(this).serialize(),
-          success: function (data, textStatus, xhr) {
-            window.location.href = '/info';
-          },
-          error: function (xhr, status, error) {
-            $('#notification').html(
-                    '<div class="alert alert-danger">프로필을 업데이트하는 과정에서 오류가 발생했습니다.</div>'
-            );
+        
+        // 비밀번호 입력된 경우만 검사
+        if (pwd || pwdConfirm) {
+          if (pwd.length < 7) {
+            alert('비밀번호는 7자 이상이어야 합니다.');
+            e.preventDefault();
+            return;
           }
-        });
+          
+          if (pwd !== pwdConfirm) {
+            alert('비밀번호가 일치하지 않습니다.');
+            e.preventDefault();
+            return;
+          }
+        }
       });
     });
+  
   </script>
 
 </head>
@@ -388,11 +442,11 @@
       </div>
 
       <!-- 오류 메시지 표시 -->
-      <c:if test="${not empty errorMsg}">
-        <div class="alert alert-danger">${errorMsg}</div>
+      <c:if test="${not empty error}">
+        <div class="alert alert-danger">${error}</div>
       </c:if>
-      <c:if test="${not empty successMsg}">
-        <div class="alert alert-success">${successMsg}</div>
+      <c:if test="${not empty success}">
+        <div class="alert alert-success">${success}</div>
       </c:if>
 
       <!-- 기본 배송지 정보 섹션 (추가된 부분) -->
@@ -426,33 +480,55 @@
       </div>
 
       <div id="notification"></div>
-      <form id="profileform" action="${pageContext.request.contextPath}/info/update" method="post">
+      <form id="profileForm" action="${pageContext.request.contextPath}/info/update" method="post">
         <input type="hidden" name="custId" value="${cust.custId}" />
-
-        <p>이름: <strong>${cust.custName}</strong></p>
-        <p>이메일: <strong>${cust.custEmail}</strong></p>
-
-        <p>전화번호:
-          <input type="text" name="custPhone" value="${cust.custPhone}" required placeholder="010-1234-5678" />
-        </p>
-
-        <p>현비밀번호:*
-          <input type="password" name="currentPwd" required placeholder="기존 비밀번호를 입력하세요." />
-        </p>
-
-        <p>새비밀번호:
-          <input type="password" name="custPwd" placeholder="비밀번호를 변경하지 않을 경우 비워두세요." />
-        </p>
-
-        <p>새비밀번호 확인:
-          <input type="password" id="pwdconfirm" name="pwdConfirm" placeholder="비밀번호를 변경하지 않을 경우 비워두세요." />
-        </p>
-        <div id="pwdCheckResult" class="check-result"></div>
-
-        <button type="submit" class="btn btn-update btn-lg btn-block">Update Profile</button>
+        
+        <!-- Name (Static Display) -->
+        <div class="form-group info-display">
+          <label>이름:</label>
+          <strong>${cust.custName}</strong>
+        </div>
+        
+        <!-- Email (Static Display) -->
+        <div class="form-group info-display">
+          <label>이메일:</label>
+          <strong>${cust.custEmail}</strong>
+        </div>
+        
+        <!-- 전화번호 (Editable) -->
+        <div class="form-group">
+          <label for="custPhone">전화번호:</label>
+          <input type="tel" class="form-control" id="custPhone" name="custPhone" value="${cust.custPhone}" placeholder="010-1234-5678">
+        </div>
+        
+        <!-- Current Password -->
+        <div class="form-group">
+          <label for="currentPwd">현비밀번호: *</label>
+          <input type="password" class="form-control" id="currentPwd" name="currentPwd"
+                 required placeholder="기존 비밀번호를 입력하세요.">
+        </div>
+        
+        <!-- New Password -->
+        <div class="form-group">
+          <label for="custPwd">새비밀번호:</label>
+          <input type="password" class="form-control" id="custPwd" name="custPwd"
+                 placeholder="비밀번호를 변경하지 않을 경우 비워두세요.">
+          <div id="pwdLengthResult" class="check-result"></div>
+        </div>
+        
+        <!-- New Password Confirmation -->
+        <div class="form-group">
+          <label for="pwdConfirm">새비밀번호 확인:</label>
+          <input type="password" class="form-control" id="pwdConfirm" name="pwdConfirm"
+                 placeholder="비밀번호를 변경하지 않을 경우 비워두세요.">
+          <div id="pwdCheckResult" class="check-result"></div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-update btn-lg btn-block">프로필 업데이트</button>
+        </div>
       </form>
-
-
     </div>
   </div>
 </section>
