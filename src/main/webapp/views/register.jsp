@@ -408,8 +408,6 @@
                 <h2>회원가입</h2>
             </div>
             
-            <!-- 오류 메시지 표시 -->
-            
             <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
                 <!-- 이메일 -->
                 <div class="form-group">

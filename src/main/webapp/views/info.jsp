@@ -201,11 +201,6 @@
       border-color: #007bff;
       box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
-    .readonly-field {
-      background: #f8f9fa;
-      color: #6c757d;
-      font-weight: bold;
-    }
   </style>
 
   <!-- jQuery -->
@@ -229,8 +224,8 @@
       custPwdInput.addEventListener('input', function () {
         const pwd = this.value;
         if (pwd.length === 0) {
-          pwdLengthResultDiv.innerHTML = ''; // kosongkan jika tidak diisi
-          passwordLengthValid = true; // tidak mengisi password = tidak update password = tidak perlu validasi
+          pwdLengthResultDiv.innerHTML = '';
+          passwordLengthValid = true; // 비밀번호를 입력하지 않음 = 비밀번호를 업데이트하지 않음 = 인증이 필요 없음
         } else if (pwd.length < 7) {
           pwdLengthResultDiv.innerHTML = '<span class="check-error">비밀번호는 7자 이상이어야 합니다.</span>';
           passwordLengthValid = false;
@@ -501,14 +496,14 @@
           <input type="tel" class="form-control" id="custPhone" name="custPhone" value="${cust.custPhone}" placeholder="010-1234-5678">
         </div>
         
-        <!-- Current Password -->
+        <!-- 현비밀번호  -->
         <div class="form-group">
           <label for="currentPwd">현비밀번호: *</label>
           <input type="password" class="form-control" id="currentPwd" name="currentPwd"
                  required placeholder="기존 비밀번호를 입력하세요.">
         </div>
         
-        <!-- New Password -->
+        <!-- 새비밀번호 -->
         <div class="form-group">
           <label for="custPwd">새비밀번호:</label>
           <input type="password" class="form-control" id="custPwd" name="custPwd"
@@ -516,7 +511,7 @@
           <div id="pwdLengthResult" class="check-result"></div>
         </div>
         
-        <!-- New Password Confirmation -->
+        <!-- 새비밀번호 확인 -->
         <div class="form-group">
           <label for="pwdConfirm">새비밀번호 확인:</label>
           <input type="password" class="form-control" id="pwdConfirm" name="pwdConfirm"
