@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.repository.OrderItemRepository">
+
+    <!-- 주문상품 등록 -->
+    <insert id="insert" parameterType="OrderItem">
+        INSERT INTO orderitem (order_id, product_id, quantity, unit_price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{unitPrice})
+    </insert>
+
+    <!-- 주문상품 삭제 -->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM orderitem WHERE orderitem_id = #{orderitemId}
+    </delete>
+
+    <!-- 주문상품 단건 조회 -->
+    <select id="select" parameterType="Integer" resultType="OrderItem">
+        SELECT
+            orderitem_id AS orderitemId,
+            order_id AS orderId,
+            product_id AS productId,
+            quantity,
+            unit_price AS unitPrice
+        FROM orderitem
+        WHERE orderitem_id = #{orderitemId}
+    </select>
+
+    <!-- 특정 주문의 주문상품 목록 조회 -->
+    <select id="findByOrderId" parameterType="Integer" resultType="OrderItem">
+        SELECT
+            orderitem_id AS orderitemId,
+            order_id AS orderId,
+            product_id AS productId,
+            quantity,
+            unit_price AS unitPrice
+        FROM orderitem
+        WHERE order_id = #{orderId}
+        ORDER BY orderitem_id ASC
+    </select>
+
+</mapper>

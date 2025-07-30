@@ -415,11 +415,11 @@
                            </c:otherwise>
                         </c:choose>
 
-                           <%-- 바로 구매 버튼 (로그인 체크) --%>
+                        <%-- 바로 구매 버튼 (로그인 체크) --%>
                         <c:choose>
                            <c:when test="${sessionScope.logincust != null}">
-                              <%-- 로그인시: 바로 구매 --%>
-                              <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
+                              <%-- 로그인시: 바로 구매 (직접 주문 페이지로) --%>
+                              <a href="${pageContext.request.contextPath}/order/direct?productId=${product.productId}&quantity=1" class="option3">
                                  Buy Now
                               </a>
                            </c:when>

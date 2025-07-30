@@ -424,7 +424,14 @@
 
   // 주문하기 함수
   function proceedToCheckout() {
-    alert('주문 기능은 곧 구현될 예정입니다!');
+    // 장바구니가 비어있는지 확인
+    <c:if test="${empty cartItems}">
+    alert('장바구니가 비어있습니다.');
+    return;
+    </c:if>
+
+    // 주문 페이지로 이동
+    location.href = '${pageContext.request.contextPath}/order/from-cart';
   }
 
   // 알림 메시지 자동 숨김
