@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.repository.OrderRepository">
+
+    <!-- 주문 등록 -->
+    <insert id="insert" parameterType="CustOrder">
+        INSERT INTO cust_order (cust_id, order_date, total_amount, shipping_address, shipping_name, shipping_phone)
+        VALUES (#{custId}, NOW(), #{totalAmount}, #{shippingAddress}, #{shippingName}, #{shippingPhone})
+    </insert>
+
+    <!-- 주문 수정 -->
+    <update id="update" parameterType="CustOrder">
+    </update>
+
+    <!-- 주문 삭제 -->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM cust_order WHERE order_id = #{orderId}
+    </delete>
+
+    <!-- 주문 단건 조회 -->
+    <select id="select" parameterType="Integer" resultType="CustOrder">
+        SELECT
+            order_id AS orderId,
+            cust_id AS custId,
+            order_date AS orderDate,
+            total_amount AS totalAmount,
+            shipping_address AS shippingAddress,
+            shipping_name AS shippingName,
+            shipping_phone AS shippingPhone
+        FROM cust_order
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 전체 주문 조회 - 관리자 전용 (현재 프로젝트에서는 사용하지 않음) -->
+    <!--
+    <select id="selectAll" resultType="CustOrder">
+        SELECT
+            order_id AS orderId,
+            cust_id AS custId,
+            order_date AS orderDate,
+            total_amount AS totalAmount,
+            shipping_address AS shippingAddress,
+            shipping_name AS shippingName,
+            shipping_phone AS shippingPhone
+        FROM cust_order
+        ORDER BY order_date DESC
+    </select>
+    -->
+
+    <!-- 특정 고객의 주문 내역 조회 -->
+    <select id="findByCustId" parameterType="Integer" resultType="CustOrder">
+        SELECT
+            order_id AS orderId,
+            cust_id AS custId,
+            order_date AS orderDate,
+            total_amount AS totalAmount,
+            shipping_address AS shippingAddress,
+            shipping_name AS shippingName,
+            shipping_phone AS shippingPhone
+        FROM cust_order
+        WHERE cust_id = #{custId}
+        ORDER BY order_date DESC
+    </select>
+
+</mapper>
