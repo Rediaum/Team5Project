@@ -293,7 +293,7 @@
                     <div class="price-breakdown">
                         <div class="order-info-row">
                             <span>상품 금액:</span>
-                            <span><fmt:formatNumber value="${order.totalAmount}" pattern="#,###" />원</span>
+                            <span><fmt:formatNumber value="${order.totalAmount}" pattern="###,###" />원</span>
                         </div>
                         <div class="order-info-row">
                             <span>배송비:</span>

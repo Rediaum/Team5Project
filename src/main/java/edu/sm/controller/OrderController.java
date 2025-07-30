@@ -230,7 +230,7 @@ public class OrderController {
             model.addAttribute("orderItems", orderItems);
 
         } catch (Exception e) {
-            model.addAttribute("error", "주문 정보를 불러오는 중 오류가 발생했습니다.");
+            model.addAttribute("error", "주문 정보를 불러오는 중 오류가 발생했습니다...");
         }
 
         return "order-complete";

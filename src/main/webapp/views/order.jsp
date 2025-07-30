@@ -504,7 +504,7 @@
 
                             <div class="total-row">
                                 <span>총 결제금액:</span>
-                                <span><fmt:formatNumber value="${totalDiscountedPrice}" pattern="#,###" />원</span>
+                                <span><fmt:formatNumber value="${totalDiscountedPrice}" pattern="###,###" />원</span>
                             </div>
                         </div>
 
