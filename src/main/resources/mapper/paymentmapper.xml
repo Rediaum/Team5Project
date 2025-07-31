@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.sm.repository.PaymentRepository">
+
+    <!-- ResultMap 정의 -->
+    <resultMap id="paymentResultMap" type="edu.sm.dto.Payment">
+        <id property="paymentId" column="payment_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="paymentAmount" column="payment_amount"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="transactionId" column="transaction_id"/>
+    </resultMap>
+
+    <!-- 결제 정보 등록 -->
+    <insert id="insert" parameterType="edu.sm.dto.Payment"
+            useGeneratedKeys="true" keyProperty="paymentId">
+        INSERT INTO Payment (
+            order_id, payment_method, payment_amount,
+            payment_date, transaction_id
+        ) VALUES (
+                     #{orderId}, #{paymentMethod}, #{paymentAmount},
+                     #{paymentDate}, #{transactionId}
+                 )
+    </insert>
+
+    <!-- 결제 정보 수정 -->
+    <update id="update" parameterType="edu.sm.dto.Payment">
+        UPDATE Payment SET
+                           payment_method = #{paymentMethod},
+                           payment_amount = #{paymentAmount},
+                           transaction_id = #{transactionId}
+        WHERE payment_id = #{paymentId}
+    </update>
+
+    <!-- 결제 정보 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM Payment WHERE payment_id = #{paymentId}
+    </delete>
+
+    <!-- 결제 ID로 조회 -->
+    <select id="select" parameterType="int" resultMap="paymentResultMap">
+        SELECT * FROM Payment WHERE payment_id = #{paymentId}
+    </select>
+
+    <!-- 전체 결제 내역 조회 -->
+    <select id="selectAll" resultMap="paymentResultMap">
+        SELECT * FROM Payment ORDER BY payment_date DESC
+    </select>
+
+    <!-- 주문 ID로 결제 정보 조회 -->
+    <select id="findByOrderId" parameterType="int" resultMap="paymentResultMap">
+        SELECT * FROM Payment WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 거래 ID로 결제 정보 조회 -->
+    <select id="findByTransactionId" parameterType="string" resultMap="paymentResultMap">
+        SELECT * FROM Payment WHERE transaction_id = #{transactionId}
+    </select>
+
+    <!-- 고객의 결제 내역 조회 -->
+    <select id="findByCustId" parameterType="int" resultMap="paymentResultMap">
+        SELECT p.*
+        FROM Payment p
+                 INNER JOIN Custorder o ON p.order_id = o.order_id
+        WHERE o.cust_id = #{custId}
+        ORDER BY p.payment_date DESC
+    </select>
+
+</mapper>
