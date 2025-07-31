@@ -34,7 +34,7 @@ public class ProductController {
             log.error("상품 목록 로딩 오류", e);
             model.addAttribute("productList", new ArrayList<>());
         }
-        return "product";
+        return "product/center";
     }
 
     /**
@@ -46,10 +46,10 @@ public class ProductController {
         try {
             Product product = productService.get(productId);
             model.addAttribute("product", product);
-            return "product-detail";
+            return "product/detail";
         } catch (Exception e) {
             log.error("상품 상세 정보 로딩 오류: {}", productId, e);
-            return "redirect:/product";
+            return "redirect:/product/center";
         }
     }
     /**
@@ -77,7 +77,7 @@ public class ProductController {
             log.error("카테고리별 상품 로딩 오류", e);
             model.addAttribute("productList", new ArrayList<>());
         }
-        return "product";
+        return "product/center";
     }
 
 
@@ -144,6 +144,6 @@ public class ProductController {
 //            log.error("검색 중 오류 발생", e);
 //            model.addAttribute("productList", new ArrayList<>());
 //        }
-//        return "product"; // product.jsp 재사용
+//        return "product"; // center.jsp 재사용
 //    }
 }

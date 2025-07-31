@@ -25,7 +25,7 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(Model model) {
-        return "login";
+        return "auth/login";
     }
 
     //Admin과 cust 통합 로그인
