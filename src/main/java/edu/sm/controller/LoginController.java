@@ -40,7 +40,7 @@ public class LoginController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            log.info("통합 로그인 시도 - Email: {}", email);
+//            log.info("통합 로그인 시도 - Email: {}", email);
 
             // 1Admin 테이블에서 먼저 확인
             Admin dbAdmin = adminService.getByEmail(email);
@@ -55,7 +55,7 @@ public class LoginController {
                     session.setAttribute("adminInfo", dbAdmin); // 원본 Admin 정보도 저장
                     session.setAttribute("role", "admin"); // Admin role 추가
 
-                    log.info("Admin 로그인 성공: {}", email);
+//                    log.info("Admin 로그인 성공: {}", email);
 
                     response.put("success", true);
                     response.put("message", "관리자 로그인 성공!");
@@ -79,7 +79,7 @@ public class LoginController {
                     session.setAttribute("isAdmin", false);
                     session.setAttribute("role", "cust"); // cust role 축아
 
-                    log.info("고객 로그인 성공: {}", email);
+//                    log.info("고객 로그인 성공: {}", email);
 
                     response.put("success", true);
                     response.put("message", "로그인 성공!");
@@ -87,7 +87,7 @@ public class LoginController {
                     response.put("userType", "customer");
                     return ResponseEntity.ok(response);
                 } else {
-                    log.warn("고객 비밀번호 불일치: {}", email);
+//                    log.warn("고객 비밀번호 불일치: {}", email);
                     response.put("success", false);
                     response.put("message", "비밀번호가 일치하지 않습니다.");
                     return ResponseEntity.ok(response);
@@ -95,13 +95,13 @@ public class LoginController {
             }
 
             // 3️ 둘 다 없는 경우
-            log.warn("존재하지 않는 이메일: {}", email);
+//            log.warn("존재하지 않는 이메일: {}", email);
             response.put("success", false);
             response.put("message", "존재하지 않는 이메일입니다.");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            log.error("로그인 처리 중 오류: ", e);
+//            log.error("로그인 처리 중 오류: ", e);
             response.put("success", false);
             response.put("message", "로그인 처리 중 오류가 발생했습니다.");
             return ResponseEntity.status(500).body(response);
@@ -114,7 +114,7 @@ public class LoginController {
     public String logout(HttpSession session) {
         if (session != null) {
             session.invalidate(); // 모든 세션 정보 삭제 (isAdmin 포함)
-            log.info("로그아웃 완료");
+//            log.info("로그아웃 완료");
         }
         return "redirect:/";
     }

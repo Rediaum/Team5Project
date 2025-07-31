@@ -49,7 +49,7 @@ public class OrderController {
             model.addAttribute("orderType", "cart");
 
         } catch (Exception e) {
-            log.error("장바구니 주문 페이지 로딩 실패: {}", e.getMessage(), e);
+//            log.error("장바구니 주문 페이지 로딩 실패: {}", e.getMessage(), e);
             model.addAttribute("error", "주문 처리 중 오류가 발생했습니다.");
             return "redirect:/cart";
         }
@@ -84,7 +84,7 @@ public class OrderController {
             model.addAttribute("orderType", "direct");
 
         } catch (Exception e) {
-            log.error("직접 주문 페이지 로딩 실패: {}", e.getMessage(), e);
+//            log.error("직접 주문 페이지 로딩 실패: {}", e.getMessage(), e);
             model.addAttribute("error", "상품 정보를 불러올 수 없습니다.");
             return "redirect:/product";
         }
@@ -126,21 +126,21 @@ public class OrderController {
             if ("cart".equals(orderType)) {
                 // 장바구니 비우기 전에 미리 금액 계산!
                 totalAmount = cartService.calculateTotalPrice(loginCust.getCustId());
-                log.info("🛒 장바구니 총 금액 계산: {}원", totalAmount);
+//                log.info(" 장바구니 총 금액 계산: {}원", totalAmount);
 
                 // 주문 처리 (이때 장바구니가 비워짐)
                 orderId = processCartOrder(loginCust, address);
-                log.info("🛒 장바구니 주문 처리 완료 - orderId: {}", orderId);
+//                log.info(" 장바구니 주문 처리 완료 - orderId: {}", orderId);
             } else {
                 // 직접 주문은 기존과 동일
                 totalAmount = calculateDirectOrderAmount(productId, quantity);
                 orderId = processDirectOrder(loginCust, productId, quantity, address);
-                log.info("🛍️ 직접 주문 - orderId: {}, totalAmount: {}", orderId, totalAmount);
+//                log.info(" 직접 주문 - orderId: {}, totalAmount: {}", orderId, totalAmount);
             }
 
             // 금액이 0인 경우 오류 처리
             if (totalAmount == null || totalAmount <= 0) {
-                log.error("❌ 주문 금액이 0원 - orderType: {}, totalAmount: {}", orderType, totalAmount);
+//                log.error(" 주문 금액이 0원 - orderType: {}, totalAmount: {}", orderType, totalAmount);
                 redirectAttributes.addFlashAttribute("error", "주문 금액이 올바르지 않습니다.");
                 return "redirect:/cart";
             }
@@ -148,10 +148,10 @@ public class OrderController {
             // 결제 처리
             try {
                 Payment payment = paymentService.processPayment(orderId, paymentMethod, totalAmount);
-                log.info("✅ 결제 완료 - 주문ID: {}, 결제ID: {}, 거래ID: {}, 금액: {}원",
-                        orderId, payment.getPaymentId(), payment.getTransactionId(), payment.getPaymentAmount());
+//                log.info(" 결제 완료 - 주문ID: {}, 결제ID: {}, 거래ID: {}, 금액: {}원",
+//                        orderId, payment.getPaymentId(), payment.getTransactionId(), payment.getPaymentAmount());
             } catch (Exception paymentException) {
-                log.error("❌ 결제 처리 실패 - 주문ID: {}, 에러: {}", orderId, paymentException.getMessage(), paymentException);
+//                log.error("결제 처리 실패 - 주문ID: {}, 에러: {}", orderId, paymentException.getMessage(), paymentException);
                 redirectAttributes.addFlashAttribute("error", "결제 처리 중 오류가 발생했습니다: " + paymentException.getMessage());
                 return "redirect:/cart";
             }
@@ -160,7 +160,7 @@ public class OrderController {
             return "redirect:/order/complete/" + orderId;
 
         } catch (Exception e) {
-            log.error("주문 처리 실패: {}", e.getMessage(), e);
+//            log.error("주문 처리 실패: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error", "주문 처리 중 오류가 발생했습니다: " + e.getMessage());
             return "redirect:/cart";
         }
@@ -169,18 +169,18 @@ public class OrderController {
 
     @Transactional
     protected Integer processCartOrder(Cust customer, Address address) throws Exception {
-        log.info("장바구니 주문 처리 시작 - 고객ID: {}", customer.getCustId());
+//        log.info("장바구니 주문 처리 시작 - 고객ID: {}", customer.getCustId());
 
         // 장바구니 아이템 조회
         List<Cart> cartItems = cartService.findByCustId(customer.getCustId());
         if (cartItems.isEmpty()) {
             throw new IllegalStateException("장바구니가 비어있습니다.");
         }
-        log.info("장바구니 아이템 수: {}", cartItems.size());
+//        log.info("장바구니 아이템 수: {}", cartItems.size());
 
         // 총 금액 계산
         int totalAmount = cartService.calculateTotalPrice(customer.getCustId());
-        log.info("총 금액: {}", totalAmount);
+//        log.info("총 금액: {}", totalAmount);
 
         // 주문 생성 - 받는분 이름을 사용자 이름으로 수정
         CustOrder order = CustOrder.builder()
@@ -192,11 +192,11 @@ public class OrderController {
                 .orderDate(new java.sql.Timestamp(System.currentTimeMillis()))
                 .build();
 
-        log.info("주문 객체 생성 완료");
+
 
         // ⭐ 개선된 부분: registerAndGetId 사용으로 한 번에 등록하고 ID 반환
         Integer orderId = orderService.registerAndGetId(order);
-        log.info("주문 등록 완료 - 생성된 주문ID: {}", orderId);
+//        log.info("주문 등록 완료 - 생성된 주문ID: {}", orderId);
 
         // 주문 아이템 생성
         for (Cart cartItem : cartItems) {
@@ -212,22 +212,22 @@ public class OrderController {
                     .build();
 
             orderItemService.register(orderItem);
-            log.info("주문 아이템 등록 완료 - 상품ID: {}", cartItem.getProductId());
+//            log.info("주문 아이템 등록 완료 - 상품ID: {}", cartItem.getProductId());
         }
 
         // 장바구니 비우기
         for (Cart cartItem : cartItems) {
             cartService.remove(cartItem.getCartId());
-            log.info("장바구니 아이템 삭제 완료 - ID: {}", cartItem.getCartId());
+//            log.info("장바구니 아이템 삭제 완료 - ID: {}", cartItem.getCartId());
         }
 
-        log.info("장바구니 주문 처리 완료 - 주문ID: {}", orderId);
+//        log.info("장바구니 주문 처리 완료 - 주문ID: {}", orderId);
         return orderId;
     }
 
     @Transactional
     protected Integer processDirectOrder(Cust customer, Integer productId, Integer quantity, Address address) throws Exception {
-        log.info("직접 주문 처리 시작 - 고객ID: {}, 상품ID: {}", customer.getCustId(), productId);
+//        log.info("직접 주문 처리 시작 - 고객ID: {}, 상품ID: {}", customer.getCustId(), productId);
 
         // 상품 정보 조회 및 검증
         Product product = productService.get(productId);
@@ -256,9 +256,9 @@ public class OrderController {
                 .orderDate(new java.sql.Timestamp(System.currentTimeMillis()))
                 .build();
 
-        // ⭐ 개선된 부분: registerAndGetId 사용으로 한 번에 등록하고 ID 반환
+        // 개선된 부분: registerAndGetId 사용으로 한 번에 등록하고 ID 반환
         Integer orderId = orderService.registerAndGetId(order);
-        log.info("주문 등록 완료 - 생성된 주문ID: {}", orderId);
+//        log.info("주문 등록 완료 - 생성된 주문ID: {}", orderId);
 
         // 주문 아이템 생성
         OrderItem orderItem = OrderItem.builder()
@@ -269,9 +269,9 @@ public class OrderController {
                 .build();
 
         orderItemService.register(orderItem);
-        log.info("주문 아이템 등록 완료 - 상품ID: {}", productId);
+//        log.info("주문 아이템 등록 완료 - 상품ID: {}", productId);
 
-        log.info("직접 주문 처리 완료 - 주문ID: {}", orderId);
+//        log.info("직접 주문 처리 완료 - 주문ID: {}", orderId);
         return orderId;
     }
 
@@ -310,12 +310,12 @@ public class OrderController {
                 itemsWithProductInfo.add(itemInfo);
             }
 
-            // 🆕 결제 정보 조회
+            //  결제 정보 조회
             Payment payment = null;
             try {
                 payment = paymentService.getPaymentByOrderId(orderId);
             } catch (Exception e) {
-                log.warn("결제 정보 조회 실패 (주문ID: {}): {}", orderId, e.getMessage());
+//                log.warn("결제 정보 조회 실패 (주문ID: {}): {}", orderId, e.getMessage());
                 // 결제 정보가 없어도 페이지는 표시하도록 함
             }
 
@@ -324,7 +324,7 @@ public class OrderController {
             model.addAttribute("payment", payment); // 🆕 결제 정보 추가
 
         } catch (Exception e) {
-            log.error("주문 완료 페이지 로딩 실패: {}", e.getMessage(), e);
+//            log.error("주문 완료 페이지 로딩 실패: {}", e.getMessage(), e);
             model.addAttribute("error", "주문 정보를 불러오는 중 오류가 발생했습니다.");
             return "redirect:/order/history";
         }
@@ -369,7 +369,7 @@ public class OrderController {
             model.addAttribute("orderItemsMap", orderItemsMap);
 
         } catch (Exception e) {
-            log.error("주문 내역 조회 실패: {}", e.getMessage(), e);
+//            log.error("주문 내역 조회 실패: {}", e.getMessage(), e);
             model.addAttribute("error", "주문 내역을 불러오는 중 오류가 발생했습니다.");
         }
 
@@ -386,8 +386,8 @@ public class OrderController {
         try {
             CustOrder order = orderService.get(orderId);
             if (order != null && Objects.equals(order.getCustId(), loginCust.getCustId())) {
-                // TODO: 주문 상태 확인 로직 추가 (배송 전에만 취소 가능)
-                // TODO: 주문 아이템도 함께 삭제하는 로직 추가
+                // 주문 상태 확인 로직 추가 (배송 전에만 취소 가능)
+                // 주문 아이템도 함께 삭제하는 로직 추가
                 orderService.remove(orderId);
                 redirectAttributes.addFlashAttribute("success", "주문이 취소되었습니다.");
                 log.info("주문 취소 완료 - 주문ID: {}, 고객ID: {}", orderId, loginCust.getCustId());
@@ -395,7 +395,7 @@ public class OrderController {
                 redirectAttributes.addFlashAttribute("error", "취소할 수 없는 주문입니다.");
             }
         } catch (Exception e) {
-            log.error("주문 취소 실패: {}", e.getMessage(), e);
+//            log.error("주문 취소 실패: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("error", "주문 취소 중 오류가 발생했습니다.");
         }
 
