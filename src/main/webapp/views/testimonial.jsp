@@ -198,7 +198,7 @@
                         </c:if>
                         
                         <%-- 7. 검색 폼 --%>
-                        <c:if test="${sessionScope.role eq 'cust'}">
+                        <c:if test="${sessionScope.role ne 'admin'}">
                             <li class="nav-item">
                                 <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
                                     <div class="search-input-container">

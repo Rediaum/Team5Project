@@ -211,7 +211,7 @@
                         </c:if>
                         
                         <%-- 7. 검색 폼 --%>
-                        <c:if test="${sessionScope.role eq 'cust'}">
+                        <c:if test="${sessionScope.role ne 'admin'}">
                             <li class="nav-item">
                                 <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
                                     <div class="search-input-container">
@@ -473,7 +473,7 @@
 <!-- end arrival section -->
 
 <%-- 12. 상품 섹션 (메인) --%>
-<c:if test="${sessionScope.role eq 'cust'}">
+<c:if test="${sessionScope.role ne 'admin'}">
     <section class="product_section layout_padding">
         <div class="container">
             <div class="heading_container heading_center">
@@ -580,7 +580,7 @@
 <!-- end product section -->
 
 <%--  구독 섹션 --%>
-<c:if test="${sessionScope.role eq 'cust'}">
+<c:if test="${sessionScope.role ne 'admin'}">
     <section class="subscribe_section">
         <div class="container-fuild">
             <div class="box">
