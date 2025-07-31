@@ -187,6 +187,43 @@
             border-radius: 8px;
             margin-top: 20px;
         }
+
+        /* 🆕 결제 정보 관련 CSS 수정 */
+        .payment-info-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .transaction-id {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #6c757d;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .payment-method i {
+            margin-right: 5px;
+        }
+
+        .total-payment-row {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            color: white !important;
+            border-radius: 6px !important;
+            padding: 12px !important;
+            margin-top: 10px !important;
+            border-bottom: none !important;
+        }
+
+        .total-payment-row span {
+            color: white !important;
+        }
+
+        .total-payment-row i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 
@@ -276,7 +313,7 @@
                         <c:forEach var="item" items="${orderItems}">
                             <div class="order-item">
                                 <div class="item-info">
-                                    <div class="item-name">${item.productId}</div>
+                                    <div class="item-name">상품 ID: ${item.productId}</div>
                                     <div class="item-details">
                                         수량: ${item.quantity}개 |
                                         단가: <fmt:formatNumber value="${item.unitPrice}" pattern="#,###" />원
@@ -304,6 +341,88 @@
                             <span><fmt:formatNumber value="${order.totalAmount}" pattern="#,###" />원</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- 🆕 결제 정보 카드 - 완전 수정 -->
+                <div class="order-summary-card">
+                    <h4 class="mb-4">
+                        <i class="fa fa-credit-card text-success"></i> 결제 정보
+                    </h4>
+
+                    <c:choose>
+                        <c:when test="${payment != null}">
+                            <div class="payment-info-container">
+                                <div class="order-info-row">
+                                    <span><i class="fa fa-hashtag"></i> 결제번호:</span>
+                                    <span><strong>${payment.paymentId}</strong></span>
+                                </div>
+                                <div class="order-info-row">
+                                    <span><i class="fa fa-barcode"></i> 거래번호:</span>
+                                    <span class="transaction-id">${payment.transactionId}</span>
+                                </div>
+                                <div class="order-info-row">
+                                    <span><i class="fa fa-credit-card"></i> 결제방법:</span>
+                                    <span class="payment-method">
+                                        <c:choose>
+                                            <c:when test="${payment.paymentMethod eq 'creditCard'}">
+                                                <i class="fa fa-credit-card text-primary"></i> 신용카드
+                                            </c:when>
+                                            <c:when test="${payment.paymentMethod eq 'bankTransfer'}">
+                                                <i class="fa fa-university text-info"></i> 무통장입금
+                                            </c:when>
+                                            <c:when test="${payment.paymentMethod eq 'kakaoPay'}">
+                                                <i class="fa fa-mobile text-warning"></i> 카카오페이
+                                            </c:when>
+                                            <c:when test="${payment.paymentMethod eq 'naverPay'}">
+                                                <i class="fa fa-credit-card-alt text-success"></i> 네이버페이
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="fa fa-question-circle"></i> ${payment.paymentMethod}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
+                                <div class="order-info-row">
+                                    <span><i class="fa fa-clock-o"></i> 결제일시:</span>
+                                    <span><fmt:formatDate value="${payment.paymentDate}" pattern="yyyy년 MM월 dd일 HH:mm" /></span>
+                                </div>
+                                <div class="order-info-row total-payment-row">
+                                    <span><i class="fa fa-won"></i> 결제금액:</span>
+                                    <span class="font-weight-bold">
+                                        <fmt:formatNumber value="${payment.paymentAmount}" pattern="#,###" />원
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- 결제 방법별 추가 안내 -->
+                            <c:if test="${payment.paymentMethod eq 'bankTransfer'}">
+                                <div class="alert alert-info mt-3">
+                                    <h6><i class="fa fa-info-circle"></i> 무통장입금 안내</h6>
+                                    <p class="mb-2"><strong>입금계좌:</strong> 신한은행 100-123-456789</p>
+                                    <p class="mb-2"><strong>예금주:</strong> Team5 쇼핑몰</p>
+                                    <p class="mb-0 text-danger"><small>⚠️ 주문 후 24시간 내 입금 완료해주세요.</small></p>
+                                </div>
+                            </c:if>
+
+                            <c:if test="${payment.paymentMethod eq 'creditCard'}">
+                                <div class="alert alert-success mt-3">
+                                    <i class="fa fa-check-circle"></i> 카드 결제가 정상적으로 완료되었습니다.
+                                </div>
+                            </c:if>
+
+                            <c:if test="${payment.paymentMethod eq 'kakaoPay' or payment.paymentMethod eq 'naverPay'}">
+                                <div class="alert alert-success mt-3">
+                                    <i class="fa fa-check-circle"></i> 간편결제가 정상적으로 완료되었습니다.
+                                </div>
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="alert alert-warning">
+                                <i class="fa fa-exclamation-triangle"></i> 결제 정보를 불러올 수 없습니다.
+                                <br><small>주문은 정상적으로 처리되었으나 결제 정보 조회에 실패했습니다.</small>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <!-- 배송 정보 -->
