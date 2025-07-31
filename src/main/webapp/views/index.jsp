@@ -177,7 +177,7 @@
                         </li>
                         
                         <%-- 장바구니 아이콘 메뉴 (Admin 숨기고 Cust 로그인시에만 표시) --%>
-                        <c:if test="${sessionScope.logincust != null and sessionScope.role eq 'user'}">
+                        <c:if test="${sessionScope.logincust != null and sessionScope.role eq 'cust'}">
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/cart">
                                         <%-- 장바구니 SVG 아이콘 --%>
@@ -211,16 +211,20 @@
                         </c:if>
                         
                         <%-- 7. 검색 폼 --%>
-                        <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
-                            <div class="search-input-container">
-                                <input type="text" name="keyword" class="form-control search-input-header"
-                                       placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
-                                <button class="btn search-btn-header" type="submit">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </button>
-                                <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
-                            </div>
-                        </form>
+                        <c:if test="${sessionScope.role eq 'cust'}">
+                            <li class="nav-item">
+                                <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
+                                    <div class="search-input-container">
+                                        <input type="text" name="keyword" class="form-control search-input-header"
+                                               placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
+                                        <button class="btn search-btn-header" type="submit">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </button>
+                                        <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
+                                    </div>
+                                </form>
+                            </li>
+                        </c:if>
                     </ul>
                 </div>
             </nav>
@@ -469,132 +473,136 @@
 <!-- end arrival section -->
 
 <%-- 12. 상품 섹션 (메인) --%>
-<section class="product_section layout_padding">
-    <div class="container">
-        <div class="heading_container heading_center">
-            <h2>Our <span>products</span></h2>
-        </div>
-        <div class="row">
-            <%-- 13. DB에서 가져온 상품 목록을 동적으로 표시 --%>
-            <c:forEach var="product" items="${productList}" varStatus="status">
-                <%-- 메인 페이지에서는 처음 8개 상품만 표시 --%>
-                <c:if test="${status.index < 8}">
-                    <div class="col-sm-6 col-md-4 col-lg-3">
-                        <div class="box">
-                                <%-- 상품 옵션 컨테이너 (호버 시 나타나는 버튼들) --%>
-                            <div class="option_container">
-                                <div class="options">
-                                        <%-- 상품 상세 페이지 링크 --%>
-                                    <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="option1">
-                                            ${product.productName}
-                                    </a>
-                                        <%-- 장바구니 추가 버튼 --%>
+<c:if test="${sessionScope.role eq 'cust'}">
+    <section class="product_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>Our <span>products</span></h2>
+            </div>
+            <div class="row">
+                <%-- 13. DB에서 가져온 상품 목록을 동적으로 표시 --%>
+                <c:forEach var="product" items="${productList}" varStatus="status">
+                    <%-- 메인 페이지에서는 처음 8개 상품만 표시 --%>
+                    <c:if test="${status.index < 8}">
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <div class="box">
+                                    <%-- 상품 옵션 컨테이너 (호버 시 나타나는 버튼들) --%>
+                                <div class="option_container">
+                                    <div class="options">
+                                            <%-- 상품 상세 페이지 링크 --%>
+                                        <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="option1">
+                                                ${product.productName}
+                                        </a>
+                                            <%-- 장바구니 추가 버튼 --%>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.logincust != null}">
+                                                <%-- 로그인시: 장바구니 추가 --%>
+                                                <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
+                                                    Add To Cart
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <%-- 비로그인시: 로그인 페이지로 --%>
+                                                <a href="${pageContext.request.contextPath}/login" class="option2" onclick="alert('로그인이 필요합니다.');">
+                                                    Add To Cart
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                            <%-- 바로 구매 버튼 --%>
+                                        <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
+                                            Buy Now
+                                        </a>
+                                    </div>
+                                </div>
+                                    <%-- 상품 이미지 --%>
+                                <div class="img-box">
+                                    <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
+                                </div>
+                                <!-- 상품 정보 (이름, 가격) - 할인 적용 버전 -->
+                                <div class="detail-box" style="display: block !important">
+                                    <h5>${product.productName}</h5>
+                                    
+                                    <!-- 할인율에 따른 가격 표시 -->
                                     <c:choose>
-                                        <c:when test="${sessionScope.logincust != null}">
-                                            <%-- 로그인시: 장바구니 추가 --%>
-                                            <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option2">
-                                                Add To Cart
-                                            </a>
+                                        <c:when test="${product.discountRate > 0}">
+                                            <!-- 할인이 있는 경우 -->
+                                            <!-- 할인율이 0.1 형태(10%)인지 70 형태(70%)인지 확인 -->
+                                            <c:set var="displayDiscountRate" value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" />
+                                            <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                            <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+                                            
+                                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                                <!-- 할인된 가격 (크게) -->
+                                                <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
+                                                    <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                                                </h6>
+                                                <!-- 원래 가격 (취소선) -->
+                                                <span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
+                                           <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                        </span>
+                                                <!-- 할인율 배지 -->
+                                                <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
+                                           <fmt:formatNumber type="number" pattern="##" value="${displayDiscountRate}" />% 할인
+                                        </span>
+                                            </div>
                                         </c:when>
                                         <c:otherwise>
-                                            <%-- 비로그인시: 로그인 페이지로 --%>
-                                            <a href="${pageContext.request.contextPath}/login" class="option2" onclick="alert('로그인이 필요합니다.');">
-                                                Add To Cart
-                                            </a>
+                                            <!-- 할인이 없는 경우 -->
+                                            <h6><fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" /></h6>
                                         </c:otherwise>
                                     </c:choose>
-                                        <%-- 바로 구매 버튼 --%>
-                                    <a href="${pageContext.request.contextPath}/cart/add?productId=${product.productId}" class="option3">
-                                        Buy Now
-                                    </a>
                                 </div>
                             </div>
-                                <%-- 상품 이미지 --%>
-                            <div class="img-box">
-                                <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
-                            </div>
-                            <!-- 상품 정보 (이름, 가격) - 할인 적용 버전 -->
-                            <div class="detail-box" style="display: block !important">
-                                <h5>${product.productName}</h5>
-                                
-                                <!-- 할인율에 따른 가격 표시 -->
-                                <c:choose>
-                                    <c:when test="${product.discountRate > 0}">
-                                        <!-- 할인이 있는 경우 -->
-                                        <!-- 할인율이 0.1 형태(10%)인지 70 형태(70%)인지 확인 -->
-                                        <c:set var="displayDiscountRate" value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" />
-                                        <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
-                                        <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
-                                        
-                                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                            <!-- 할인된 가격 (크게) -->
-                                            <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
-                                                <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
-                                            </h6>
-                                            <!-- 원래 가격 (취소선) -->
-                                            <span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
-                                       <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
-                                    </span>
-                                            <!-- 할인율 배지 -->
-                                            <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
-                                       <fmt:formatNumber type="number" pattern="##" value="${displayDiscountRate}" />% 할인
-                                    </span>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <!-- 할인이 없는 경우 -->
-                                        <h6><fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" /></h6>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
+                
+                <%-- 14. 상품이 없을 경우 메시지 표시 --%>
+                <c:if test="${empty productList}">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <h4>상품이 준비 중입니다.</h4>
+                            <p>곧 다양한 상품을 만나보실 수 있습니다!</p>
                         </div>
                     </div>
                 </c:if>
-            </c:forEach>
+            </div>
             
-            <%-- 14. 상품이 없을 경우 메시지 표시 --%>
-            <c:if test="${empty productList}">
-                <div class="col-12">
-                    <div class="text-center">
-                        <h4>상품이 준비 중입니다.</h4>
-                        <p>곧 다양한 상품을 만나보실 수 있습니다!</p>
-                    </div>
-                </div>
-            </c:if>
+            <%-- 모든 상품 보기 버튼 --%>
+            <div class="btn-box">
+                <a href="${pageContext.request.contextPath}/product">
+                    View All products
+                </a>
+            </div>
         </div>
-        
-        <%-- 모든 상품 보기 버튼 --%>
-        <div class="btn-box">
-            <a href="${pageContext.request.contextPath}/product">
-                View All products
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
+</c:if>
 <!-- end product section -->
 
 <%--  구독 섹션 --%>
-<section class="subscribe_section">
-    <div class="container-fuild">
-        <div class="box">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <div class="subscribe_form ">
-                        <div class="heading_container heading_center">
-                            <h3>Subscribe To Get Discount Offers</h3>
+<c:if test="${sessionScope.role eq 'cust'}">
+    <section class="subscribe_section">
+        <div class="container-fuild">
+            <div class="box">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="subscribe_form ">
+                            <div class="heading_container heading_center">
+                                <h3>Subscribe To Get Discount Offers</h3>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                            <%-- 이메일 구독 폼 --%>
+                            <form action="">
+                                <input type="email" placeholder="Enter your email">
+                                <button>subscribe</button>
+                            </form>
                         </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-                        <%-- 이메일 구독 폼 --%>
-                        <form action="">
-                            <input type="email" placeholder="Enter your email">
-                            <button>subscribe</button>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</c:if>
 <!-- end subscribe section -->
 
 <%-- 16. 고객 후기 섹션 --%>
