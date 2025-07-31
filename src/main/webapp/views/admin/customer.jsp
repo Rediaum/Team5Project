@@ -205,7 +205,7 @@
 <!-- Customer Update Form section -->
 <div class="container-profile">
     <form action="${pageContext.request.contextPath}/admin/customerList/update" method="post">
-        <!-- ID (non-editable) -->
+        
         <div class="form-group">
             <label for="custId">ID</label>
             <input type="text" class="form-control" id="custId" name="custId" value="${cust.custId}" readonly />

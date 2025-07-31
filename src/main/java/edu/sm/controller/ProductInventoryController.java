@@ -22,7 +22,7 @@ public class ProductInventoryController {
 
     private final ProductService productService;
 
-    // INVENTORY LIST PAGE
+    // 재고 목록 페이지
     @GetMapping
     public String inventoryPage(HttpSession session, Model model) {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
@@ -37,7 +37,7 @@ public class ProductInventoryController {
         return "admin/inventory";
     }
 
-    // ADD PAGE FORM
+    // 페이지 추가 양식
     @GetMapping("/add")
     public String addPage(HttpSession session, Model model) {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
@@ -46,7 +46,7 @@ public class ProductInventoryController {
         return "admin/add";
     }
 
-    // ADD PRODUCT (HANDLE FORM SUBMISSION)
+    // 제품 추가 (폼 제출 처리)
     @PostMapping("/addimpl")
     public String addProductImpl(@ModelAttribute Product product,
                                  @RequestParam("imgfile") MultipartFile imgfile,
@@ -54,13 +54,13 @@ public class ProductInventoryController {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
 
         try {
-            // Simpan file image
+            // 이미지 파일을 저장
             String uploadPath = session.getServletContext().getRealPath("/views/images/");
             String filename = UUID.randomUUID().toString() + "_" + imgfile.getOriginalFilename();
             File dest = Paths.get(uploadPath, filename).toFile();
             imgfile.transferTo(dest);
 
-            // Set data product
+            // 데이터 제품 설정
             product.setProductImg(filename);
             product.setProductRegdate(new Timestamp(System.currentTimeMillis()));
             productService.register(product);
@@ -71,7 +71,7 @@ public class ProductInventoryController {
         return "redirect:/admin/inventory";
     }
 
-    // DETAIL + UPDATE FORM PAGE
+    // 세부 사항 + 업데이트 양식 페이지
     @GetMapping("/update/{id}")
     public String updatePage(@PathVariable("id") int id, HttpSession session, Model model) {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
@@ -83,10 +83,10 @@ public class ProductInventoryController {
             e.printStackTrace();
         }
 
-        return "admin/update"; // JSP form for editing
+        return "admin/update";
     }
 
-    // UPDATE PRODUCT DATA
+    // 제품 데이터 업데이트
     @PostMapping("/update")
     public String updateProduct(@ModelAttribute Product product,
                                 @RequestParam(value = "imgfile", required = false) MultipartFile imgfile,
@@ -94,7 +94,7 @@ public class ProductInventoryController {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
 
         try {
-            // Optional: if image is uploaded, replace it
+            // 이미지가 업로드되면 해당 이미지를 교체
             if (imgfile != null && !imgfile.isEmpty()) {
                 String uploadPath = session.getServletContext().getRealPath("/views/images/");
                 String filename = imgfile.getOriginalFilename();
@@ -102,7 +102,6 @@ public class ProductInventoryController {
                 imgfile.transferTo(dest);
                 product.setProductImg(filename);
             } else {
-                // Ambil produk lama dulu agar productImg lama tidak hilang
                 Product oldProduct = productService.get(product.getProductId());
                 product.setProductImg(oldProduct.getProductImg());
             }
@@ -116,7 +115,7 @@ public class ProductInventoryController {
         return "redirect:/admin/inventory";
     }
 
-    // DELETE PRODUCT
+    // 제품 삭제
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") int id, HttpSession session) {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";

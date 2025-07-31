@@ -51,7 +51,7 @@ public class CustAdminController {
         return "redirect:/admin/customerList";
     }
 
-    // Hapus customer
+    // 고객 삭제
     @GetMapping("/delete/{custId}")
     public String deleteCustomer(@PathVariable int custId, HttpSession session) throws Exception {
         if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
