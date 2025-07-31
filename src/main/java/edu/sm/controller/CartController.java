@@ -59,7 +59,7 @@ public class CartController {
             log.error("장바구니 조회 오류: ", e);
             model.addAttribute("error", "장바구니를 불러오는 중 오류가 발생했습니다.");
         }
-        return "cart"; // cart.jsp 직접 반환
+        return "order/cart"; // cart.jsp 직접 반환
     }
 
     /**

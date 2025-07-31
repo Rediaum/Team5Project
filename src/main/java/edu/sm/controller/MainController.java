@@ -34,9 +34,9 @@ public class MainController {
                 productList.add(allProducts.get(i));
             }
             model.addAttribute("productList", productList);
-            log.info("메인 페이지에 {} 개의 상품을 표시합니다.", productList.size());
+//            log.info("메인 페이지에 {} 개의 상품을 표시합니다.", productList.size());
         } catch (Exception e) {
-            log.error("메인 페이지 상품 로딩 오류", e);
+//            log.error("메인 페이지 상품 로딩 오류", e);
             model.addAttribute("productList", new ArrayList<>());
         }
 

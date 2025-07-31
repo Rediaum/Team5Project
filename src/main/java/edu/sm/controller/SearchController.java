@@ -70,7 +70,7 @@ public class SearchController {
             model.addAttribute("error", "검색 중 오류가 발생했습니다.");
         }
 
-        return "search"; // search.jsp
+        return "product/search"; // search.jsp
     }
 
     // AJAX 자동완성 검색

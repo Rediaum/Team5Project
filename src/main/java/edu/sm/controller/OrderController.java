@@ -55,7 +55,7 @@ public class OrderController {
             return "redirect:/cart";
         }
 
-        return "order";
+        return "order/checkout";
     }
 
     @RequestMapping("/direct")
@@ -90,7 +90,7 @@ public class OrderController {
             return "redirect:/product";
         }
 
-        return "order";
+        return "order/checkout";
     }
 
     @PostMapping("/submit")
@@ -317,7 +317,7 @@ public class OrderController {
             return "redirect:/order/history";
         }
 
-        return "order-complete";
+        return "order/complete";
     }
 
     @RequestMapping("/history")
@@ -336,7 +336,7 @@ public class OrderController {
             model.addAttribute("error", "주문 내역을 불러오는 중 오류가 발생했습니다.");
         }
 
-        return "order-history";
+        return "order/history";
     }
 
     @RequestMapping("/cancel/{orderId}")
