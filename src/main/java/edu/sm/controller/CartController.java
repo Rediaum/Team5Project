@@ -63,9 +63,8 @@ public class CartController {
         return "order/cart"; // cart.jsp 직접 반환
     }
 
-    /**
-     * 장바구니에 상품 추가 - 로그인 필수
-     */
+    // 장바구니에 상품 추가 - 로그인 필수
+
     @RequestMapping("/add")
     public String addCart(@RequestParam("productId") Integer productId,
                           @RequestParam(value = "quantity", defaultValue = "1") Integer quantity,
@@ -108,9 +107,8 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    /**
-     * 장바구니 상품 삭제 - 본인 장바구니만 삭제 가능
-     */
+    // 장바구니 상품 삭제 - 본인 장바구니만 삭제 가능
+
     @RequestMapping("/delete")
     public String deleteCart(@RequestParam("cartId") int cartId, HttpSession session) {
         // 세션에서 로그인 고객 정보 확인
@@ -135,9 +133,8 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    /**
-     * 장바구니 상품 수량 변경 - 본인 장바구니만 수정 가능
-     */
+    // 장바구니 상품 수량 변경 - 본인 장바구니만 수정 가능
+
     @RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateCart(@RequestParam("cartId") int cartId,
@@ -223,9 +220,8 @@ public class CartController {
         }
     }
 
-    /**
-     * 장바구니 전체 비우기
-     */
+    // 장바구니 전체 비우기
+
     @PostMapping("/clear")
     public String clearCart(HttpSession session) {
         Cust loginCust = (Cust) session.getAttribute("logincust");

@@ -18,27 +18,23 @@ public class RegisterController {
 
     private final CustService custService;
 
-    /**
-     * 회원가입 페이지 표시
-     */
+    // 회원가입 페이지 표시
     @GetMapping("")
     public String registerForm(Model model) {
-        log.info("회원가입 페이지 요청");
+//        log.info("회원가입 페이지 요청");
         model.addAttribute("pageTitle", "회원가입");
         model.addAttribute("cust", new Cust());
         return "auth/register";
     }
 
-    /**
-     * 회원가입 처리
-     */
+    // 회원가입 처리
     @PostMapping("")
     public String register(@ModelAttribute Cust cust,
                            @RequestParam String custPwd,
                            RedirectAttributes redirectAttributes,
                            Model model) {
         try {
-            log.info("회원가입 처리 시작: {}", cust.getCustEmail());
+//            log.info("회원가입 처리 시작: {}", cust.getCustEmail());
 
             // 유효성 검사
             if (!custService.validateCust(cust)) {
@@ -59,10 +55,7 @@ public class RegisterController {
         }
     }
 
-    /**
-     * 이메일 중복 체크 (AJAX)
-     * ✅ 수정: 명확한 응답 구조로 변경
-     */
+    // 이메일 중복 체크 (AJAX)
     @PostMapping("/check-email")
     @ResponseBody
     public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam String email) {
@@ -73,11 +66,11 @@ public class RegisterController {
             // ✅ 명확한 로직: 중복이면 false(사용불가), 중복 아니면 true(사용가능)
             boolean isAvailable = !isDuplicate;
 
-            log.info("이메일 {} - 중복: {}, 사용가능: {}", email, isDuplicate, isAvailable);
+//            log.info("이메일 {} - 중복: {}, 사용가능: {}", email, isDuplicate, isAvailable);
             return ResponseEntity.ok(isAvailable);
 
         } catch (Exception e) {
-            log.error("이메일 중복 체크 오류: ", e);
+//            log.error("이메일 중복 체크 오류: ", e);
             return ResponseEntity.ok(false); // 오류 시 사용 불가로 처리
         }
     }

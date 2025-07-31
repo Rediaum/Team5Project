@@ -35,8 +35,8 @@ public class SearchController {
                          @RequestParam(required = false) String sortOrder,
                          Model model) {
 
-        log.info("검색 요청 - 키워드: {}, 카테고리: {}, 가격: {}-{}",
-                keyword, category, minPrice, maxPrice);
+//        log.info("검색 요청 - 키워드: {}, 카테고리: {}, 가격: {}-{}",
+//                keyword, category, minPrice, maxPrice);
 
         try {
             List<Product> searchResults;
@@ -62,10 +62,10 @@ public class SearchController {
             model.addAttribute("sortBy", sortBy != null ? sortBy : "regdate");
             model.addAttribute("sortOrder", sortOrder != null ? sortOrder : "DESC");
 
-            log.info("검색 완료 - {}개 결과", searchResults.size());
+//            log.info("검색 완료 - {}개 결과", searchResults.size());
 
         } catch (Exception e) {
-            log.error("검색 중 오류 발생: ", e);
+//            log.error("검색 중 오류 발생: ", e);
             model.addAttribute("searchResults", new ArrayList<>());
             model.addAttribute("error", "검색 중 오류가 발생했습니다.");
         }
@@ -82,7 +82,7 @@ public class SearchController {
             List<String> suggestions = productService.getSearchSuggestions(keyword);
             return ResponseEntity.ok(suggestions);
         } catch (Exception e) {
-            log.error("자동완성 검색 오류: ", e);
+//            log.error("자동완성 검색 오류: ", e);
             return ResponseEntity.ok(new ArrayList<>());
         }
     }
@@ -97,7 +97,7 @@ public class SearchController {
             response.put("success", true);
             response.put("products", popularProducts);
         } catch (Exception e) {
-            log.error("인기 상품 조회 오류: ", e);
+//            log.error("인기 상품 조회 오류: ", e);
             response.put("success", false);
             response.put("message", "인기 상품을 불러올 수 없습니다.");
         }
@@ -115,7 +115,7 @@ public class SearchController {
             response.put("success", true);
             response.put("products", discountedProducts);
         } catch (Exception e) {
-            log.error("할인 상품 조회 오류: ", e);
+//            log.error("할인 상품 조회 오류: ", e);
             response.put("success", false);
             response.put("message", "할인 상품을 불러올 수 없습니다.");
         }

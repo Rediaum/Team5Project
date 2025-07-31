@@ -20,7 +20,7 @@ public class MainController {
 
     @GetMapping("/")
     public String main(Model model) {
-        log.info("Start Main...");
+//        log.info("Start Main...");
 
         // 홈페이지 기본 데이터
         model.addAttribute("pageTitle", "Shop - Project team - 5");

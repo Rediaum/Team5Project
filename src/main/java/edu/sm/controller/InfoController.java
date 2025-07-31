@@ -38,11 +38,11 @@ public class InfoController {
         try {
             Address defaultAddress = addressService.getDefaultAddress(loginUser.getCustId());
             model.addAttribute("defaultAddress", defaultAddress);
-            log.info("사용자 {}의 기본 배송지 조회: {}",
-                    loginUser.getCustName(),
-                    defaultAddress != null ? defaultAddress.getAddressName() : "없음");
+//            log.info("사용자 {}의 기본 배송지 조회: {}",
+//                    loginUser.getCustName(),
+//                    defaultAddress != null ? defaultAddress.getAddressName() : "없음");
         } catch (Exception e) {
-            log.error("기본 배송지 조회 실패: {}", e.getMessage());
+//            log.error("기본 배송지 조회 실패: {}", e.getMessage());
             // 기본 배송지 조회 실패해도 프로필 페이지는 정상 표시
             model.addAttribute("defaultAddress", null);
         }
@@ -100,7 +100,7 @@ public class InfoController {
         custService.modify(cust);
 
         // 업데이트 로그 출력
-        log.info("프로필 수정 완료: {}", cust.getCustEmail());
+//        log.info("프로필 수정 완료: {}", cust.getCustEmail());
 
         // 세션 업데이트
         session.setAttribute("logincust", cust);
