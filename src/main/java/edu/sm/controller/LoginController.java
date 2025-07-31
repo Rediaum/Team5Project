@@ -77,7 +77,7 @@ public class LoginController {
                     session.setAttribute("logincust", dbCust);
                     // 일반 고객은 Admin 플래그 false
                     session.setAttribute("isAdmin", false);
-                    session.setAttribute("role", "user"); // user role 축아
+                    session.setAttribute("role", "cust"); // cust role 축아
 
                     log.info("고객 로그인 성공: {}", email);
 

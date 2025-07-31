@@ -390,9 +390,9 @@
                                 </c:choose>
                             </div>
                         </li>
-                        
-                        <%-- 장바구니 아이콘 메뉴 (로그인시에만 표시) --%>
-                        <c:if test="${sessionScope.logincust != null}">
+                            
+                        <%-- 장바구니 아이콘 메뉴 (Admin 숨기고 Cust 로그인시에만 표시) --%>
+                        <c:if test="${sessionScope.logincust != null and sessionScope.role eq 'cust'}">
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/cart">
                                         <%-- 장바구니 SVG 아이콘 --%>
@@ -420,22 +420,26 @@
                                      c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
                                             </g>
                                         </g>
-                            </svg>
+                                    </svg>
                                 </a>
                             </li>
                         </c:if>
                         
                         <%-- 7. 검색 폼 --%>
-                        <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
-                            <div class="search-input-container">
-                                <input type="text" name="keyword" class="form-control search-input-header"
-                                       placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
-                                <button class="btn search-btn-header" type="submit">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </button>
-                                <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
-                            </div>
-                        </form>
+                        <c:if test="${sessionScope.role eq 'cust'}">
+                            <li class="nav-item">
+                                <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
+                                    <div class="search-input-container">
+                                        <input type="text" name="keyword" class="form-control search-input-header"
+                                               placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
+                                        <button class="btn search-btn-header" type="submit">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </button>
+                                        <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
+                                    </div>
+                                </form>
+                            </li>
+                        </c:if>
                     </ul>
                 </div>
             </nav>
@@ -460,35 +464,37 @@
                 <div class="alert alert-success">${success}</div>
             </c:if>
             
-            <!-- 기본 배송지 정보 섹션 (추가된 부분) -->
-            <div class="address-section">
-                <h4><i class="fa fa-map-marker" aria-hidden="true"></i> 기본 배송지</h4>
-                <c:choose>
-                    <c:when test="${not empty defaultAddress}">
-                        <div class="address-info">
-                            <div class="address-name">${defaultAddress.addressName}</div>
-                            <div class="address-detail">${defaultAddress.address}</div>
-                            <c:if test="${not empty defaultAddress.detailAddress}">
-                                <div class="address-detail">${defaultAddress.detailAddress}</div>
-                            </c:if>
-                            <div class="address-detail" style="color: #6c757d; font-size: 14px;">
-                                우편번호: ${defaultAddress.postalCode}
+            <!-- cust 위한 기본 배송지 정보 섹션 (추가된 부분) -->
+            <c:if test="${sessionScope.role eq 'cust'}">
+                <div class="address-section">
+                    <h4><i class="fa fa-map-marker" aria-hidden="true"></i> 기본 배송지</h4>
+                    <c:choose>
+                        <c:when test="${not empty defaultAddress}">
+                            <div class="address-info">
+                                <div class="address-name">${defaultAddress.addressName}</div>
+                                <div class="address-detail">${defaultAddress.address}</div>
+                                <c:if test="${not empty defaultAddress.detailAddress}">
+                                    <div class="address-detail">${defaultAddress.detailAddress}</div>
+                                </c:if>
+                                <div class="address-detail" style="color: #6c757d; font-size: 14px;">
+                                    우편번호: ${defaultAddress.postalCode}
+                                </div>
                             </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-address">
-                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                            등록된 기본 배송지가 없습니다.
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-                
-                <!-- 배송지 관리 버튼 -->
-                <a href="${pageContext.request.contextPath}/address" class="btn-address-manage">
-                    <i class="fa fa-edit" aria-hidden="true"></i> 수정
-                </a>
-            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-address">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                등록된 기본 배송지가 없습니다.
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                    
+                    <!-- 배송지 관리 버튼 -->
+                    <a href="${pageContext.request.contextPath}/address" class="btn-address-manage">
+                        <i class="fa fa-edit" aria-hidden="true"></i> 수정
+                    </a>
+                </div>
+            </c:if>
             
             <div id="notification"></div>
             <form id="profileForm" action="${pageContext.request.contextPath}/info/update" method="post">

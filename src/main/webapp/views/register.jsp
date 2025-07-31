@@ -385,13 +385,22 @@
                                 </a>
                             </li>
                         </c:if>
-                        
-                        <%-- 7. 검색 폼 --%>
-                        <form class="form-inline" action="${pageContext.request.contextPath}/search">
-                            <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
+                            
+                            <%-- 7. 검색 폼 --%>
+                            <c:if test="${sessionScope.role ne 'admin'}">
+                                <li class="nav-item">
+                                    <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
+                                        <div class="search-input-container">
+                                            <input type="text" name="keyword" class="form-control search-input-header"
+                                                   placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
+                                            <button class="btn search-btn-header" type="submit">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </button>
+                                            <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
+                                        </div>
+                                    </form>
+                                </li>
+                            </c:if>
                     </ul>
                 </div>
             </nav>
