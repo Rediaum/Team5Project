@@ -248,35 +248,67 @@
             <div class="row product_grid">
                <c:forEach var="product" items="${searchResults}">
                   <div class="col-sm-6 col-md-4 col-lg-3">
+
+                     <!-- 검색 결과 표시 부분에 추가할 할인 가격 로직 -->
                      <div class="product_box">
                         <div class="product_img_box">
                            <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" alt="${product.productName}">
                         </div>
-                        <div class="product_detail">
-                           <div class="product_info">
-                              <h6>${product.productName}</h6>
-                              <div class="product_price">
-                                 <fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원
-                              </div>
-                              <div class="btn_container">
-                                 <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="btn btn-dark btn-sm">
-                                    상세보기
-                                 </a>
-                                 <c:choose>
-                                    <c:when test="${sessionScope.logincust != null}">
-                                       <a href="javascript:void(0)" onclick="addToCart(${product.productId})" class="btn btn-light btn-sm ml-2">
-                                          장바구니
-                                       </a>
-                                    </c:when>
-                                    <c:otherwise>
-                                       <a href="${pageContext.request.contextPath}/login" class="btn btn-success btn-sm ml-2">
-                                          장바구니
-                                       </a>
-                                    </c:otherwise>
-                                 </c:choose>
-                              </div>
+                        <div class="detail-box">
+                           <h5>${product.productName}</h5>
+
+                           <!-- ========== 할인 가격 표시 로직 추가 ========== -->
+                           <c:choose>
+                              <c:when test="${product.discountRate > 0}">
+                                 <!-- 할인이 있는 경우 -->
+                                 <!-- 할인율이 0.1 형태(10%)인지 70 형태(70%)인지 확인 -->
+                                 <c:set var="displayDiscountRate" value="${product.discountRate > 1 ? product.discountRate : product.discountRate * 100}" />
+                                 <c:set var="actualDiscountRate" value="${product.discountRate > 1 ? product.discountRate / 100 : product.discountRate}" />
+                                 <c:set var="discountedPrice" value="${product.productPrice * (1 - actualDiscountRate)}" />
+
+                                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;">
+                                    <!-- 할인된 가격 (크게) -->
+                                    <h6 style="color: #1a1a1a; font-weight: bold; margin: 0;">
+                                       <fmt:formatNumber type="number" pattern="###,###원" value="${discountedPrice}" />
+                                    </h6>
+                                    <!-- 원래 가격 (취소선) -->
+                                    <span style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
+                  <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+               </span>
+                                    <!-- 할인율 배지 -->
+                                    <span style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;">
+                  <fmt:formatNumber type="number" pattern="##" value="${displayDiscountRate}" />% 할인
+               </span>
+                                 </div>
+                              </c:when>
+                              <c:otherwise>
+                                 <!-- 할인이 없는 경우 -->
+                                 <h6 style="margin-bottom: 15px;">
+                                    <fmt:formatNumber type="number" pattern="###,###원" value="${product.productPrice}" />
+                                 </h6>
+                              </c:otherwise>
+                           </c:choose>
+                           <!-- ========== 할인 가격 표시 로직 끝 ========== -->
+
+                           <div class="btn-container">
+                              <a href="${pageContext.request.contextPath}/product/detail/${product.productId}" class="btn btn-primary btn-sm">
+                                 상세보기
+                              </a>
+                              <c:choose>
+                                 <c:when test="${sessionScope.logincust != null}">
+                                    <a href="javascript:void(0);" onclick="addToCart(${product.productId})" class="btn btn-success btn-sm ml-2">
+                                       장바구니
+                                    </a>
+                                 </c:when>
+                                 <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/login" class="btn btn-success btn-sm ml-2">
+                                       장바구니
+                                    </a>
+                                 </c:otherwise>
+                              </c:choose>
                            </div>
                         </div>
+                     </div>
                      </div>
                   </div>
                </c:forEach>
