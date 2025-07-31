@@ -25,6 +25,7 @@ public class OrderController {
     private final CartService cartService;
     private final AddressService addressService;
     private final ProductService productService;
+    private final PaymentService paymentService;
 
     @RequestMapping("/from-cart")
     public String orderFromCart(HttpSession session, Model model) {
@@ -95,6 +96,7 @@ public class OrderController {
     @PostMapping("/submit")
     public String submitOrder(@RequestParam("orderType") String orderType,
                               @RequestParam("selectedAddress") String selectedAddress,
+                              @RequestParam("paymentMethod") String paymentMethod, // 결제 방법 파라미터 추가
                               @RequestParam(value = "productId", required = false) Integer productId,
                               @RequestParam(value = "quantity", required = false, defaultValue = "1") Integer quantity,
                               HttpSession session,
@@ -113,14 +115,37 @@ public class OrderController {
                 return "redirect:/order/from-cart";
             }
 
-            Integer orderId;
-            if ("cart".equals(orderType)) {
-                orderId = processCartOrder(loginCust, address);
-            } else {
-                orderId = processDirectOrder(loginCust, productId, quantity, address);
+            // 🆕 결제 방법 검증
+            if (!isValidPaymentMethod(paymentMethod)) {
+                redirectAttributes.addFlashAttribute("error", "유효하지 않은 결제 방법입니다.");
+                return "redirect:/order/from-cart";
             }
 
-            redirectAttributes.addFlashAttribute("success", "주문이 성공적으로 완료되었습니다.");
+            Integer orderId;
+            Integer totalAmount;
+
+            if ("cart".equals(orderType)) {
+                orderId = processCartOrder(loginCust, address);
+                // 🆕 장바구니 총 금액 계산
+                totalAmount = cartService.calculateTotalPrice(loginCust.getCustId());
+            } else {
+                orderId = processDirectOrder(loginCust, productId, quantity, address);
+                // 🆕 직접 주문 금액 계산
+                totalAmount = calculateDirectOrderAmount(productId, quantity);
+            }
+
+            // 🆕 결제 처리
+            try {
+                Payment payment = paymentService.processPayment(orderId, paymentMethod, totalAmount);
+                log.info("✅ 결제 완료 - 주문ID: {}, 결제ID: {}, 거래ID: {}",
+                        orderId, payment.getPaymentId(), payment.getTransactionId());
+            } catch (Exception paymentException) {
+                log.error("결제 처리 실패: {}", paymentException.getMessage(), paymentException);
+                redirectAttributes.addFlashAttribute("error", "결제 처리 중 오류가 발생했습니다: " + paymentException.getMessage());
+                return "redirect:/cart";
+            }
+
+            redirectAttributes.addFlashAttribute("success", "주문 및 결제가 성공적으로 완료되었습니다.");
             return "redirect:/order/complete/" + orderId;
 
         } catch (Exception e) {
@@ -129,6 +154,7 @@ public class OrderController {
             return "redirect:/cart";
         }
     }
+
 
     @Transactional
     protected Integer processCartOrder(Cust customer, Address address) throws Exception {
@@ -260,8 +286,18 @@ public class OrderController {
 
             List<OrderItem> orderItems = orderItemService.getItemsByOrderId(orderId);
 
+            // 🆕 결제 정보 조회
+            Payment payment = null;
+            try {
+                payment = paymentService.getPaymentByOrderId(orderId);
+            } catch (Exception e) {
+                log.warn("결제 정보 조회 실패 (주문ID: {}): {}", orderId, e.getMessage());
+                // 결제 정보가 없어도 페이지는 표시하도록 함
+            }
+
             model.addAttribute("order", order);
             model.addAttribute("orderItems", orderItems);
+            model.addAttribute("payment", payment); // 🆕 결제 정보 추가
 
         } catch (Exception e) {
             log.error("주문 완료 페이지 로딩 실패: {}", e.getMessage(), e);
@@ -315,5 +351,29 @@ public class OrderController {
         }
 
         return "redirect:/order/history";
+    }
+
+    // 결제 방법 유효성 검증
+    private boolean isValidPaymentMethod(String paymentMethod) {
+        return paymentMethod != null && (
+                "creditCard".equals(paymentMethod) ||
+                        "bankTransfer".equals(paymentMethod) ||
+                        "kakaoPay".equals(paymentMethod) ||
+                        "naverPay".equals(paymentMethod)
+        );
+    }
+
+    // 직접 주문 금액 계산
+    private Integer calculateDirectOrderAmount(Integer productId, Integer quantity) throws Exception {
+        Product product = productService.get(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+        }
+
+        double actualDiscountRate = product.getDiscountRate() > 1 ?
+                product.getDiscountRate() / 100 : product.getDiscountRate();
+        int unitPrice = (int)(product.getProductPrice() * (1 - actualDiscountRate));
+
+        return unitPrice * quantity;
     }
 }
