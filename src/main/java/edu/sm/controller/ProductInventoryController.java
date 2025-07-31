@@ -97,7 +97,7 @@ public class ProductInventoryController {
             // Optional: if image is uploaded, replace it
             if (imgfile != null && !imgfile.isEmpty()) {
                 String uploadPath = session.getServletContext().getRealPath("/views/images/");
-                String filename = UUID.randomUUID().toString() + "_" + imgfile.getOriginalFilename();
+                String filename = imgfile.getOriginalFilename();
                 File dest = Paths.get(uploadPath, filename).toFile();
                 imgfile.transferTo(dest);
                 product.setProductImg(filename);

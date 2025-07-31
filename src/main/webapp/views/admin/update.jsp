@@ -300,7 +300,7 @@
             
             <div class="form-group">
                 <label for="productImg">Upload New Image</label>
-                <input type="file" name="imgFile" class="form-control-file" />
+                <input type="file" name="imgfile" class="form-control-file" />
             </div>
             
             <div class="form-group">
