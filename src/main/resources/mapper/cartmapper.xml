@@ -77,28 +77,23 @@
         DELETE FROM cart WHERE cart_id = #{cartId}
     </delete>
 
-    <!--  중복 상품 체크 (필요시 사용) -->
-    <select id="findByCustomerAndProduct" resultType="Cart">
-        SELECT
-            c.cart_id AS cartId,
-            c.cust_id AS custId,
-            c.product_id AS productId,
-            c.product_qt AS productQt,
-            c.cart_regdate AS cartRegdate,
-            p.product_name AS productName,
-            p.product_price AS productPrice,
-            p.product_img AS productImg,
-            p.discount_rate AS discountRate
-        FROM cart c
-                 INNER JOIN product p ON c.product_id = p.product_id
-        WHERE c.cust_id = #{custId} AND p.product_id = #{productId}
-    </select>
-
     <!--  특정 상품 수량만 증가 (필요시 사용) -->
     <update id="updateQuantity">
         UPDATE cart SET
             product_qt = product_qt + #{quantity}
         WHERE cust_id = #{custId} AND product_id = #{productId}
     </update>
+
+    <!-- 중복 상품 체크 (같은 고객의 같은 상품) -->
+    <select id="findByCustomerAndProduct" parameterType="map" resultType="Cart">
+        SELECT
+            cart_id as cartId,
+            cust_id as custId,
+            product_id as productId,
+            product_qt as productQt,
+            cart_regdate as cartRegdate
+        FROM cart
+        WHERE cust_id = #{custId} AND product_id = #{productId}
+    </select>
 
 </mapper>

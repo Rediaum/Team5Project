@@ -78,4 +78,8 @@ public class CartService implements ProjectService<Cart, Integer> {
         }
         return totalCount;
     }
+
+    public Cart findByCustomerAndProduct(Integer custId, Integer productId) throws Exception {
+        return cartRepository.findByCustomerAndProduct(custId, productId);
+    }
 }

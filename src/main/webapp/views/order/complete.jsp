@@ -8,108 +8,90 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>주문 완료 - Team 5 Electronic Shop</title>
+    <title>주문 완료 - Team 5 Shop</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- CSS 리소스 -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
-    <!-- Font Awesome -->
     <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
-    <!-- Custom styles -->
     <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
-    <!-- Responsive style -->
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
     <style>
+        /* ===== 드롭다운 메뉴 스타일 ===== */
+        .dropdown-menu {
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .dropdown-item {
+            padding: 8px 16px;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #f7444e;
+        }
+
+        .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        .dropdown-item i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        /* ===== 주문 완료 전용 스타일 ===== */
         .success-header {
+            text-align: center;
+            padding: 50px 0;
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border-radius: 15px;
-            padding: 40px;
-            text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
         }
 
         .success-icon {
-            font-size: 4rem;
+            font-size: 80px;
             margin-bottom: 20px;
-            animation: checkmark-animation 0.8s ease-in-out;
+            animation: bounce 2s infinite;
         }
 
-        @keyframes checkmark-animation {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
         }
 
         .order-summary-card {
-            background: #fff;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 20px;
-        }
-
-        .order-info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .order-info-row:last-child {
-            border-bottom: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #dc3545;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #f8f9fa;
-        }
-
-        .order-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
-            font-weight: bold;
-            color: #343a40;
-            margin-bottom: 5px;
-        }
-
-        .item-details {
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-
-        .item-price {
-            text-align: right;
-            font-weight: bold;
-            color: #dc3545;
         }
 
         .action-buttons {
             text-align: center;
-            margin-top: 30px;
+            margin: 40px 0;
         }
 
         .btn-action {
-            margin: 0 10px;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            text-decoration: none;
             display: inline-block;
+            padding: 12px 30px;
+            margin: 0 10px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
             transition: all 0.3s ease;
         }
 
@@ -126,218 +108,152 @@
         }
 
         .btn-secondary-action {
-            background: #6c757d;
-            color: white;
+            background: white;
+            color: #6c757d;
             border: 2px solid #6c757d;
         }
 
         .btn-secondary-action:hover {
-            background: white;
-            color: #6c757d;
+            background: #6c757d;
+            color: white;
             text-decoration: none;
         }
 
-        .shipping-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .timeline {
-            margin-top: 30px;
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .timeline-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #28a745;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 16px;
-        }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-title {
-            font-weight: bold;
-            color: #343a40;
-        }
-
-        .timeline-desc {
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-
-        .price-breakdown {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        /* 🆕 결제 정보 관련 CSS 수정 */
-        .payment-info-container {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .transaction-id {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            color: #6c757d;
-            background: #e9ecef;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .payment-method i {
-            margin-right: 5px;
-        }
-
-        .total-payment-row {
-            background: linear-gradient(135deg, #28a745, #20c997) !important;
-            color: white !important;
-            border-radius: 6px !important;
-            padding: 12px !important;
-            margin-top: 10px !important;
-            border-bottom: none !important;
-        }
-
-        .total-payment-row span {
-            color: white !important;
-        }
-
-        .total-payment-row i {
-            margin-right: 8px;
-        }
-
-        /* 드롭다운 메뉴 기본 스타일 */
-        .dropdown-menu {
-            border: 1px solid #ddd;
+        .info-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
-
-        /* 드롭다운 아이템 스타일 */
-        .dropdown-item {
-            padding: 8px 16px;
-            color: #333;
-            transition: background-color 0.2s;
-        }
-
-        /* 드롭다운 아이템 호버 효과 */
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #f7444e;
-        }
-
-        /* 드롭다운 구분선 스타일 */
-        .dropdown-divider {
-            margin: 5px 0;
-        }
-
-        /* 드롭다운 아이템 내 아이콘 스타일 */
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
         }
     </style>
+
+    <!-- JavaScript 리소스 -->
+    <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
 </head>
 
 <body class="sub_page">
 
+<!-- ===== 헤더 섹션 ===== -->
 <div class="hero_area">
-    <!-- header section starts -->
     <header class="header_section">
         <div class="container">
             <nav class="navbar navbar-expand-lg custom_nav-container">
+                <%-- 로고 --%>
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-                    <img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" />
+                    <img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="Team 5 Shop" />
                 </a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <%-- 모바일 메뉴 토글 버튼 --%>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class=""></span>
                 </button>
 
+                <%-- 네비게이션 메뉴 --%>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="nav-label">Pages</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pagesDropdown">
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/about">About</a>
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
+                            </div>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                         </li>
-                        <c:if test="${sessionScope.logincust != null}">
-                            <li class="nav-item dropdown">
-                                    <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
-                                    <!-- 사람 아이콘 SVG -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="7" r="4"/><!-- 머리 -->
-                                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><!-- 몸통 -->
-                                    </svg>
-                                    <span class="nav-label"><span class="caret"></span></span>
-                                </a>
 
-                                    <%-- 드롭다운 메뉴 내용 --%>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                    <c:if test="${sessionScope.logincust != null}">
-                                        <%-- 사용자 프로필 메뉴 (사용자 이름 표시) --%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="7" r="4"/>
+                                    <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                                </svg>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <c:choose>
+                                    <c:when test="${sessionScope.logincust == null}">
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/login">
+                                            <i class="fa fa-sign-in"></i> Login
+                                        </a>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/register">
+                                            <i class="fa fa-user-plus"></i> Register
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
                                         <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
-                                            <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                                            <i class="fa fa-user"></i> ${sessionScope.logincust.custName}
                                         </a>
-
-                                        <%-- 주문 내역 메뉴 추가 --%>
                                         <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
-                                            <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
+                                            <i class="fa fa-list-alt"></i> 주문 내역
                                         </a>
-
-                                        <%-- 배송지 관리 메뉴 --%>
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/address">
-                                            <i class="fa fa-map-marker" aria-hidden="true"></i> 배송지 관리
-                                        </a>
-
-                                        <%-- 구분선 --%>
                                         <div class="dropdown-divider"></div>
-
-                                        <%-- 로그아웃 메뉴 --%>
                                         <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃
+                                            <i class="fa fa-sign-out"></i> Log Out
                                         </a>
-                                    </c:if>
-                                </div>
-                            </li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </li>
+
+                        <c:if test="${sessionScope.logincust != null}">
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/cart">
-                                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 456.029 456.029"
+                                         style="width: 24px; height: 24px;">
+                                        <g>
+                                            <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                                                     c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                                        </g>
+                                        <g>
+                                            <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                                                     C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                                                     c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                                                     C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                                        </g>
+                                        <g>
+                                            <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                                                     c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                                        </g>
+                                    </svg>
                                 </a>
                             </li>
                         </c:if>
+
+                        <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
+                            <div class="search-input-container">
+                                <input type="text" name="keyword" class="form-control search-input-header"
+                                       placeholder="상품 검색..." autocomplete="off" id="headerSearchInput">
+                                <button class="btn search-btn-header" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <div id="headerSuggestions" class="header-suggestions-dropdown" style="display: none;"></div>
+                            </div>
+                        </form>
                     </ul>
                 </div>
             </nav>
         </div>
     </header>
-    <!-- end header section -->
 </div>
 
-<!-- 주문 완료 페이지 -->
+<!-- ===== 메인 컨텐츠 ===== -->
 <section class="layout_padding">
     <div class="container">
         <!-- 성공 메시지 헤더 -->
@@ -353,257 +269,91 @@
         </div>
 
         <div class="row">
-            <!-- 주문 상세 정보 -->
-            <div class="col-lg-8">
-                <div class="order-summary-card">
+            <div class="col-lg-8 mx-auto">
+                <!-- 주문 기본 정보 -->
+                <div class="info-section">
                     <h4 class="mb-4">
-                        <i class="fa fa-shopping-cart"></i> 주문 상품 정보
+                        <i class="fa fa-receipt"></i> 주문 정보
                     </h4>
 
-                    <!-- 주문 상품 목록 -->
-                    <c:if test="${not empty orderItems}">
-                        <c:forEach var="item" items="${orderItems}">
-                            <div class="order-item">
-                                <div class="item-info">
-                                    <div class="item-name">상품 ID: ${item.productId}</div>
-                                    <div class="item-details">
-                                        수량: ${item.quantity}개 |
-                                        단가: <fmt:formatNumber value="${item.unitPrice}" pattern="#,###" />원
-                                    </div>
-                                </div>
-                                <div class="item-price">
-                                    <fmt:formatNumber value="${item.unitPrice * item.quantity}" pattern="#,###" />원
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:if>
-
-                    <!-- 가격 요약 -->
-                    <div class="price-breakdown">
-                        <div class="order-info-row">
-                            <span>상품 금액:</span>
-                            <span><fmt:formatNumber value="${order.totalAmount}" pattern="###,###" />원</span>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>주문번호:</strong> #${order.orderId}</p>
+                            <p><strong>주문일시:</strong>
+                                <fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm" />
+                            </p>
+                            <p><strong>결제금액:</strong>
+                                <span class="text-danger font-weight-bold" style="font-size: 1.2rem;">
+                                    <fmt:formatNumber value="${order.totalAmount}" pattern="#,###" />원
+                                </span>
+                            </p>
                         </div>
-                        <div class="order-info-row">
-                            <span>배송비:</span>
-                            <span style="color: #28a745;">무료</span>
-                        </div>
-                        <div class="order-info-row">
-                            <span>총 결제금액:</span>
-                            <span><fmt:formatNumber value="${order.totalAmount}" pattern="#,###" />원</span>
+                        <div class="col-md-6">
+                            <p><strong>받는분:</strong> ${order.shippingName}</p>
+                            <p><strong>연락처:</strong> ${order.shippingPhone}</p>
+                            <p><strong>배송지:</strong><br>
+                                <small>${order.shippingAddress}</small>
+                            </p>
                         </div>
                     </div>
-                </div>
 
-                <!-- 결제 정보 카드 -->
-                <div class="order-summary-card">
-                    <h4 class="mb-4">
-                        <i class="fa fa-credit-card text-success"></i> 결제 정보
-                    </h4>
-
-                    <c:choose>
-                        <c:when test="${payment != null}">
-                            <div class="payment-info-container">
-                                <div class="order-info-row">
-                                    <span><i class="fa fa-hashtag"></i> 결제번호:</span>
-                                    <span><strong>${payment.paymentId}</strong></span>
-                                </div>
-                                <div class="order-info-row">
-                                    <span><i class="fa fa-barcode"></i> 거래번호:</span>
-                                    <span class="transaction-id">${payment.transactionId}</span>
-                                </div>
-                                <div class="order-info-row">
-                                    <span><i class="fa fa-credit-card"></i> 결제방법:</span>
-                                    <span class="payment-method">
-                                        <c:choose>
-                                            <c:when test="${payment.paymentMethod eq 'creditCard'}">
-                                                <i class="fa fa-credit-card text-primary"></i> 신용카드
-                                            </c:when>
-                                            <c:when test="${payment.paymentMethod eq 'bankTransfer'}">
-                                                <i class="fa fa-university text-info"></i> 무통장입금
-                                            </c:when>
-                                            <c:when test="${payment.paymentMethod eq 'kakaoPay'}">
-                                                <i class="fa fa-mobile text-warning"></i> 카카오페이
-                                            </c:when>
-                                            <c:when test="${payment.paymentMethod eq 'naverPay'}">
-                                                <i class="fa fa-credit-card-alt text-success"></i> 네이버페이
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="fa fa-question-circle"></i> ${payment.paymentMethod}
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </span>
-                                </div>
-                                <div class="order-info-row">
-                                    <span><i class="fa fa-clock-o"></i> 결제일시:</span>
-                                    <span><fmt:formatDate value="${payment.paymentDate}" pattern="yyyy년 MM월 dd일 HH:mm" /></span>
-                                </div>
-                                <div class="order-info-row total-payment-row">
-                                    <span><i class="fa fa-won"></i> 결제금액:</span>
-                                    <span class="font-weight-bold">
-                                        <fmt:formatNumber value="${payment.paymentAmount}" pattern="#,###" />원
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- 결제 방법별 추가 안내 -->
-                            <c:if test="${payment.paymentMethod eq 'bankTransfer'}">
-                                <div class="alert alert-info mt-3">
-                                    <h6><i class="fa fa-info-circle"></i> 무통장입금 안내</h6>
-                                    <p class="mb-2"><strong>입금계좌:</strong> 신한은행 100-123-456789</p>
-                                    <p class="mb-2"><strong>예금주:</strong> Team5 쇼핑몰</p>
-                                    <p class="mb-0 text-danger"><small>⚠️ 주문 후 24시간 내 입금 완료해주세요.</small></p>
-                                </div>
-                            </c:if>
-
-                            <c:if test="${payment.paymentMethod eq 'creditCard'}">
-                                <div class="alert alert-success mt-3">
-                                    <i class="fa fa-check-circle"></i> 카드 결제가 정상적으로 완료되었습니다.
-                                </div>
-                            </c:if>
-
-                            <c:if test="${payment.paymentMethod eq 'kakaoPay' or payment.paymentMethod eq 'naverPay'}">
-                                <div class="alert alert-success mt-3">
-                                    <i class="fa fa-check-circle"></i> 간편결제가 정상적으로 완료되었습니다.
-                                </div>
-                            </c:if>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="alert alert-warning">
-                                <i class="fa fa-exclamation-triangle"></i> 결제 정보를 불러올 수 없습니다.
-                                <br><small>주문은 정상적으로 처리되었으나 결제 정보 조회에 실패했습니다.</small>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-
-                <!-- 배송 정보 -->
-                <div class="order-summary-card">
-                    <h4 class="mb-4">
-                        <i class="fa fa-truck"></i> 배송 정보
-                    </h4>
-                    <div class="shipping-info">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>받는 사람:</strong> ${order.shippingName}<br>
-                                <strong>연락처:</strong> ${order.shippingPhone}
-                            </div>
-                            <div class="col-md-6">
-                                <strong>배송 주소:</strong><br>
-                                ${order.shippingAddress}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 사이드바 - 주문 진행 상황 및 안내 -->
-            <div class="col-lg-4">
-                <div class="order-summary-card">
-                    <h4 class="mb-4">
-                        <i class="fa fa-clock-o"></i> 주문 진행 상황
-                    </h4>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-icon">
-                                <i class="fa fa-check"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <div class="timeline-title">주문 완료</div>
-                                <div class="timeline-desc">
-                                    <fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-icon" style="background: #6c757d;">
-                                <i class="fa fa-cog"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <div class="timeline-title">상품 준비중</div>
-                                <div class="timeline-desc">곧 준비가 완료됩니다</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-icon" style="background: #6c757d;">
-                                <i class="fa fa-truck"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <div class="timeline-title">배송 시작</div>
-                                <div class="timeline-desc">영업일 기준 2-3일 소요</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-icon" style="background: #6c757d;">
-                                <i class="fa fa-home"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <div class="timeline-title">배송 완료</div>
-                                <div class="timeline-desc">상품을 확인해주세요</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 고객센터 안내 -->
-                <div class="order-summary-card">
-                    <h4 class="mb-3">
-                        <i class="fa fa-headphones"></i> 고객센터
-                    </h4>
-                    <p style="font-size: 0.9em; color: #6c757d; line-height: 1.6;">
-                        주문 관련 문의사항이 있으시면<br>
-                        언제든지 연락해주세요.
-                    </p>
-                    <div style="margin-top: 15px;">
-                        <i class="fa fa-phone"></i> <strong>1588-1234</strong><br>
-                        <i class="fa fa-envelope"></i> <strong>support@team5shop.com</strong><br>
-                        <small class="text-muted">평일 09:00 - 18:00 (주말, 공휴일 휴무)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 액션 버튼들 -->
-        <div class="action-buttons">
-            <a href="${pageContext.request.contextPath}/order/history" class="btn-action btn-primary-action">
-                <i class="fa fa-list-alt"></i> 주문 내역 보기
-            </a>
-            <a href="${pageContext.request.contextPath}/product" class="btn-action btn-secondary-action">
-                <i class="fa fa-shopping-cart"></i> 쇼핑 계속하기
-            </a>
-        </div>
-
-        <!-- 추가 안내사항 -->
-        <div class="order-summary-card" style="margin-top: 30px;">
-            <h5 class="mb-3">
-                <i class="fa fa-info-circle"></i> 주문 완료 안내
-            </h5>
-            <div class="row">
-                <div class="col-md-4">
-                    <div style="text-align: center; padding: 20px;">
-                        <i class="fa fa-truck" style="font-size: 2rem; color: #007bff; margin-bottom: 10px;"></i>
-                        <h6>무료 배송</h6>
-                        <p style="font-size: 0.9em; color: #6c757d;">
-                            전 상품 무료배송으로<br>부담 없이 주문하세요.
+                    <!-- 간단한 배송 안내 -->
+                    <div class="order-summary-card">
+                        <h5 class="mb-3">
+                            <i class="fa fa-truck"></i> 배송 안내
+                        </h5>
+                        <p class="mb-2">
+                            <i class="fa fa-check text-success"></i>
+                            <strong>무료배송</strong> - 배송비는 무료입니다.
+                        </p>
+                        <p class="mb-2">
+                            <i class="fa fa-clock-o text-info"></i>
+                            <strong>배송기간</strong> - 영업일 기준 2-3일 소요 예정
+                        </p>
+                        <p class="mb-0">
+                            <i class="fa fa-phone text-warning"></i>
+                            <strong>문의전화</strong> - 02-1234-5678 (평일 09:00-18:00)
                         </p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div style="text-align: center; padding: 20px;">
-                        <i class="fa fa-shield" style="font-size: 2rem; color: #28a745; margin-bottom: 10px;"></i>
-                        <h6>안전한 포장</h6>
-                        <p style="font-size: 0.9em; color: #6c757d;">
-                            제품이 안전하게 배송될 수 있도록<br>꼼꼼하게 포장합니다.
-                        </p>
-                    </div>
+
+                <!-- 액션 버튼들 -->
+                <div class="action-buttons">
+                    <a href="${pageContext.request.contextPath}/order/history" class="btn-action btn-primary-action">
+                        <i class="fa fa-list-alt"></i> 주문 내역 보기
+                    </a>
+                    <a href="${pageContext.request.contextPath}/product" class="btn-action btn-secondary-action">
+                        <i class="fa fa-shopping-cart"></i> 쇼핑 계속하기
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <div style="text-align: center; padding: 20px;">
-                        <i class="fa fa-refresh" style="font-size: 2rem; color: #dc3545; margin-bottom: 10px;"></i>
-                        <h6>쉬운 교환/반품</h6>
-                        <p style="font-size: 0.9em; color: #6c757d;">
-                            7일 내 간편하게<br>교환/반품이 가능합니다.
-                        </p>
+
+                <!-- 추가 안내사항 -->
+                <div class="info-section">
+                    <h5 class="mb-3">
+                        <i class="fa fa-info-circle"></i> 이용 안내
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <i class="fa fa-truck" style="font-size: 2rem; color: #007bff; margin-bottom: 10px;"></i>
+                            <h6>무료 배송</h6>
+                            <p style="font-size: 0.9em; color: #6c757d;">
+                                전 상품 무료배송으로<br>부담 없이 주문하세요.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fa fa-shield" style="font-size: 2rem; color: #28a745; margin-bottom: 10px;"></i>
+                            <h6>안전 결제</h6>
+                            <p style="font-size: 0.9em; color: #6c757d;">
+                                안전한 결제 시스템으로<br>걱정 없이 구매하세요.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fa fa-headphones" style="font-size: 2rem; color: #ffc107; margin-bottom: 10px;"></i>
+                            <h6>고객 지원</h6>
+                            <p style="font-size: 0.9em; color: #6c757d;">
+                                궁금한 점이 있으시면<br>언제든 연락주세요.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -611,97 +361,35 @@
     </div>
 </section>
 
-<!-- footer section -->
+<!-- ===== 푸터 ===== -->
 <footer class="footer_section">
     <div class="container">
         <div class="row">
             <div class="col-md-4 footer-col">
                 <div class="footer_contact">
-                    <h4>Contact us</h4>
+                    <h4>연락처</h4>
                     <div class="contact_link_box">
-                        <a href="">
-                            <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            <span>서울시 강남구 테헤란로</span>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-phone" aria-hidden="true"></i>
-                            <span>Call +82 1588-1234</span>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                            <span>team5@electroshop.com</span>
-                        </a>
+                        <a href=""><i class="fa fa-map-marker"></i><span>서울시 강남구</span></a>
+                        <a href=""><i class="fa fa-phone"></i><span>02-1234-5678</span></a>
+                        <a href=""><i class="fa fa-envelope"></i><span>team5@shop.com</span></a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 footer-col">
-                <div class="footer_detail">
-                    <a href="" class="footer-logo">Team 5 Electronic Shop</a>
-                    <p>
-                        최고의 전자제품을 합리적인 가격에 만나보세요.
-                        고객 만족이 저희의 최우선 목표입니다.
-                    </p>
-                    <div class="footer_social">
-                        <a href="">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-linkedin" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                <div class="footer_info">
+                    <h4>고객센터</h4>
+                    <p>평일 09:00 - 18:00<br>주말/공휴일 휴무</p>
                 </div>
             </div>
-            <div class="col-md-4 footer-col">
-                <h4>Subscribe</h4>
-                <form action="#">
-                    <input type="text" placeholder="Enter email" />
-                    <button type="submit">Subscribe</button>
-                </form>
+            <div class="col-md-4">
+                <div class="footer_info">
+                    <h5>Team 5 Shop</h5>
+                    <p>최고의 상품과 서비스를 제공합니다</p>
+                </div>
             </div>
-        </div>
-        <div class="footer-info">
-            <p>
-                &copy; <span id="displayYear"></span> All Rights Reserved By
-                <a href="#">Team 5 Electronic Shop</a>
-            </p>
         </div>
     </div>
 </footer>
-<!-- footer section -->
-
-<!-- jQuery -->
-<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
-<!-- Popper.js -->
-<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
-<!-- Bootstrap JavaScript -->
-<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-<!-- Custom JavaScript -->
-<script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
-
-<script>
-    $(document).ready(function() {
-        // 현재 연도 설정
-        $('#displayYear').text(new Date().getFullYear());
-
-        // 주문완료 페이지 진입시 장바구니 아이콘 업데이트 (비우기)
-        // 필요에 따라 AJAX로 장바구니 개수 업데이트 로직 추가 가능
-    });
-</script>
-
-<!-- jQuery 라이브러리 -->
-<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
-<!-- Bootstrap Popper.js -->
-<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
-<!-- Bootstrap JavaScript -->
-<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
-<!-- 커스텀 JavaScript -->
-<script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 
 </body>
 </html>
