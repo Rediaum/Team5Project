@@ -284,7 +284,7 @@
             
             <div class="col-md-4">
                 <label for="discountRate" class="form-label">Discount Rate (%)</label>
-                <input type="number" step="0.01" name="discountRate" id="discountRate" class="form-control">
+                <input type="number" step="0.01" min="0" max="1" name="discountRate" id="discountRate" class="form-control">
             </div>
             
             <div class="col-md-4">
