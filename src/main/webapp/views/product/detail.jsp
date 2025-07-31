@@ -46,7 +46,7 @@
 
                     // 바로 구매 로직
                     if(confirm('바로 구매하시겠습니까?')) {
-                        location.href = '${pageContext.request.contextPath}/order/buy?productId=' + productId + '&quantity=' + quantity;
+                        location.href = '${pageContext.request.contextPath}/order/direct?productId=' + productId + '&quantity=' + quantity;
                     }
                 });
 
