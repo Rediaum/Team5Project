@@ -1,4 +1,4 @@
-# 🧑‍💻TEAM 5 - 프로젝트명 : Spring Boot 기반 전자제품 쇼핑몰 
+## 🧑‍💻TEAM 5 - 프로젝트명 : Spring Boot 기반 전자제품 쇼핑몰 
 ***
 # 🎯 주제
   -  Spring Boot와 JSP를 활용하여 구축되는 전자제품 쇼핑몰 
