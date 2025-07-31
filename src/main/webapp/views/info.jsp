@@ -380,6 +380,12 @@
                                         <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
                                             <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
                                         </a>
+
+                                        <%-- 주문 내역 메뉴 추가 --%>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
+                                            <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
+                                        </a>
+
                                         <%-- 구분선 --%>
                                         <div class="dropdown-divider"></div>
                                         <%-- 로그아웃 메뉴 --%>

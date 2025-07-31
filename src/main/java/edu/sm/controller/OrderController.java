@@ -11,8 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -183,11 +182,11 @@ public class OrderController {
         int totalAmount = cartService.calculateTotalPrice(customer.getCustId());
         log.info("총 금액: {}", totalAmount);
 
-        // 주문 생성
+        // 주문 생성 - 받는분 이름을 사용자 이름으로 수정
         CustOrder order = CustOrder.builder()
                 .custId(customer.getCustId())
                 .totalAmount(totalAmount)
-                .shippingName(address.getAddressName())
+                .shippingName(customer.getCustName())  // 수정: 사용자 실제 이름
                 .shippingPhone(customer.getCustPhone())
                 .shippingAddress(address.getAddress() + " " + (address.getDetailAddress() != null ? address.getDetailAddress() : ""))
                 .orderDate(new java.sql.Timestamp(System.currentTimeMillis()))
@@ -247,11 +246,11 @@ public class OrderController {
         int unitPrice = (int)(product.getProductPrice() * (1 - actualDiscountRate));
         int totalAmount = unitPrice * quantity;
 
-        // 주문 생성
+        // 주문 생성 - 받는분 이름을 사용자 이름으로 수정
         CustOrder order = CustOrder.builder()
                 .custId(customer.getCustId())
                 .totalAmount(totalAmount)
-                .shippingName(address.getAddressName())
+                .shippingName(customer.getCustName())  // 수정: 사용자 실제 이름
                 .shippingPhone(customer.getCustPhone())
                 .shippingAddress(address.getAddress() + " " + (address.getDetailAddress() != null ? address.getDetailAddress() : ""))
                 .orderDate(new java.sql.Timestamp(System.currentTimeMillis()))
@@ -298,6 +297,19 @@ public class OrderController {
 
             List<OrderItem> orderItems = orderItemService.getItemsByOrderId(orderId);
 
+            // 주문 아이템에 상품 정보 추가
+            List<Map<String, Object>> itemsWithProductInfo = new ArrayList<>();
+            for (OrderItem item : orderItems) {
+                Product product = productService.get(item.getProductId());
+
+                Map<String, Object> itemInfo = new HashMap<>();
+                itemInfo.put("orderItem", item);
+                itemInfo.put("product", product);
+                itemInfo.put("totalPrice", item.getUnitPrice() * item.getQuantity());
+
+                itemsWithProductInfo.add(itemInfo);
+            }
+
             // 🆕 결제 정보 조회
             Payment payment = null;
             try {
@@ -308,7 +320,7 @@ public class OrderController {
             }
 
             model.addAttribute("order", order);
-            model.addAttribute("orderItems", orderItems);
+            model.addAttribute("orderItems", itemsWithProductInfo); // 상품 정보 포함된 데이터
             model.addAttribute("payment", payment); // 🆕 결제 정보 추가
 
         } catch (Exception e) {
@@ -328,8 +340,33 @@ public class OrderController {
         }
 
         try {
+            // 주문 목록 조회
             List<CustOrder> orderHistory = orderService.getOrdersByCustId(loginCust.getCustId());
+
+            // 각 주문에 대한 주문 아이템과 상품 정보 조회
+            Map<Integer, List<Map<String, Object>>> orderItemsMap = new HashMap<>();
+
+            for (CustOrder order : orderHistory) {
+                List<OrderItem> orderItems = orderItemService.getItemsByOrderId(order.getOrderId());
+                List<Map<String, Object>> itemsWithProductInfo = new ArrayList<>();
+
+                for (OrderItem item : orderItems) {
+                    // 상품 정보 조회
+                    Product product = productService.get(item.getProductId());
+
+                    Map<String, Object> itemInfo = new HashMap<>();
+                    itemInfo.put("orderItem", item);
+                    itemInfo.put("product", product);
+                    itemInfo.put("totalPrice", item.getUnitPrice() * item.getQuantity());
+
+                    itemsWithProductInfo.add(itemInfo);
+                }
+
+                orderItemsMap.put(order.getOrderId(), itemsWithProductInfo);
+            }
+
             model.addAttribute("orderHistory", orderHistory);
+            model.addAttribute("orderItemsMap", orderItemsMap);
 
         } catch (Exception e) {
             log.error("주문 내역 조회 실패: {}", e.getMessage(), e);
