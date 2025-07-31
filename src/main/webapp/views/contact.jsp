@@ -130,14 +130,21 @@
                                  <i class="fa fa-user-plus" aria-hidden="true"></i> Register
                               </a>
                            </c:when>
-                           <%-- 로그인한 경우 --%>
+                           <%-- 로그인한 경우 드롭다운 메뉴 --%>
                            <c:otherwise>
                               <%-- 사용자 프로필 메뉴 (사용자 이름 표시) --%>
                               <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
                                  <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
                               </a>
+
+                              <%-- 주문 내역 메뉴 추가 --%>
+                              <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
+                                 <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
+                              </a>
+
                               <%-- 구분선 --%>
                               <div class="dropdown-divider"></div>
+
                               <%-- 로그아웃 메뉴 --%>
                               <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
                                  <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out
