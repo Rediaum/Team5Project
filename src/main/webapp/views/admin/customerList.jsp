@@ -59,15 +59,7 @@
             margin-right: 8px;
             width: 16px;
         }
-
-        .card {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            margin: 20px auto;
-            padding: 20px;
-            max-width: 1100px;
-            background-color: #fff;
-        }
+        
         .table th, .table td {
             vertical-align: middle;
         }
@@ -128,7 +120,7 @@
                             
                             <!-- Customer 관리 메뉴 -->
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/customers">Customer</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/customerList">Customer</a>
                             </li>
                         </c:if>
                         
@@ -188,7 +180,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="full">
-                    <h3>Inventory Management</h3>
+                    <h3>Costumer List</h3>
                 </div>
             </div>
         </div>
@@ -198,9 +190,7 @@
 
 <!-- Customer List section -->
 <div class="container mt-4">
-    <div class="card">
-        <h3 class="mb-4 text-center">Customer List</h3>
-        
+    
         <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
             <tr>
@@ -216,7 +206,7 @@
             <c:forEach var="cust" items="${custList}">
                 <tr>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin/customer/${cust.custId}"
+                        <a href="${pageContext.request.contextPath}/admin/customerList/${cust.custId}"
                            class="btn-link-style">
                                 ${cust.custId}
                         </a>
@@ -235,7 +225,6 @@
             </c:if>
             </tbody>
         </table>
-    </div>
 </div>
 <!-- end Customer List section -->
 
