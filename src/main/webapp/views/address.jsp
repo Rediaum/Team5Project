@@ -57,7 +57,7 @@
             margin-right: 8px;
             width: 16px;
         }
-        
+
         .address-container {
             max-width: 800px;
             margin: 50px auto;
@@ -234,12 +234,12 @@
             <nav class="navbar navbar-expand-lg custom_nav-container ">
                 <%-- 로고 - 홈페이지로 링크 --%>
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/"><img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" /></a>
-                
+
                 <%-- 모바일 메뉴 토글 버튼 --%>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class=""> </span>
                 </button>
-                
+
                 <%-- 네비게이션 메뉴 --%>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav">
@@ -247,7 +247,7 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="${pageContext.request.contextPath}/">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        
+
                         <%-- Pages 드롭다운 메뉴 --%>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #000;">
@@ -258,17 +258,17 @@
                                 <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
                             </div>
                         </li>
-                        
+
                         <%-- Products 메뉴 --%>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                         </li>
-                        
+
                         <%-- Contact 메뉴 --%>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                         </li>
-                        
+
                         <%-- 사용자 관리 드롭다운 메뉴 (사람 아이콘) --%>
                         <li class="nav-item dropdown">
                             <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
@@ -280,7 +280,7 @@
                                 </svg>
                                 <span class="nav-label"><span class="caret"></span></span>
                             </a>
-                            
+
                             <%-- 드롭다운 메뉴 내용 --%>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                                 <%-- 로그인 상태에 따른 메뉴 분기 --%>
@@ -312,7 +312,7 @@
                                 </c:choose>
                             </div>
                         </li>
-                        
+
                         <%-- 장바구니 아이콘 메뉴 (로그인시에만 표시) --%>
                         <c:if test="${sessionScope.logincust != null}">
                             <li class="nav-item">
@@ -346,7 +346,7 @@
                                 </a>
                             </li>
                         </c:if>
-                        
+
                         <%-- 7. 검색 폼 --%>
                         <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
                             <div class="search-input-container">
@@ -377,9 +377,18 @@
 
             <!-- 뒤로 가기 버튼 -->
             <div class="mb-3">
-                <a href="${pageContext.request.contextPath}/info" class="btn btn-secondary">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i> 프로필로 돌아가기
-                </a>
+                <c:choose>
+                    <c:when test="${returnUrl == 'order'}">
+                        <a href="${pageContext.request.contextPath}/order/from-cart" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i> 주문 페이지로 돌아가기
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/info" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i> 프로필로 돌아가기
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <!-- 오류/성공 메시지 표시 -->
@@ -406,6 +415,11 @@
             <div id="addAddressForm" class="address-form">
                 <h4>새 배송지 추가</h4>
                 <form action="${pageContext.request.contextPath}/address/add" method="post">
+                    <!-- returnUrl 히든 필드 추가 -->
+                    <c:if test="${not empty returnUrl}">
+                        <input type="hidden" name="returnUrl" value="${returnUrl}">
+                    </c:if>
+
                     <div class="form-group">
                         <label for="addressName">배송지 이름*</label>
                         <input type="text" id="addressName" name="addressName" class="form-control"
@@ -475,16 +489,27 @@
                                         </button>
                                     </c:if>
 
-                                    <a href="${pageContext.request.contextPath}/address/delete/${addr.addressId}"
-                                       class="btn btn-sm btn-danger delete-btn">
-                                        <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-                                    </a>
+                                    <form action="${pageContext.request.contextPath}/address/delete" method="post"
+                                          style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                                        <c:if test="${not empty returnUrl}">
+                                            <input type="hidden" name="returnUrl" value="${returnUrl}">
+                                        </c:if>
+                                        <input type="hidden" name="addressId" value="${addr.addressId}">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-trash" aria-hidden="true"></i> 삭제
+                                        </button>
+                                    </form>
                                 </div>
 
                                 <!-- 수정 폼 -->
                                 <div id="editForm${addr.addressId}" class="address-form">
                                     <h4>배송지 수정</h4>
                                     <form action="${pageContext.request.contextPath}/address/update" method="post">
+                                        <!-- returnUrl 히든 필드 추가 -->
+                                        <c:if test="${not empty returnUrl}">
+                                            <input type="hidden" name="returnUrl" value="${returnUrl}">
+                                        </c:if>
+
                                         <input type="hidden" name="addressId" value="${addr.addressId}">
                                         <div class="form-group">
                                             <label>배송지 이름*</label>
