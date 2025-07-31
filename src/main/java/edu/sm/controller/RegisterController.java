@@ -26,7 +26,7 @@ public class RegisterController {
         log.info("회원가입 페이지 요청");
         model.addAttribute("pageTitle", "회원가입");
         model.addAttribute("cust", new Cust());
-        return "register";
+        return "auth/register";
     }
 
     /**
