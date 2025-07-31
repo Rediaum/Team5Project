@@ -429,7 +429,7 @@
                                         <div class="col-md-2">
                                             <c:choose>
                                                 <c:when test="${not empty item.product.productImg}">
-                                                    <img src="${pageContext.request.contextPath}/imgs/${item.product.productImg}"
+                                                    <img src="${pageContext.request.contextPath}/views/images/${item.product.productImg}"
                                                          alt="${item.product.productName}"
                                                          class="img-fluid order-item-image">
                                                 </c:when>
@@ -455,16 +455,17 @@
                                                     <c:otherwise>기타</c:otherwise>
                                                 </c:choose>
                                             </p>
-                                            <p class="text-muted mb-0" style="font-size: 0.9em;">
-                                                단가: <fmt:formatNumber value="${item.unitPrice}" pattern="#,###" />원
+                                            <p class="mb-1"><strong>단가</strong></p>
+                                            <p class="text-muted mb-1" style="font-size: 0.9rem;">
+                                                <fmt:formatNumber value="${item.orderItem.unitPrice}" pattern="#,###" />원
                                             </p>
                                         </div>
                                         <div class="col-md-2 text-center">
-                                            <span class="quantity-badge">${item.quantity}개</span>
+                                            <span class="quantity-badge">${item.orderItem.quantity}개</span>
                                         </div>
                                         <div class="col-md-2 text-right">
                                             <strong class="text-primary">
-                                                <fmt:formatNumber value="${item.unitPrice * item.quantity}" pattern="#,###" />원
+                                                    <fmt:formatNumber value="${item.totalPrice}" pattern="#,### 원"/>
                                             </strong>
                                         </div>
                                     </div>
