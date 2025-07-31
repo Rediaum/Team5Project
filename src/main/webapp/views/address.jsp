@@ -441,8 +441,14 @@
                                placeholder="상세주소를 입력하세요">
                     </div>
                     <div class="form-group">
-                        기본 배송지로 설정 : <input type="checkbox" name="isDefault" value="true" style="margin-left: 5px;">
+                        <label>
+                            <input type="checkbox" name="isDefault" value="true" style="margin-right: 5px;">
+                            기본 배송지로 설정
+                        </label>
+                        <!-- 체크되지 않았을 때도 false 값을 전달하기 위한 히든 필드 -->
+                        <input type="hidden" name="_isDefault" value="on">
                     </div>
+
                     <div class="address-actions">
                         <button type="submit" class="btn btn-primary">저장</button>
                         <button type="button" class="btn btn-secondary cancel-btn">취소</button>
