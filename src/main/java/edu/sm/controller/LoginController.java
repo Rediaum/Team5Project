@@ -53,6 +53,7 @@ public class LoginController {
                     // Admin 플래그 추가
                     session.setAttribute("isAdmin", true);
                     session.setAttribute("adminInfo", dbAdmin); // 원본 Admin 정보도 저장
+                    session.setAttribute("role", "admin"); // Admin role 추가
 
                     log.info("Admin 로그인 성공: {}", email);
 
@@ -74,9 +75,9 @@ public class LoginController {
             if (dbCust != null) {
                 if (dbCust.getCustPwd().equals(pwd)) {
                     session.setAttribute("logincust", dbCust);
-
                     // 일반 고객은 Admin 플래그 false
                     session.setAttribute("isAdmin", false);
+                    session.setAttribute("role", "user"); // user role 축아
 
                     log.info("고객 로그인 성공: {}", email);
 
