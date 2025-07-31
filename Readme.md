@@ -1,17 +1,19 @@
 # 🧑‍💻TEAM 5 - 프로젝트명 : Spring Boot 기반 전자제품 쇼핑몰 
-
+***
 # 🎯 주제
   -  Spring Boot와 JSP를 활용하여 구축되는 전자제품 쇼핑몰 
   -  관리자 시스템, 고객 관리, 상품 관리, 주문 처리, 배송 관리 등의 핵심 기능을 제공하는  웹 애플리케이션
+***
 # ⌛개발 기간
 - 25.07.21 ~ 25.07.31
-
+***
 # 🕺구성원/역할
 1. 주민성(Rediaum)          <https://github.com/Rediaum>
 
 2. 주희성(jhs0106)        <https://github.com/jhs0106> 
 
 3. 라마단 비에리(vieri)          <https://github.com/vieri4643>
+***
 # 주요기능
 - 주요 기능
 - 회원가입 및 로그인
