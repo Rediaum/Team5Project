@@ -53,6 +53,7 @@ public class AddressController {
     @PostMapping("/add")
     public String addAddress(@ModelAttribute Address address,
                              @RequestParam(value = "returnUrl", required = false) String returnUrl,
+                             @RequestParam(value = "isDefault", required = false) String isDefaultParam,
                              HttpSession session,
                              RedirectAttributes redirectAttributes) throws Exception {
         // 로그인 체크
@@ -72,26 +73,41 @@ public class AddressController {
             // 고객 ID 설정
             address.setCustId(loginUser.getCustId());
 
-            // 기본 배송지로 설정하는 경우, 기존 기본 배송지를 해제
+            // 체크박스 값 명시적으로 설정
+            boolean isDefaultChecked = "true".equals(isDefaultParam);
+            address.setDefault(isDefaultChecked);
+
+            // 디버그 로그 추가
+            log.info("새 배송지 추가 요청 - 사용자: {}, isDefaultParam: {}, 최종 기본 배송지 설정: {}",
+                    loginUser.getCustName(), isDefaultParam, address.isDefault());
+
+            // 기본 배송지 설정 처리
             if (address.isDefault()) {
+                // 기존 기본 배송지를 모두 해제
+                log.info("기존 기본 배송지 해제 중...");
                 addressService.resetDefaultAddress(loginUser.getCustId());
+                log.info("기존 기본 배송지 해제 완료");
             } else if (currentAddresses.isEmpty()) {
                 // 첫 번째 배송지는 자동으로 기본 배송지로 설정
+                log.info("첫 번째 배송지이므로 자동으로 기본 배송지로 설정");
                 address.setDefault(true);
             }
 
             // 배송지 저장
+            log.info("배송지 저장 중... 기본 배송지: {}", address.isDefault());
             addressService.register(address);
+            log.info("배송지 저장 완료");
 
             redirectAttributes.addFlashAttribute("successMsg", "새 배송지가 추가되었습니다.");
-            log.info("사용자 {}가 새 배송지 '{}' 추가", loginUser.getCustName(), address.getAddressName());
+            log.info("사용자 {}가 새 배송지 '{}' 추가 (기본: {})",
+                    loginUser.getCustName(), address.getAddressName(), address.isDefault());
 
             // returnUrl에 따라 적절한 페이지로 리다이렉트
             return getRedirectUrl(returnUrl);
 
         } catch (Exception e) {
-            log.error("배송지 추가 실패: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMsg", "배송지 추가에 실패했습니다.");
+            log.error("배송지 추가 실패: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMsg", "배송지 추가에 실패했습니다: " + e.getMessage());
             return getRedirectUrl(returnUrl);
         }
     }
@@ -102,6 +118,7 @@ public class AddressController {
     @PostMapping("/update")
     public String updateAddress(@ModelAttribute Address address,
                                 @RequestParam(value = "returnUrl", required = false) String returnUrl,
+                                @RequestParam(value = "isDefault", required = false) String isDefaultParam,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) throws Exception {
         // 로그인 체크
@@ -121,6 +138,13 @@ public class AddressController {
             // 고객 ID 설정
             address.setCustId(loginUser.getCustId());
 
+            // 체크박스 값 명시적으로 설정
+            boolean isDefaultChecked = "true".equals(isDefaultParam);
+            address.setDefault(isDefaultChecked);
+
+            log.info("배송지 수정 요청 - 사용자: {}, isDefaultParam: {}, 최종 기본 배송지 설정: {}",
+                    loginUser.getCustName(), isDefaultParam, address.isDefault());
+
             // 기본 배송지로 설정하는 경우, 기존 기본 배송지를 해제
             if (address.isDefault()) {
                 addressService.resetDefaultAddress(loginUser.getCustId());
@@ -130,13 +154,14 @@ public class AddressController {
             addressService.modify(address);
 
             redirectAttributes.addFlashAttribute("successMsg", "배송지가 수정되었습니다.");
-            log.info("사용자 {}가 배송지 '{}' 수정", loginUser.getCustName(), address.getAddressName());
+            log.info("사용자 {}가 배송지 '{}' 수정 (기본: {})",
+                    loginUser.getCustName(), address.getAddressName(), address.isDefault());
 
             return getRedirectUrl(returnUrl);
 
         } catch (Exception e) {
-            log.error("배송지 수정 실패: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMsg", "배송지 수정에 실패했습니다.");
+            log.error("배송지 수정 실패: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMsg", "배송지 수정에 실패했습니다: " + e.getMessage());
             return getRedirectUrl(returnUrl);
         }
     }
