@@ -21,6 +21,7 @@
 - 관리자 상품 등록/수정/삭제 기능
 - 주문 내역 확인 및 주문 상품 관리
 - 고객 주소지(배송지) 관리
+***
 # 🛠️기술 스택
 
   ### ⚙️ 백엔드
@@ -46,7 +47,7 @@
     - 💬 Slack
   ### 📦 Others
     - 💡 다양한 라이브러리 및 플러그인 적용
-    
+***    
 ### 🗂️ ERD
 <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
 
