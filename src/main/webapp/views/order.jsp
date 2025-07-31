@@ -203,6 +203,44 @@
         .address-option input[type="radio"] {
             margin-right: 10px;
         }
+
+        .payment-methods .form-check {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .payment-methods .form-check:hover {
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+        }
+
+        .payment-methods .form-check-input:checked + .form-check-label {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .payment-methods .form-check-input:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .payment-methods .form-check-label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+
+        .payment-methods .form-check-label i {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        #paymentInfo {
+            border-left: 4px solid #007bff;
+        }
     </style>
 
     <!-- jQuery -->
@@ -406,7 +444,7 @@
                                     <div class="order-item">
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div style="flex: 1;">
-                                                <h6 class="mb-1">${item.productId}</h6>
+                                                <h6 class="mb-1">${item.productName}</h6>
                                                 <small class="text-muted">수량: ${item.productQt}개</small>
 
                                                 <!-- 가격 표시 -->
@@ -511,17 +549,59 @@
                         <!-- 결제 방법 선택 -->
                         <div class="mt-3">
                             <h6>결제 방법</h6>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
-                                <label class="form-check-label" for="creditCard">
-                                    <i class="fa fa-credit-card"></i> 신용카드
-                                </label>
+                            <div class="payment-methods">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
+                                    <label class="form-check-label" for="creditCard">
+                                        <i class="fa fa-credit-card text-primary"></i> 신용카드
+                                        <small class="text-muted d-block">간편하고 안전한 카드결제</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
+                                    <label class="form-check-label" for="bankTransfer">
+                                        <i class="fa fa-university text-info"></i> 무통장입금
+                                        <small class="text-muted d-block">계좌이체로 결제</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="kakaoPay" value="kakaoPay">
+                                    <label class="form-check-label" for="kakaoPay">
+                                        <i class="fa fa-mobile text-warning"></i> 카카오페이
+                                        <small class="text-muted d-block">카카오톡으로 간편결제</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="naverPay" value="naverPay">
+                                    <label class="form-check-label" for="naverPay">
+                                        <i class="fa fa-credit-card-alt text-success"></i> 네이버페이
+                                        <small class="text-muted d-block">네이버 간편결제</small>
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
-                                <label class="form-check-label" for="bankTransfer">
-                                    <i class="fa fa-university"></i> 무통장입금
-                                </label>
+
+                            <!-- 결제 정보 표시 영역 -->
+                            <div id="paymentInfo" class="mt-3 p-3 bg-light rounded" style="display: none;">
+                                <div id="creditCardInfo" class="payment-detail">
+                                    <h6>💳 신용카드 결제</h6>
+                                    <p class="text-muted">안전한 SSL 암호화로 보호되는 카드결제입니다.</p>
+                                </div>
+                                <div id="bankTransferInfo" class="payment-detail" style="display: none;">
+                                    <h6>🏦 무통장입금 안내</h6>
+                                    <div class="bank-info">
+                                        <p><strong>입금계좌:</strong> 신한은행 100-123-456789</p>
+                                        <p><strong>예금주:</strong> Team5 쇼핑몰</p>
+                                        <p class="text-danger"><small>⚠️ 주문 후 24시간 내 입금해주세요.</small></p>
+                                    </div>
+                                </div>
+                                <div id="kakaoPayInfo" class="payment-detail" style="display: none;">
+                                    <h6>📱 카카오페이</h6>
+                                    <p class="text-muted">카카오톡 앱에서 간편하게 결제하세요.</p>
+                                </div>
+                                <div id="naverPayInfo" class="payment-detail" style="display: none;">
+                                    <h6>🟢 네이버페이</h6>
+                                    <p class="text-muted">네이버 ID로 간편하게 결제하세요.</p>
+                                </div>
                             </div>
                         </div>
 
@@ -577,7 +657,16 @@
 
 <script>
     $(document).ready(function() {
-        // 주문 폼 제출 처리
+        // 결제 방법 변경 이벤트
+        $('input[name="paymentMethod"]').change(function() {
+            var selectedMethod = $(this).val();
+            showPaymentInfo(selectedMethod);
+        });
+
+        // 초기 선택된 결제 방법 정보 표시
+        showPaymentInfo('creditCard');
+
+        // 주문 폼 제출 처리 - 결제 방법 추가 로직
         $('#orderForm').on('submit', function(e) {
             e.preventDefault();
 
@@ -588,6 +677,17 @@
                 return false;
             }
 
+            // 결제 방법 가져와서 hidden field로 추가
+            const selectedPaymentMethod = $('input[name="paymentMethod"]:checked').val();
+            if (!selectedPaymentMethod) {
+                alert('결제 방법을 선택해주세요.');
+                return false;
+            }
+
+            // 기존 paymentMethod hidden field 제거 후 새로 추가
+            $('#orderForm input[name="paymentMethod"][type="hidden"]').remove();
+            $('#orderForm').append('<input type="hidden" name="paymentMethod" value="' + selectedPaymentMethod + '">');
+
             // 최종 확인
             if (confirm('주문하시겠습니까?')) {
                 $('#orderBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> 처리중...');
@@ -595,6 +695,35 @@
             }
         });
     });
+
+    function showPaymentInfo(method) {
+        // 모든 결제 정보 숨기기
+        $('.payment-detail').hide();
+
+        // 선택된 결제 방법 정보 표시
+        $('#paymentInfo').show();
+        $('#' + method + 'Info').show();
+
+        // 결제 버튼 텍스트 변경
+        var buttonText = '';
+        switch(method) {
+            case 'creditCard':
+                buttonText = '<i class="fa fa-credit-card"></i> 카드로 결제하기';
+                break;
+            case 'bankTransfer':
+                buttonText = '<i class="fa fa-university"></i> 주문 완료 (입금대기)';
+                break;
+            case 'kakaoPay':
+                buttonText = '<i class="fa fa-mobile"></i> 카카오페이로 결제';
+                break;
+            case 'naverPay':
+                buttonText = '<i class="fa fa-credit-card-alt"></i> 네이버페이로 결제';
+                break;
+            default:
+                buttonText = '<i class="fa fa-credit-card"></i> 주문 완료';
+        }
+        $('#orderBtn').html(buttonText);
+    }
 
     function openAddressModal() {
         $('#addressModal').show();
@@ -699,6 +828,13 @@
 <script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
 <!-- custom js -->
 <script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // 현재 연도 설정
+        $('#displayYear').text(new Date().getFullYear());
+    });
+</script>
 
 </body>
 </html>
