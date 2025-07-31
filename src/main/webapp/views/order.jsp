@@ -305,7 +305,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="fa fa-truck"></i> 배송 정보</h5>
-                        <a href="${pageContext.request.contextPath}/address" class="btn btn-secondary btn-sm">
+                        <a href="${pageContext.request.contextPath}/address?returnUrl=order" class="btn btn-secondary btn-sm">
                             <i class="fa fa-cog"></i> 배송지 관리
                         </a>
                     </div>
@@ -350,7 +350,7 @@
                                         <div class="no-address">
                                             <i class="fa fa-exclamation-circle"></i>
                                             등록된 배송지가 없습니다.
-                                            <a href="${pageContext.request.contextPath}/address">배송지를 등록해주세요</a>
+                                            <a href="${pageContext.request.contextPath}/address?returnUrl=order">배송지를 등록해주세요</a>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>

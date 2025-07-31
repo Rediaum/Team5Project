@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @Slf4j
@@ -27,7 +28,9 @@ public class AddressController {
      * 배송지 관리 페이지 - 사용자의 모든 배송지 조회
      */
     @GetMapping("")
-    public String address(Model model, HttpSession session) throws Exception {
+    public String address(Model model,
+                          HttpSession session,
+                          @RequestParam(value = "returnUrl", required = false) String returnUrl) throws Exception {
         // 로그인 체크
         Cust loginUser = (Cust) session.getAttribute("logincust");
         if (loginUser == null) {
@@ -38,7 +41,8 @@ public class AddressController {
         List<Address> addressList = addressService.getAddressByCustomerId(loginUser.getCustId());
 
         model.addAttribute("addressList", addressList);
-        log.info("사용자 {}의 배송지 {}개 조회", loginUser.getCustName(), addressList.size());
+        model.addAttribute("returnUrl", returnUrl); // JSP에서 사용할 수 있도록 추가
+        log.info("사용자 {}의 배송지 {}개 조회, returnUrl: {}", loginUser.getCustName(), addressList.size(), returnUrl);
 
         return "address";
     }
@@ -48,6 +52,7 @@ public class AddressController {
      */
     @PostMapping("/add")
     public String addAddress(@ModelAttribute Address address,
+                             @RequestParam(value = "returnUrl", required = false) String returnUrl,
                              HttpSession session,
                              RedirectAttributes redirectAttributes) throws Exception {
         // 로그인 체크
@@ -61,7 +66,7 @@ public class AddressController {
             List<Address> currentAddresses = addressService.getAddressByCustomerId(loginUser.getCustId());
             if (currentAddresses.size() >= 10) {
                 redirectAttributes.addFlashAttribute("errorMsg", "최대 10개까지만 배송지를 등록할 수 있습니다.");
-                return "redirect:/address";
+                return getRedirectUrl(returnUrl);
             }
 
             // 고객 ID 설정
@@ -81,12 +86,14 @@ public class AddressController {
             redirectAttributes.addFlashAttribute("successMsg", "새 배송지가 추가되었습니다.");
             log.info("사용자 {}가 새 배송지 '{}' 추가", loginUser.getCustName(), address.getAddressName());
 
+            // returnUrl에 따라 적절한 페이지로 리다이렉트
+            return getRedirectUrl(returnUrl);
+
         } catch (Exception e) {
             log.error("배송지 추가 실패: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMsg", "배송지 추가에 실패했습니다.");
+            return getRedirectUrl(returnUrl);
         }
-
-        return "redirect:/address";
     }
 
     /**
@@ -94,6 +101,7 @@ public class AddressController {
      */
     @PostMapping("/update")
     public String updateAddress(@ModelAttribute Address address,
+                                @RequestParam(value = "returnUrl", required = false) String returnUrl,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) throws Exception {
         // 로그인 체크
@@ -103,20 +111,20 @@ public class AddressController {
         }
 
         try {
-            // 기존 배송지 정보 조회 (권한 체크)
+            // 배송지 소유자 검증
             Address existingAddress = addressService.get(address.getAddressId());
-            if (existingAddress == null || existingAddress.getCustId() != loginUser.getCustId()) {
+            if (existingAddress == null || !Objects.equals(existingAddress.getCustId(), loginUser.getCustId())) {
                 redirectAttributes.addFlashAttribute("errorMsg", "수정 권한이 없습니다.");
-                return "redirect:/address";
+                return getRedirectUrl(returnUrl);
             }
+
+            // 고객 ID 설정
+            address.setCustId(loginUser.getCustId());
 
             // 기본 배송지로 설정하는 경우, 기존 기본 배송지를 해제
             if (address.isDefault()) {
                 addressService.resetDefaultAddress(loginUser.getCustId());
             }
-
-            // 고객 ID 설정 (보안상 다시 설정)
-            address.setCustId(loginUser.getCustId());
 
             // 배송지 수정
             addressService.modify(address);
@@ -124,19 +132,21 @@ public class AddressController {
             redirectAttributes.addFlashAttribute("successMsg", "배송지가 수정되었습니다.");
             log.info("사용자 {}가 배송지 '{}' 수정", loginUser.getCustName(), address.getAddressName());
 
+            return getRedirectUrl(returnUrl);
+
         } catch (Exception e) {
             log.error("배송지 수정 실패: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMsg", "배송지 수정에 실패했습니다.");
+            return getRedirectUrl(returnUrl);
         }
-
-        return "redirect:/address";
     }
 
     /**
-     * 배송지 삭제
+     * 배송지 삭제 - POST 방식
      */
-    @GetMapping("/delete/{addressId}")
-    public String deleteAddress(@PathVariable Integer addressId,
+    @PostMapping("/delete")
+    public String deleteAddress(@RequestParam Integer addressId,
+                                @RequestParam(value = "returnUrl", required = false) String returnUrl,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) throws Exception {
         // 로그인 체크
@@ -146,80 +156,91 @@ public class AddressController {
         }
 
         try {
-            // 기존 배송지 정보 조회 (권한 체크)
-            Address existingAddress = addressService.get(addressId);
-            if (existingAddress == null || existingAddress.getCustId() != loginUser.getCustId()) {
+            // 배송지 소유자 검증
+            Address address = addressService.get(addressId);
+            if (address == null || !Objects.equals(address.getCustId(), loginUser.getCustId())) {
                 redirectAttributes.addFlashAttribute("errorMsg", "삭제 권한이 없습니다.");
-                return "redirect:/address";
+                return getRedirectUrl(returnUrl);
             }
 
             // 배송지 삭제
             addressService.remove(addressId);
 
-            // 삭제된 배송지가 기본 배송지였다면, 다른 배송지를 기본으로 설정
-            if (existingAddress.isDefault()) {
-                List<Address> remainingAddresses = addressService.getAddressByCustomerId(loginUser.getCustId());
-                if (!remainingAddresses.isEmpty()) {
-                    Address firstAddress = remainingAddresses.get(0);
-                    firstAddress.setDefault(true);
-                    addressService.modify(firstAddress);
-                }
-            }
-
             redirectAttributes.addFlashAttribute("successMsg", "배송지가 삭제되었습니다.");
-            log.info("사용자 {}가 배송지 '{}' 삭제", loginUser.getCustName(), existingAddress.getAddressName());
+            log.info("사용자 {}가 배송지 '{}' 삭제", loginUser.getCustName(), address.getAddressName());
+
+            return getRedirectUrl(returnUrl);
 
         } catch (Exception e) {
             log.error("배송지 삭제 실패: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMsg", "배송지 삭제에 실패했습니다.");
+            return getRedirectUrl(returnUrl);
         }
-
-        return "redirect:/address";
     }
 
     /**
-     * 기본 배송지 설정 (AJAX)
+     * 기존 GET 방식 삭제를 위한 호환성 메서드
+     */
+    @GetMapping("/delete/{addressId}")
+    public String deleteAddressGet(@PathVariable Integer addressId,
+                                   @RequestParam(value = "returnUrl", required = false) String returnUrl,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) throws Exception {
+        // POST 방식 삭제 메서드를 호출
+        return deleteAddress(addressId, returnUrl, session, redirectAttributes);
+    }
+
+    /**
+     * 기본 배송지 설정 - AJAX 호출용
      */
     @PostMapping("/setDefault")
     @ResponseBody
     public Map<String, Object> setDefaultAddress(@RequestParam Integer addressId,
-                                                 HttpSession session) throws Exception {
+                                                 HttpSession session) {
         Map<String, Object> result = new HashMap<>();
 
-        // 로그인 체크
-        Cust loginUser = (Cust) session.getAttribute("logincust");
-        if (loginUser == null) {
-            result.put("success", false);
-            result.put("message", "로그인이 필요합니다.");
-            return result;
-        }
-
         try {
-            // 기존 배송지 정보 조회 (권한 체크)
-            Address existingAddress = addressService.get(addressId);
-            if (existingAddress == null || existingAddress.getCustId() != loginUser.getCustId()) {
+            // 로그인 체크
+            Cust loginUser = (Cust) session.getAttribute("logincust");
+            if (loginUser == null) {
+                result.put("success", false);
+                result.put("message", "로그인이 필요합니다.");
+                return result;
+            }
+
+            // 배송지 소유자 검증
+            Address address = addressService.get(addressId);
+            if (address == null || !Objects.equals(address.getCustId(), loginUser.getCustId())) {
                 result.put("success", false);
                 result.put("message", "권한이 없습니다.");
                 return result;
             }
 
-            // 기존 기본 배송지 해제
+            // 기존 기본 배송지 해제 후 새로 설정
             addressService.resetDefaultAddress(loginUser.getCustId());
-
-            // 새로운 기본 배송지 설정
-            existingAddress.setDefault(true);
-            addressService.modify(existingAddress);
+            address.setDefault(true);
+            addressService.modify(address);
 
             result.put("success", true);
             result.put("message", "기본 배송지로 설정되었습니다.");
-            log.info("사용자 {}가 '{}' 를 기본 배송지로 설정", loginUser.getCustName(), existingAddress.getAddressName());
+            log.info("사용자 {}가 배송지 '{}'을 기본으로 설정", loginUser.getCustName(), address.getAddressName());
 
         } catch (Exception e) {
             log.error("기본 배송지 설정 실패: {}", e.getMessage());
             result.put("success", false);
-            result.put("message", "기본 배송지 설정에 실패했습니다.");
+            result.put("message", "설정에 실패했습니다.");
         }
 
         return result;
+    }
+
+    /**
+     * returnUrl에 따라 적절한 리다이렉트 URL 반환
+     */
+    private String getRedirectUrl(String returnUrl) {
+        if ("order".equals(returnUrl)) {
+            return "redirect:/order/from-cart";
+        }
+        return "redirect:/address"; // 기본값은 배송지 관리 페이지
     }
 }
