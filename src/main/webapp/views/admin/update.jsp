@@ -171,7 +171,7 @@
                             
                             <!-- Customer 관리 메뉴 -->
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/customers">Customer</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/customerList">Customer</a>
                             </li>
                         </c:if>
                         
@@ -266,31 +266,31 @@
         <form action="${pageContext.request.contextPath}/admin/inventory/update" method="post" enctype="multipart/form-data">
             
             <div class="form-group mb-3">
-                <label>ID:</label>
+                <label for="productId">ID:</label>
                 <p class="form-control-plaintext">${product.productId}</p>
-                <input type="hidden" name="productId" value="${product.productId}" />
+                <input type="hidden" name="productId" id="productId" value="${product.productId}" />
             </div>
             
             <div class="form-group mb-3">
-                <label>Current Image:</label><br/>
+                <label for="productImg">Current Image:</label><br/>
                 <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" width="400" height="auto" alt="${product.productName}" />
-                <input type="hidden" name="productImg" value="${product.productImg}" />
+                <input type="hidden" name="productImg" id="productimg" value="${product.productImg}" />
             </div>
             
             
             <div class="form-group">
-                <label>Name:</label>
-                <input type="text" name="productName" class="form-control" value="${product.productName}" required>
+                <label for="productName">Name:</label>
+                <input type="text" name="productName" id="productName" class="form-control" value="${product.productName}" required>
             </div>
             
             <div class="form-group">
-                <label>Price:</label>
-                <input type="number" name="productPrice" class="form-control" value="${product.productPrice}" required>
+                <label for="productPrice">Price:</label>
+                <input type="number" name="productPrice" id="productPrice" class="form-control" value="${product.productPrice}" required>
             </div>
             
             <div class="form-group">
-                <label>Discount Rate (%):</label>
-                <input type="number" name="discountRate" class="form-control" value="${product.discountRate}" required>
+                <label for="discountRate">Discount Rate (%):</label>
+                <input type="number" step="0.01" min="0" max="1" name="discountRate" id="discountRate" class="form-control" value="${product.discountRate}" required>
             </div>
             
             <div class="form-group">
@@ -299,13 +299,13 @@
             </div>
             
             <div class="form-group">
-                <label for="productImg">Upload New Image</label>
-                <input type="file" name="imgfile" class="form-control-file" />
+                <label for="imgfile">Upload New Image</label>
+                <input type="file" name="imgfile" id="imgfile" class="form-control-file" />
             </div>
             
             <div class="form-group">
-                <label>Category ID:</label>
-                <input type="number" name="categoryId" class="form-control" value="${product.categoryId}" required>
+                <label for="categoryId">Category ID:</label>
+                <input type="number" name="categoryId" id="categoryId" class="form-control" value="${product.categoryId}" required>
             </div>
             
             <br>

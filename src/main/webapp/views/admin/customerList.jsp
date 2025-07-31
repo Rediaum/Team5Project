@@ -1,6 +1,7 @@
 <%-- 1. JSP 페이지 기본 설정 및 JSTL 태그 라이브러리 선언 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -58,58 +59,7 @@
             margin-right: 8px;
             width: 16px;
         }
-
-        /* Sidebar */
-        .sidebar {
-            width: 220px;
-            background: #222;
-            color: white;
-            padding-top: 60px;
-            box-sizing: border-box; /* agar padding tidak menambah lebar */
-            flex-shrink: 0; /* agar tidak mengecil */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar h4 {
-            padding: 15px 20px;
-            margin-bottom: 0;
-            color: #fff;
-            font-size: 18px;
-            border-bottom: 1px solid #444;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-
-        .sidebar ul li {
-            padding: 10px 20px;
-            border-bottom: 1px solid #333;
-        }
-
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #444;
-            color: #fff;
-        }
-
-        /* Main content */
-        .content {
-            flex-grow: 1;
-            padding: 30px;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-        }
-
+        
         .table th, .table td {
             vertical-align: middle;
         }
@@ -126,23 +76,6 @@
         .btn-link-style:hover {
             text-decoration: underline;
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding-top: 20px;
-            }
-
-            .content {
-                padding: 15px;
-            }
-        }
-    
     </style>
 </head>
 <body class="sub_page">
@@ -247,7 +180,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="full">
-                    <h3>Inventory Management</h3>
+                    <h3>Costumer List</h3>
                 </div>
             </div>
         </div>
@@ -255,70 +188,45 @@
 </section>
 <!-- end inner page section -->
 
-<!-- client section -->
-<div class="d-flex" style="min-height: 100vh;">
-    <%--sidebar--%>
-    <div class="sidebar d-flex flex-column p-3 bg-dark text-white" style="width: 220px;">
-        <h4>Inventory</h4>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="${pageContext.request.contextPath}/admin/inventory"
-                   class="nav-link ${activePage == 'inventory' ? 'active' : 'text-white'}">
-                    Inventory
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="${pageContext.request.contextPath}/admin/inventory/add"
-                   class="nav-link ${activePage == 'add' ? 'active' : 'text-white'}">
-                    Add New Product
-                </a>
-            </li>
-        </ul>
-    </div>
-        
-    <!-- 제품 표 -->
-    <div class="content flex-grow-1 p-4" style="background-color: #f8f9fa;">
-        <div class="product-table">
-            <table class="table table-bordered table-hover text-center">
-                <thead class="thead-dark">
+<!-- Customer List section -->
+<div class="container mt-4">
+    
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Reg Date</th>
+                <th>Update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="cust" items="${custList}">
                 <tr>
-                    <th>Image</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Rate</th>
-                    <th>Regdate</th>
-                    <th>Update</th>
-                    <th>Category</th>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/admin/customerList/${cust.custId}"
+                           class="btn-link-style">
+                                ${cust.custId}
+                        </a>
+                    </td>
+                    <td>${cust.custName}</td>
+                    <td>${cust.custEmail}</td>
+                    <td>${cust.custPhone}</td>
+                    <td><fmt:formatDate value="${cust.custRegdate}" pattern="yyyy-MM-dd HH:mm"/></td>
+                    <td><fmt:formatDate value="${cust.custUpdate}" pattern="yyyy-MM-dd HH:mm"/></td>
                 </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="p" items="${productList}">
-                    <tr>
-                        <td>
-                            <img src="${pageContext.request.contextPath}/views/images/${p.productImg}"
-                                 alt="${p.productName}" width="80" height="80" style="object-fit: cover;" />
-                        </td>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/inventory/update/${p.productId}" class="btn-link-style">
-                                    ${p.productId}
-                            </a>
-                        </td>
-                        <td>${p.productName}</td>
-                        <td>${p.productPrice}</td>
-                        <td>${p.discountRate}</td>
-                        <td>${p.productRegdate}</td>
-                        <td>${p.productUpdate}</td>
-                        <td>${p.categoryId}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
+            </c:forEach>
+            <c:if test="${empty custList}">
+                <tr>
+                    <td colspan="6" class="text-muted">No customers found.</td>
+                </tr>
+            </c:if>
+            </tbody>
+        </table>
 </div>
-
-<!-- end client section -->
+<!-- end Customer List section -->
 
 <!-- footer section -->
 <footer class="footer_section">
