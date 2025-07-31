@@ -1,6 +1,7 @@
 <%-- 1. JSP 페이지 기본 설정 및 JSTL 태그 라이브러리 선언 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html>
@@ -65,8 +66,8 @@
             background: #222;
             color: white;
             padding-top: 60px;
-            box-sizing: border-box; /* agar padding tidak menambah lebar */
-            flex-shrink: 0; /* agar tidak mengecil */
+            box-sizing: border-box;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
         }
@@ -261,43 +262,56 @@
         
     <!-- 제품 표 -->
     <div class="content flex-grow-1 p-4" style="background-color: #f8f9fa;">
-        <div class="product-table">
-            <table class="table table-bordered align-middle text-center">
-                <thead class="table-dark">
-                <tr>
-                    <th>Image</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Rate</th>
-                    <th>Regdate</th>
-                    <th>Update</th>
-                    <th>Category</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="p" items="${productList}">
-                    <tr>
-                        <td>
-                            <img src="${pageContext.request.contextPath}/views/images/${p.productImg}"
-                                 alt="${p.productName}" width="80" height="80" style="object-fit: cover;" />
-                        </td>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/inventory/update/${p.productId}">
-                                    ${p.productId}
-                            </a>
-                        </td>
-                        <td>${p.productName}</td>
-                        <td>${p.productPrice}</td>
-                        <td>${p.discountRate}</td>
-                        <td>${p.productRegdate}</td>
-                        <td>${p.productUpdate}</td>
-                        <td>${p.categoryId}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+        <h2>Update Product</h2>
+        <form action="${pageContext.request.contextPath}/admin/inventory/update" method="post" enctype="multipart/form-data">
+            
+            <div class="form-group mb-3">
+                <label>ID:</label>
+                <p class="form-control-plaintext">${product.productId}</p>
+                <input type="hidden" name="productId" value="${product.productId}" />
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Current Image:</label><br/>
+                <img src="${pageContext.request.contextPath}/views/images/${product.productImg}" width="400" height="auto" alt="${product.productName}" />
+                <input type="hidden" name="productImg" value="${product.productImg}" />
+            </div>
+            
+            
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="productName" class="form-control" value="${product.productName}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" name="productPrice" class="form-control" value="${product.productPrice}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Discount Rate (%):</label>
+                <input type="number" name="discountRate" class="form-control" value="${product.discountRate}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3">${product.description}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="productImg">Upload New Image</label>
+                <input type="file" name="imgFile" class="form-control-file" />
+            </div>
+            
+            <div class="form-group">
+                <label>Category ID:</label>
+                <input type="number" name="categoryId" class="form-control" value="${product.categoryId}" required>
+            </div>
+            
+            <br>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="${pageContext.request.contextPath}/admin/inventory/delete/${product.productId}" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+        </form>
     </div>
 </div>
 

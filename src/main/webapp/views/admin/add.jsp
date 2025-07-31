@@ -240,7 +240,6 @@
 
 <!-- client section -->
 <div class="d-flex" style="min-height: 100vh;">
-    <%--sidebar--%>
     <div class="sidebar d-flex flex-column p-3 bg-dark text-white" style="width: 220px;">
         <h4>Inventory</h4>
         <ul class="nav nav-pills flex-column mb-auto">
@@ -258,46 +257,46 @@
             </li>
         </ul>
     </div>
-        
-    <!-- 제품 표 -->
+    
     <div class="content flex-grow-1 p-4" style="background-color: #f8f9fa;">
-        <div class="product-table">
-            <table class="table table-bordered align-middle text-center">
-                <thead class="table-dark">
-                <tr>
-                    <th>Image</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Rate</th>
-                    <th>Regdate</th>
-                    <th>Update</th>
-                    <th>Category</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="p" items="${productList}">
-                    <tr>
-                        <td>
-                            <img src="${pageContext.request.contextPath}/views/images/${p.productImg}"
-                                 alt="${p.productName}" width="80" height="80" style="object-fit: cover;" />
-                        </td>
-                        <td>
-                            <a href="${pageContext.request.contextPath}/admin/inventory/update/${p.productId}">
-                                    ${p.productId}
-                            </a>
-                        </td>
-                        <td>${p.productName}</td>
-                        <td>${p.productPrice}</td>
-                        <td>${p.discountRate}</td>
-                        <td>${p.productRegdate}</td>
-                        <td>${p.productUpdate}</td>
-                        <td>${p.categoryId}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+        <h3 class="mb-4">Add New Product</h3>
+        
+        <form action="${pageContext.request.contextPath}/admin/inventory/addimpl" method="post" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-6">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" name="productName" id="productName" class="form-control" required>
+            </div>
+            
+            <div class="col-md-6">
+                <label for="categoryId" class="form-label">Category ID</label>
+                <input type="number" name="categoryId" id="categoryId" class="form-control" required>
+            </div>
+            
+            <div class="col-12">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="productPrice" class="form-label">Price</label>
+                <input type="number" name="productPrice" id="productPrice" class="form-control" required>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="discountRate" class="form-label">Discount Rate (%)</label>
+                <input type="number" step="0.01" name="discountRate" id="discountRate" class="form-control">
+            </div>
+            
+            <div class="col-md-4">
+                <label for="productImg" class="form-label">Product Image</label>
+                <input type="file" name="imgfile" id="productImg" class="form-control" required>
+            </div>
+            
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+                <a href="${pageContext.request.contextPath}/inventory" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 
