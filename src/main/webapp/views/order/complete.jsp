@@ -224,6 +224,37 @@
         .total-payment-row i {
             margin-right: 8px;
         }
+
+        /* 드롭다운 메뉴 기본 스타일 */
+        .dropdown-menu {
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        /* 드롭다운 아이템 스타일 */
+        .dropdown-item {
+            padding: 8px 16px;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        /* 드롭다운 아이템 호버 효과 */
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #f7444e;
+        }
+
+        /* 드롭다운 구분선 스타일 */
+        .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        /* 드롭다운 아이템 내 아이콘 스타일 */
+        .dropdown-item i {
+            margin-right: 8px;
+            width: 16px;
+        }
     </style>
 </head>
 
@@ -252,23 +283,44 @@
                         </li>
                         <c:if test="${sessionScope.logincust != null}">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                    <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                                    <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #000;">
+                                    <!-- 사람 아이콘 SVG -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="7" r="4"/><!-- 머리 -->
+                                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><!-- 몸통 -->
+                                    </svg>
+                                    <span class="nav-label"><span class="caret"></span></span>
                                 </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
-                                        <i class="fa fa-user"></i> 프로필
-                                    </a>
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/address">
-                                        <i class="fa fa-map-marker"></i> 배송지 관리
-                                    </a>
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
-                                        <i class="fa fa-list-alt"></i> 주문 내역
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                                        <i class="fa fa-sign-out"></i> 로그아웃
-                                    </a>
+
+                                    <%-- 드롭다운 메뉴 내용 --%>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <c:if test="${sessionScope.logincust != null}">
+                                        <%-- 사용자 프로필 메뉴 (사용자 이름 표시) --%>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/info">
+                                            <i class="fa fa-user" aria-hidden="true"></i> ${sessionScope.logincust.custName}
+                                        </a>
+
+                                        <%-- 주문 내역 메뉴 추가 --%>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
+                                            <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
+                                        </a>
+
+                                        <%-- 배송지 관리 메뉴 --%>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/address">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i> 배송지 관리
+                                        </a>
+
+                                        <%-- 구분선 --%>
+                                        <div class="dropdown-divider"></div>
+
+                                        <%-- 로그아웃 메뉴 --%>
+                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i> 로그아웃
+                                        </a>
+                                    </c:if>
                                 </div>
                             </li>
                             <li class="nav-item">
@@ -343,7 +395,7 @@
                     </div>
                 </div>
 
-                <!-- 🆕 결제 정보 카드 - 완전 수정 -->
+                <!-- 결제 정보 카드 -->
                 <div class="order-summary-card">
                     <h4 class="mb-4">
                         <i class="fa fa-credit-card text-success"></i> 결제 정보
@@ -641,6 +693,15 @@
         // 필요에 따라 AJAX로 장바구니 개수 업데이트 로직 추가 가능
     });
 </script>
+
+<!-- jQuery 라이브러리 -->
+<script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
+<!-- Bootstrap Popper.js -->
+<script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="${pageContext.request.contextPath}/views/js/bootstrap.js"></script>
+<!-- 커스텀 JavaScript -->
+<script src="${pageContext.request.contextPath}/views/js/custom.js"></script>
 
 </body>
 </html>
