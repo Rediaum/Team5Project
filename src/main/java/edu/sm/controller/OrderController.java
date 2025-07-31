@@ -96,7 +96,7 @@ public class OrderController {
     @PostMapping("/submit")
     public String submitOrder(@RequestParam("orderType") String orderType,
                               @RequestParam("selectedAddress") String selectedAddress,
-                              @RequestParam("paymentMethod") String paymentMethod, // 결제 방법 파라미터 추가
+                              @RequestParam(value = "paymentMethod", required = false, defaultValue = "creditCard") String paymentMethod,
                               @RequestParam(value = "productId", required = false) Integer productId,
                               @RequestParam(value = "quantity", required = false, defaultValue = "1") Integer quantity,
                               HttpSession session,
@@ -115,7 +115,7 @@ public class OrderController {
                 return "redirect:/order/from-cart";
             }
 
-            // 🆕 결제 방법 검증
+            // 결제 방법 검증
             if (!isValidPaymentMethod(paymentMethod)) {
                 redirectAttributes.addFlashAttribute("error", "유효하지 않은 결제 방법입니다.");
                 return "redirect:/order/from-cart";
@@ -125,22 +125,34 @@ public class OrderController {
             Integer totalAmount;
 
             if ("cart".equals(orderType)) {
-                orderId = processCartOrder(loginCust, address);
-                // 🆕 장바구니 총 금액 계산
+                // 장바구니 비우기 전에 미리 금액 계산!
                 totalAmount = cartService.calculateTotalPrice(loginCust.getCustId());
+                log.info("🛒 장바구니 총 금액 계산: {}원", totalAmount);
+
+                // 주문 처리 (이때 장바구니가 비워짐)
+                orderId = processCartOrder(loginCust, address);
+                log.info("🛒 장바구니 주문 처리 완료 - orderId: {}", orderId);
             } else {
-                orderId = processDirectOrder(loginCust, productId, quantity, address);
-                // 🆕 직접 주문 금액 계산
+                // 직접 주문은 기존과 동일
                 totalAmount = calculateDirectOrderAmount(productId, quantity);
+                orderId = processDirectOrder(loginCust, productId, quantity, address);
+                log.info("🛍️ 직접 주문 - orderId: {}, totalAmount: {}", orderId, totalAmount);
             }
 
-            // 🆕 결제 처리
+            // 금액이 0인 경우 오류 처리
+            if (totalAmount == null || totalAmount <= 0) {
+                log.error("❌ 주문 금액이 0원 - orderType: {}, totalAmount: {}", orderType, totalAmount);
+                redirectAttributes.addFlashAttribute("error", "주문 금액이 올바르지 않습니다.");
+                return "redirect:/cart";
+            }
+
+            // 결제 처리
             try {
                 Payment payment = paymentService.processPayment(orderId, paymentMethod, totalAmount);
-                log.info("✅ 결제 완료 - 주문ID: {}, 결제ID: {}, 거래ID: {}",
-                        orderId, payment.getPaymentId(), payment.getTransactionId());
+                log.info("✅ 결제 완료 - 주문ID: {}, 결제ID: {}, 거래ID: {}, 금액: {}원",
+                        orderId, payment.getPaymentId(), payment.getTransactionId(), payment.getPaymentAmount());
             } catch (Exception paymentException) {
-                log.error("결제 처리 실패: {}", paymentException.getMessage(), paymentException);
+                log.error("❌ 결제 처리 실패 - 주문ID: {}, 에러: {}", orderId, paymentException.getMessage(), paymentException);
                 redirectAttributes.addFlashAttribute("error", "결제 처리 중 오류가 발생했습니다: " + paymentException.getMessage());
                 return "redirect:/cart";
             }
