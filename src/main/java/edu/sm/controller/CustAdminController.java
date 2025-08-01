@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -52,12 +53,22 @@ public class CustAdminController {
     }
 
     // 고객 삭제
-    @GetMapping("/delete/{custId}")
-    public String deleteCustomer(@PathVariable int custId, HttpSession session) throws Exception {
-        if (!"admin".equals(session.getAttribute("role"))) return "redirect:/";
+    @PostMapping("/delete")
+    public String deleteCustomer(@RequestParam("custId") Integer custId, HttpSession session, RedirectAttributes redirectAttributes) {
+        if (!"admin".equals(session.getAttribute("role"))) {
+            redirectAttributes.addFlashAttribute("error", "권한이 없습니다.");
+            return "redirect:/admin/customerList";
+        }
 
-        custService.remove(custId);
+        try {
+            custService.remove(custId);
+            redirectAttributes.addFlashAttribute("success", "고객 정보가 삭제되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
+            e.printStackTrace(); // Bantu debug
+        }
         return "redirect:/admin/customerList";
     }
+
 
 }
