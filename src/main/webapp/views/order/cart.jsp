@@ -367,10 +367,10 @@
 
                         <%-- 액션 버튼 --%>
                       <div class="col-md-3 text-right">
-                        <button type="button" class="btn btn-primary btn-sm mr-2"
-                                onclick="updateItem(${item.cartId})" title="수량 변경">
-                          <i class="fa fa-check"></i> 변경
-                        </button>
+<%--                        <button type="button" class="btn btn-primary btn-sm mr-2"--%>
+<%--                                onclick="updateItem(${item.cartId})" title="수량 변경">--%>
+<%--                          <i class="fa fa-check"></i> 변경--%>
+<%--                        </button>--%>
                         <button type="button" class="btn btn-danger btn-sm"
                                 onclick="deleteItem(${item.cartId})" title="상품 삭제">
                           <i class="fa fa-trash"></i> 삭제
