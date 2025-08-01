@@ -59,7 +59,7 @@ public class OrderController {
     }
 
     @RequestMapping("/direct")
-    public String orderDirect(@RequestParam("productId") Integer productId,
+    public String orderDirect(@RequestParam(value = "productId", required = false) Integer productId,
                               @RequestParam(value = "quantity", defaultValue = "1") Integer quantity,
                               HttpSession session, Model model) {
         Cust loginCust = (Cust) session.getAttribute("logincust");
@@ -68,6 +68,12 @@ public class OrderController {
         }
 
         try {
+            // productId가 없으면 장바구니로 리다이렉트
+            if (productId == null) {
+                model.addAttribute("error", "상품 정보가 없습니다.");
+                return "redirect:/cart";
+            }
+
             // 상품 정보 조회
             Product product = productService.get(productId);
             if (product == null) {
@@ -433,4 +439,6 @@ public class OrderController {
 
         return unitPrice * quantity;
     }
+
+
 }

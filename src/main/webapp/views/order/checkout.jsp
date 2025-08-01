@@ -364,9 +364,18 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="fa fa-truck"></i> 배송 정보</h5>
-                        <a href="${pageContext.request.contextPath}/address?returnUrl=order" class="btn btn-secondary btn-sm">
-                            <i class="fa fa-cog"></i> 배송지 관리
-                        </a>
+                        <c:choose>
+                            <c:when test="${orderType == 'direct'}">
+                                <a href="${pageContext.request.contextPath}/address?returnUrl=direct&productId=${product.productId}&quantity=${quantity}" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-cog"></i> 배송지 관리
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/address?returnUrl=order" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-cog"></i> 배송지 관리
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <div class="card-body">
                         <form id="orderForm" action="${pageContext.request.contextPath}/order/submit" method="post">
@@ -409,7 +418,14 @@
                                         <div class="no-address">
                                             <i class="fa fa-exclamation-circle"></i>
                                             등록된 배송지가 없습니다.
-                                            <a href="${pageContext.request.contextPath}/address?returnUrl=order">배송지를 등록해주세요</a>
+                                            <c:choose>
+                                                <c:when test="${orderType == 'direct'}">
+                                                    <a href="${pageContext.request.contextPath}/address?returnUrl=direct&productId=${product.productId}&quantity=${quantity}">배송지를 등록해주세요</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="${pageContext.request.contextPath}/address?returnUrl=order">배송지를 등록해주세요</a>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
