@@ -437,14 +437,16 @@
             <div class="row">
                 <div class="col-md-6 ml-auto">
                     <div class="heading_container remove_line_bt">
-                        <h2>#NewArrivals</h2>
+                        <h2>🧊신상품 </h2>
+                        <h3>-----------------------------------</h3>
+                        <h3>플래그십 스마트폰 256GB</h3>
                     </div>
                     <p style="margin-top: 20px;margin-bottom: 30px;">
-                        Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!
+                        최신 기술이 집약된 스마트폰을 15% 할인된 가격에 만나보세요
                     </p>
                     <%-- 쇼핑하기 버튼 --%>
-                    <a href="${pageContext.request.contextPath}/product">
-                        Shop Now
+                    <a href="${pageContext.request.contextPath}/product/detail/12" class="btn btn-black">
+                        쇼핑하기
                     </a>
                 </div>
             </div>

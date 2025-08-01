@@ -550,7 +550,8 @@ a:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 3;
+    z-index: 0;
+
 }
 
 .arrival_section .arrival_bg_box img {
@@ -560,6 +561,7 @@ a:focus {
     object-fit: cover;
     -o-object-position: top left;
     object-position: top left;
+
 }
 
 .arrival_section a {
@@ -567,14 +569,15 @@ a:focus {
   padding: 10px 45px;
   background-color: #000000;
   border: 1px solid #000000;
-  color: #ffffff;
+  color: #d4ced0;
   border-radius: 0;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
 
 .arrival_section a:hover {
-  background-color: transparent;
+  background-color: #d4ced0;;
+
   color: #000000;
 }
 

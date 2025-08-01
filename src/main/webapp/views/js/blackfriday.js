@@ -1,13 +1,13 @@
-/**
- * 블랙프라이데이 슬라이더 동적 배경 변경 스크립트
- * index.jsp에서 사용
+/*
+  블랙프라이데이 슬라이더 동적 배경 변경 스크립트
+  index.jsp에서 사용
  */
 
 $(document).ready(function() {
 
-    /**
-     * 배경 이미지 변경 함수
-     * @param {string} bgImageUrl - 변경할 배경 이미지 URL
+    /*
+      배경 이미지 변경 함수
+      @param {string} bgImageUrl - 변경할 배경 이미지 URL
      */
     function changeSliderBackground(bgImageUrl) {
         if (bgImageUrl && $('#sliderBgImage').length) {
@@ -15,9 +15,9 @@ $(document).ready(function() {
         }
     }
 
-    /**
-     * Bootstrap 캐러셀 슬라이드 전환 이벤트
-     * 슬라이드가 전환되기 시작할 때 배경 이미지도 함께 변경
+    /*
+     Bootstrap 캐러셀 슬라이드 전환 이벤트
+     슬라이드가 전환되기 시작할 때 배경 이미지도 함께 변경
      */
     $('#customCarousel1').on('slide.bs.carousel', function (event) {
         var nextSlide = $(event.relatedTarget);
@@ -38,9 +38,9 @@ $(document).ready(function() {
         changeSliderBackground(bgImage);
     });
 
-    /**
-     * 초기 로딩 시 첫 번째 슬라이드 배경 설정
-     * 페이지 로드 후 active 슬라이드의 배경으로 초기화
+    /*
+      초기 로딩 시 첫 번째 슬라이드 배경 설정
+      페이지 로드 후 active 슬라이드의 배경으로 초기화
      */
     function initializeSliderBackground() {
         var activeSlide = $('.carousel-item.active');
@@ -54,9 +54,9 @@ $(document).ready(function() {
     // 초기화 실행
     initializeSliderBackground();
 
-    /**
-     * 키보드 네비게이션 지원 (선택사항)
-     * 좌우 화살표 키로 슬라이드 변경
+    /*
+      키보드 네비게이션 지원 (선택사항)
+      좌우 화살표 키로 슬라이드 변경
      */
     $(document).keydown(function(e) {
         if (e.which === 37) { // 왼쪽 화살표
@@ -66,9 +66,9 @@ $(document).ready(function() {
         }
     });
 
-    /**
-     * 터치 스와이프 지원 개선 (모바일)
-     * 기본 Bootstrap 스와이프에 추가 최적화
+    /*
+     터치 스와이프 지원 개선 (모바일)
+     기본 Bootstrap 스와이프에 추가 최적화
      */
     var xDown = null;
     var yDown = null;
