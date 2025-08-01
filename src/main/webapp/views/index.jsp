@@ -233,9 +233,11 @@
                                         <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-red">
                                             Shop Now
                                         </a>
-                                        <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
-                                            Join Now
-                                        </a>
+                                        <c:if test="${sessionScope.logincust == null}">
+                                            <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
+                                                Join Now
+                                            </a>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -261,9 +263,11 @@
                                         <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-orange">
                                             Shop Now
                                         </a>
-                                        <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
-                                            Join Now
-                                        </a>
+                                        <c:if test="${sessionScope.logincust == null}">
+                                            <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
+                                                Join Now
+                                            </a>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -289,9 +293,11 @@
                                         <a href="${pageContext.request.contextPath}/product" class="btn1 blackfriday-btn-green">
                                             Shop Now
                                         </a>
-                                        <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
-                                            Join Now
-                                        </a>
+                                        <c:if test="${sessionScope.logincust == null}">
+                                            <a href="${pageContext.request.contextPath}/register" class="btn1 blackfriday-btn-white">
+                                                Join Now
+                                            </a>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
