@@ -119,46 +119,53 @@
         ORDER BY product_regdate DESC
     </select>
 
-    <!-- 고급 복합 검색 (핵심 검색 쿼리) -->
+    <!-- 고급 복합 검색 (계층 구조 카테고리 지원) -->
     <select id="advancedSearch" parameterType="map" resultMap="productResultMap">
-        SELECT * FROM product
+        SELECT * FROM product p
         WHERE 1=1
 
         <!-- 키워드 조건 -->
         <if test="keyword != null and keyword != ''">
             AND (
-            product_name LIKE CONCAT('%', #{keyword}, '%')
-            OR description LIKE CONCAT('%', #{keyword}, '%')
+            p.product_name LIKE CONCAT('%', #{keyword}, '%')
+            OR p.description LIKE CONCAT('%', #{keyword}, '%')
             )
         </if>
 
-        <!-- 카테고리 조건 -->
+        <!-- 카테고리 조건 (계층 구조 지원) -->
         <if test="categoryId != null and categoryId > 0">
-            AND category_id = #{categoryId}
+            AND (
+            p.category_id = #{categoryId}
+            OR p.category_id IN (
+            SELECT c.category_id
+            FROM category c
+            WHERE c.parent_category_id = #{categoryId}
+            )
+            )
         </if>
 
         <!-- 가격 범위 조건 -->
         <if test="minPrice != null and minPrice > 0">
-            AND product_price >= #{minPrice}
+            AND p.product_price >= #{minPrice}
         </if>
         <if test="maxPrice != null and maxPrice > 0">
-            AND product_price &lt;= #{maxPrice}
+            AND p.product_price &lt;= #{maxPrice}
         </if>
 
         <!-- 동적 정렬 -->
         ORDER BY
         <choose>
             <when test="sortBy == 'price'">
-                product_price
+                p.product_price
             </when>
             <when test="sortBy == 'name'">
-                product_name
+                p.product_name
             </when>
-            <when test="sortBy == 'regdate'">
-                product_regdate
+            <when test="sortBy == 'product_regdate'">
+                p.product_regdate
             </when>
             <otherwise>
-                product_regdate
+                p.product_regdate
             </otherwise>
         </choose>
 
@@ -171,7 +178,7 @@
             </otherwise>
         </choose>
     </select>
-
+    
     <!-- 인기 상품 조회 (최근 30일 주문 기준) -->
     <select id="getPopularProducts" parameterType="int" resultMap="productResultMap">
         SELECT

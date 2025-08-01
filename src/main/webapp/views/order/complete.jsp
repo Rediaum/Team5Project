@@ -445,14 +445,12 @@
                                             <p class="text-muted mb-1" style="font-size: 0.9em;">
                                                 카테고리:
                                                 <c:choose>
-                                                    <c:when test="${item.product.categoryId == 1}">스마트폰/태블릿</c:when>
-                                                    <c:when test="${item.product.categoryId == 2}">게이밍</c:when>
-                                                    <c:when test="${item.product.categoryId == 3}">웨어러블/스마트기기</c:when>
-                                                    <c:when test="${item.product.categoryId == 4}">노트북/PC</c:when>
-                                                    <c:when test="${item.product.categoryId == 5}">모니터</c:when>
-                                                    <c:when test="${item.product.categoryId == 6}">TV</c:when>
-                                                    <c:when test="${item.product.categoryId == 7}">기타 전자제품</c:when>
-                                                    <c:otherwise>기타</c:otherwise>
+                                                    <c:when test="${not empty item.category}">
+                                                        ${item.category.categoryName}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        분류 없음
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </p>
                                             <p class="mb-1"><strong>단가</strong></p>

@@ -25,6 +25,7 @@ public class OrderController {
     private final AddressService addressService;
     private final ProductService productService;
     private final PaymentService paymentService;
+    private final CategoryService categoryService;
 
     @RequestMapping("/from-cart")
     public String orderFromCart(HttpSession session, Model model) {
@@ -297,34 +298,41 @@ public class OrderController {
 
             List<OrderItem> orderItems = orderItemService.getItemsByOrderId(orderId);
 
-            // 주문 아이템에 상품 정보 추가
+            // 주문 아이템에 상품 정보와 카테고리 정보 추가
             List<Map<String, Object>> itemsWithProductInfo = new ArrayList<>();
             for (OrderItem item : orderItems) {
                 Product product = productService.get(item.getProductId());
 
+                // 카테고리 정보 조회
+                Category category = null;
+                try {
+                    category = categoryService.get(product.getCategoryId());
+                } catch (Exception e) {
+                    // 카테고리 조회 실패 시 기본값 처리
+                }
+
                 Map<String, Object> itemInfo = new HashMap<>();
                 itemInfo.put("orderItem", item);
                 itemInfo.put("product", product);
+                itemInfo.put("category", category); // 카테고리 정보 추가
                 itemInfo.put("totalPrice", item.getUnitPrice() * item.getQuantity());
 
                 itemsWithProductInfo.add(itemInfo);
             }
 
-            //  결제 정보 조회
+            // 결제 정보 조회
             Payment payment = null;
             try {
                 payment = paymentService.getPaymentByOrderId(orderId);
             } catch (Exception e) {
-//                log.warn("결제 정보 조회 실패 (주문ID: {}): {}", orderId, e.getMessage());
                 // 결제 정보가 없어도 페이지는 표시하도록 함
             }
 
             model.addAttribute("order", order);
-            model.addAttribute("orderItems", itemsWithProductInfo); // 상품 정보 포함된 데이터
-            model.addAttribute("payment", payment); // 🆕 결제 정보 추가
+            model.addAttribute("orderItems", itemsWithProductInfo); // 카테고리 정보 포함된 데이터
+            model.addAttribute("payment", payment);
 
         } catch (Exception e) {
-//            log.error("주문 완료 페이지 로딩 실패: {}", e.getMessage(), e);
             model.addAttribute("error", "주문 정보를 불러오는 중 오류가 발생했습니다.");
             return "redirect:/order/history";
         }
