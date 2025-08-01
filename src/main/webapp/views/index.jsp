@@ -427,32 +427,34 @@
 <!-- end why section -->
 
 <%-- 11. 신상품 도착 섹션 --%>
-<section class="arrival_section">
-    <div class="container">
-        <div class="box">
-            <%-- 배경 이미지 --%>
-            <div class="arrival_bg_box">
-                <img src="${pageContext.request.contextPath}/views/images/arrival-bg.png" alt="">
-            </div>
-            <div class="row">
-                <div class="col-md-6 ml-auto">
-                    <div class="heading_container remove_line_bt">
-                        <h2>🧊신상품 </h2>
-                        <h3>-----------------------------------</h3>
-                        <h3>플래그십 스마트폰 256GB</h3>
+<c:if test="${sessionScope.role ne 'admin'}">
+    <section class="arrival_section">
+        <div class="container">
+            <div class="box">
+                <%-- 배경 이미지 --%>
+                <div class="arrival_bg_box">
+                    <img src="${pageContext.request.contextPath}/views/images/arrival-bg.png" alt="">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ml-auto">
+                        <div class="heading_container remove_line_bt">
+                            <h2>🧊신상품 </h2>
+                            <h3>-----------------------------------</h3>
+                            <h3>플래그십 스마트폰 256GB</h3>
+                        </div>
+                        <p style="margin-top: 20px;margin-bottom: 30px;">
+                            최신 기술이 집약된 스마트폰을 15% 할인된 가격에 만나보세요
+                        </p>
+                        <%-- 쇼핑하기 버튼 --%>
+                        <a href="${pageContext.request.contextPath}/product/detail/12" class="btn btn-black">
+                            쇼핑하기
+                        </a>
                     </div>
-                    <p style="margin-top: 20px;margin-bottom: 30px;">
-                        최신 기술이 집약된 스마트폰을 15% 할인된 가격에 만나보세요
-                    </p>
-                    <%-- 쇼핑하기 버튼 --%>
-                    <a href="${pageContext.request.contextPath}/product/detail/12" class="btn btn-black">
-                        쇼핑하기
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</c:if>
 <!-- end arrival section -->
 
 <%-- 12. 상품 섹션 (메인) --%>
