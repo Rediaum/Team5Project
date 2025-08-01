@@ -67,4 +67,8 @@ https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-websi
 
 ***
 # 기능별 gif
+### 회원가입 & 로그인
 ![relo](mdgif/loginregi.gif)
+
+### 상품 카테고리 별 조회 
+![pro](mdgif/products.gif)
