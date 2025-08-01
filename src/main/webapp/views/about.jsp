@@ -17,7 +17,7 @@
     
     <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 수정 --%>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-    <title>Famms - Fashion HTML Template</title>
+    <title>About - Shop Project Team 5</title>
     <!-- bootstrap core css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
     <!-- font awesome style -->

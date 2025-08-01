@@ -15,7 +15,7 @@
 
    <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 수정 --%>
    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-   <title>Shop - Team5Project</title>
+   <title>Products - Shop Project Team 5</title>
    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
    <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>주문 완료 - Team 5 Shop</title>
+    <title>주문 완료 - Shop Project Team 5</title>
 
     <!-- CSS 리소스 -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
@@ -17,33 +17,6 @@
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
     <style>
-        /* ===== 드롭다운 메뉴 스타일 ===== */
-        .dropdown-menu {
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
-
-        .dropdown-item {
-            padding: 8px 16px;
-            color: #333;
-            transition: background-color 0.2s;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #f7444e;
-        }
-
-        .dropdown-divider {
-            margin: 5px 0;
-        }
-
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
-        }
-
         /* ===== 주문 완료 전용 스타일 ===== */
         .success-header {
             text-align: center;

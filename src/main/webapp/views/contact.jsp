@@ -17,7 +17,7 @@
 
    <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 수정 --%>
    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-   <title>Famms - Fashion HTML Template</title>
+   <title>Contact - Shop Project Team 5</title>
    <!-- bootstrap core css -->
    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
    <!-- font awesome style -->
@@ -27,38 +27,6 @@
    <!-- responsive style -->
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
    
-   <style>
-      /* 드롭다운 메뉴 기본 스타일 */
-      .dropdown-menu {
-         border: 1px solid #ddd;
-         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-         border-radius: 5px;
-      }
-      
-      /* 드롭다운 아이템 스타일 */
-      .dropdown-item {
-         padding: 8px 16px;
-         color: #333;
-         transition: background-color 0.2s;
-      }
-      
-      /* 드롭다운 아이템 호버 효과 */
-      .dropdown-item:hover {
-         background-color: #f8f9fa;
-         color: #f7444e;
-      }
-      
-      /* 드롭다운 구분선 스타일 */
-      .dropdown-divider {
-         margin: 5px 0;
-      }
-      
-      /* 드롭다운 아이템 내 아이콘 스타일 */
-      .dropdown-item i {
-         margin-right: 8px;
-         width: 16px;
-      }
-   </style>
 </head>
 <body class="sub_page">
 <div class="hero_area">

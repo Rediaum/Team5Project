@@ -13,7 +13,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
    <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-   <title>검색 결과 - Team5 Shop</title>
+   <title>검색 결과 - Shop Project Team 5</title>
    <!-- bootstrap core css -->
    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
    <!-- font awesome style -->
