@@ -271,6 +271,7 @@
                 
                 <%-- 아래는 JSTL을 사용하지 않을 경우를 대비한 정적 HTML 예시입니다. --%>
                 <%-- 실제 개발 시에는 위의 <c:forEach> 블록을 사용하고 아래는 삭제합니다. --%>
+                <%-- 첫 번째 후기 (활성화 상태) --%>
                 <div class="carousel-item active">
                     <div class="box col-lg-10 mx-auto">
                         <div class="img_container">
@@ -288,7 +289,53 @@
                                 Customer
                             </h6>
                             <p>
-                                Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.
+                                배송도 정말 빠르고 포장도 꼼꼼했어요! 구매한 이어폰 음질도 너무 좋고 디자인도 마음에 들어요. 친구들한테도 추천했답니다 :) 앞으로도 자주 이용할게요~
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <%-- 두 번째 후기 --%>
+                <div class="carousel-item">
+                    <div class="box col-lg-10 mx-auto">
+                        <div class="img_container">
+                            <div class="img-box">
+                                <div class="img_box-inner">
+                                    <img src="${pageContext.request.contextPath}/views/images/client2.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-box">
+                            <h5>
+                                Melisa Ackerman
+                            </h5>
+                            <h6>
+                                Customer
+                            </h6>
+                            <p>
+                                회사에서 사용할 모니터를 찾다가 여기서 주문했는데, 가성비 최고예요! 화면도 선명하고, 눈도 덜 피로해서 하루 종일 사용해도 편하네요. 믿고 살 수 있는 쇼핑몰 같아요!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <%-- 세 번째 후기 --%>
+                <div class="carousel-item">
+                    <div class="box col-lg-10 mx-auto">
+                        <div class="img_container">
+                            <div class="img-box">
+                                <div class="img_box-inner">
+                                    <img src="${pageContext.request.contextPath}/views/images/client3.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-box">
+                            <h5>
+                                Junius Robert
+                            </h5>
+                            <h6>
+                                Customer
+                            </h6>
+                            <p>
+                                노트북이랑 충전기 세트를 샀는데 퀄리티가 기대 이상이네요. 실사용 후기 보고 샀는데 저도 만족합니다. 제품 설명이 상세해서 선택하기 쉬웠고, 고객 응대도 친절했어요.
                             </p>
                         </div>
                     </div>
