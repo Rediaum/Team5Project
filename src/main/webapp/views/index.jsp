@@ -29,40 +29,6 @@
     <!-- responsive style -->
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
     
-    <%-- 드롭다운 메뉴 스타일 --%>
-    <style>
-        /* 드롭다운 메뉴 기본 스타일 */
-        .dropdown-menu {
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
-
-        /* 드롭다운 아이템 스타일 */
-        .dropdown-item {
-            padding: 8px 16px;
-            color: #333;
-            transition: background-color 0.2s;
-        }
-
-        /* 드롭다운 아이템 호버 효과 */
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #f7444e;
-        }
-
-        /* 드롭다운 구분선 스타일 */
-        .dropdown-divider {
-            margin: 5px 0;
-        }
-
-        /* 드롭다운 아이템 내 아이콘 스타일 */
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
-        }
-    </style>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
@@ -632,49 +598,64 @@
                             </div>
                         </div>
                         <div class="detail-box">
-                            <h5>Anna Trevor</h5>
-                            <h6>Customer</h6>
-                            <p>민성이는 매우 개쩌는 사람이었어요 그의 판매력에 저는 티셔트 300만장을 사버렸죠 어머 이제 전 vip?</p>
+                            <h5>
+                                Anna Trevor
+                            </h5>
+                            <h6>
+                                Customer
+                            </h6>
+                            <p>
+                                배송도 정말 빠르고 포장도 꼼꼼했어요! 구매한 이어폰 음질도 너무 좋고 디자인도 마음에 들어요. 친구들한테도 추천했답니다 :) 앞으로도 자주 이용할게요~
+                            </p>
                         </div>
                     </div>
                 </div>
-                
                 <%-- 두 번째 후기 --%>
                 <div class="carousel-item">
                     <div class="box col-lg-10 mx-auto">
                         <div class="img_container">
                             <div class="img-box">
                                 <div class="img_box-inner">
-                                    <img src="${pageContext.request.contextPath}/views/images/client.jpg" alt="">
+                                    <img src="${pageContext.request.contextPath}/views/images/client2.jpg" alt="">
                                 </div>
                             </div>
                         </div>
                         <div class="detail-box">
-                            <h5>Anna Trevor</h5>
-                            <h6>Customer</h6>
-                            <p>Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.</p>
+                            <h5>
+                                Melisa Ackerman
+                            </h5>
+                            <h6>
+                                Customer
+                            </h6>
+                            <p>
+                                회사에서 사용할 모니터를 찾다가 여기서 주문했는데, 가성비 최고예요! 화면도 선명하고, 눈도 덜 피로해서 하루 종일 사용해도 편하네요. 믿고 살 수 있는 쇼핑몰 같아요!
+                            </p>
                         </div>
                     </div>
                 </div>
-                
                 <%-- 세 번째 후기 --%>
                 <div class="carousel-item">
                     <div class="box col-lg-10 mx-auto">
                         <div class="img_container">
                             <div class="img-box">
                                 <div class="img_box-inner">
-                                    <img src="${pageContext.request.contextPath}/views/images/client.jpg" alt="">
+                                    <img src="${pageContext.request.contextPath}/views/images/client3.jpg" alt="">
                                 </div>
                             </div>
                         </div>
                         <div class="detail-box">
-                            <h5>Anna Trevor</h5>
-                            <h6>Customer</h6>
-                            <p>Dignissimos reprehenderit repellendus nobis error quibusdam? Atque animi sint unde quis reprehenderit, et, perspiciatis, debitis totam est deserunt eius officiis ipsum ducimus ad labore modi voluptatibus accusantium sapiente nam! Quaerat.</p>
+                            <h5>
+                                Junius Robert
+                            </h5>
+                            <h6>
+                                Customer
+                            </h6>
+                            <p>
+                                노트북이랑 충전기 세트를 샀는데 퀄리티가 기대 이상이네요. 실사용 후기 보고 샀는데 저도 만족합니다. 제품 설명이 상세해서 선택하기 쉬웠고, 고객 응대도 친절했어요.
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
             
             <%-- 캐러셀 네비게이션 버튼 --%>
             <div class="carousel_btn_box">
@@ -692,79 +673,52 @@
 </section>
 <!-- end client section -->
 
-<%-- 17. 푸터 섹션 시작 --%>
+<%-- 푸터 섹션 시작 --%>
 <footer>
     <div class="container">
-        <div class="row">
-            <%-- 회사 정보 --%>
-            <div class="col-md-4">
-                <div class="full">
-                    <div class="logo_footer">
-                        <a href="${pageContext.request.contextPath}/"><img width="210" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" /></a>
-                    </div>
-                    <div class="information_f">
-                        <p><strong>ADDRESS:</strong> 28 White tower, Street Name New York City, USA</p>
-                        <p><strong>TELEPHONE:</strong> +91 987 654 3210</p>
-                        <p><strong>EMAIL:</strong> yourmain@gmail.com</p>
-                    </div>
+        <div class="row justify-content-center">
+            <%-- 회사 로고 --%>
+            <div class="col-md-3 pr-md-4">
+                <div class="logo_footer">
+                    <a href="${pageContext.request.contextPath}/">
+                        <img width="210" src="${pageContext.request.contextPath}/views/images/logo.png" alt="로고" />
+                    </a>
                 </div>
             </div>
-            
-            <%-- 메뉴 링크들 --%>
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="row">
-                            <%-- 메인 메뉴 --%>
-                            <div class="col-md-6">
-                                <div class="widget_menu">
-                                    <h3>Menu</h3>
-                                    <ul>
-                                        <li><a href="${pageContext.request.contextPath}/">Home</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/about">About</a></li>
-                                        <li><a href="#">Services</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/testimonial">Testimonial</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <%-- 계정 관련 메뉴 --%>
-                            <div class="col-md-6">
-                                <div class="widget_menu">
-                                    <h3>Account</h3>
-                                    <ul>
-                                        <li><a href="#">Account</a></li>
-                                        <li><a href="#">Checkout</a></li>
-                                        <li><a href="#">Login</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
-                                        <li><a href="#">Shopping</a></li>
-                                        <li><a href="#">Widget</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <%-- 뉴스레터 구독 --%>
-                    <div class="col-md-5">
-                        <div class="widget_menu">
-                            <h3>Newsletter</h3>
-                            <div class="information_f">
-                                <p>Subscribe by our newsletter and get update protidin.</p>
-                            </div>
-                            <div class="form_sub">
-                                <form>
-                                    <fieldset>
-                                        <div class="field">
-                                            <input type="email" placeholder="Enter Your Mail" name="email" />
-                                            <input type="submit" value="Subscribe" />
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+            <!-- 정보 (주소 + GitHub) -->
+            <div class="col-md-4 pr-md-4">
+                <div class="information_f">
+                    <p style="margin-bottom: 0.5rem;">
+                        <strong>ADDRESS:</strong><br/>
+                        충청남도 아산시 탕정면 선문로 221번길 70 선문대학교
+                    </p>
+                    <p style="margin-bottom: 0;">
+                        <strong>GITHUB:</strong>
+                        <a href="https://github.com/Rediaum/Team5Project"
+                           class="black-link"
+                           target="_blank" rel="noopener noreferrer">
+                            Team5Project
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!-- 네비게이션 메뉴 -->
+            <div class="col-md-2">
+                <div class="footer-menu">
+                    <h5>Menu</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="${pageContext.request.contextPath}/" class="text-dark">Home</a></li>
+                        <li><a href="${pageContext.request.contextPath}/about" class="text-dark">About</a></li>
+                        <li><a href="${pageContext.request.contextPath}/testimonial" class="text-dark">Testimonial</a></li>
+                        <c:if test="${role ne 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/product" class="text-dark">Products</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contact" class="text-dark">Contact</a></li>
+                        </c:if>
+                        <c:if test="${role eq 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/admin/inventory" class="text-dark">Inventory</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/customerList" class="text-dark">Customer</a></li>
+                        </c:if>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -772,7 +726,7 @@
 </footer>
 <!-- footer end -->
 
-<%-- 18. 저작권 정보 --%>
+<%-- 저작권 정보 --%>
 <div class="cpy_">
     <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
         Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>

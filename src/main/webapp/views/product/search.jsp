@@ -326,49 +326,65 @@
    </div>
 </section>
 
-<!-- 기존 프로젝트와 동일한 푸터 -->
-<footer class="footer_section">
+<%-- 푸터 섹션 시작 --%>
+<footer>
    <div class="container">
-      <div class="row">
-         <div class="col-md-4 footer-col">
-            <div class="footer_contact">
-               <h4>Contact us</h4>
-               <div class="contact_link_box">
-                  <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
-                  <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call +01 1234567890</span></a>
-                  <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>demo@gmail.com</span></a>
-               </div>
+      <div class="row justify-content-center">
+         <%-- 회사 로고 --%>
+         <div class="col-md-3 pr-md-4">
+            <div class="logo_footer">
+               <a href="${pageContext.request.contextPath}/">
+                  <img width="210" src="${pageContext.request.contextPath}/views/images/logo.png" alt="로고" />
+               </a>
             </div>
          </div>
-         <div class="col-md-4 footer-col">
-            <div class="footer_detail">
-               <a href="" class="footer-logo">Shop</a>
-               <p>Necessary, making this the first true generator on the Internet.</p>
-               <div class="footer_social">
-                  <a href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                  <a href=""><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                  <a href=""><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                  <a href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
-               </div>
+         <!-- 정보 (주소 + GitHub) -->
+         <div class="col-md-4 pr-md-4">
+            <div class="information_f">
+               <p style="margin-bottom: 0.5rem;">
+                  <strong>ADDRESS:</strong><br/>
+                  충청남도 아산시 탕정면 선문로 221번길 70 선문대학교
+               </p>
+               <p style="margin-bottom: 0;">
+                  <strong>GITHUB:</strong>
+                  <a href="https://github.com/Rediaum/Team5Project"
+                     class="black-link"
+                     target="_blank" rel="noopener noreferrer">
+                     Team5Project
+                  </a>
+               </p>
             </div>
          </div>
-         <div class="col-md-4 footer-col">
-            <h4>Subscribe</h4>
-            <form>
-               <input type="text" placeholder="Enter email" />
-               <button type="submit">Subscribe</button>
-            </form>
+         <!-- 네비게이션 메뉴 -->
+         <div class="col-md-2">
+            <div class="footer-menu">
+               <h5>Menu</h5>
+               <ul class="list-unstyled d-flex flex-column gap-2">
+                  <li><a href="${pageContext.request.contextPath}/" class="text-dark">Home</a></li>
+                  <li><a href="${pageContext.request.contextPath}/about" class="text-dark">About</a></li>
+                  <li><a href="${pageContext.request.contextPath}/testimonial" class="text-dark">Testimonial</a></li>
+                  <c:if test="${role ne 'admin'}">
+                     <li><a href="${pageContext.request.contextPath}/product" class="text-dark">Products</a></li>
+                     <li><a href="${pageContext.request.contextPath}/contact" class="text-dark">Contact</a></li>
+                  </c:if>
+                  <c:if test="${role eq 'admin'}">
+                     <li><a href="${pageContext.request.contextPath}/admin/inventory" class="text-dark">Inventory</a></li>
+                     <li><a href="${pageContext.request.contextPath}/admin/customerList" class="text-dark">Customer</a></li>
+                  </c:if>
+               </ul>
+            </div>
          </div>
       </div>
    </div>
 </footer>
+<!-- footer end -->
 
+<%-- 저작권 정보 --%>
 <div class="cpy_">
    <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
       Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
    </p>
 </div>
-
 <!-- JavaScript -->
 <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/views/js/popper.min.js"></script>
