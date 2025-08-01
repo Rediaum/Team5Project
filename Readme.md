@@ -9,13 +9,15 @@
 ***
 # 🕺구성원/역할
 1. 주민성(Rediaum)          <https://github.com/Rediaum>
+- PM
 
 2. 주희성(jhs0106)        <https://github.com/jhs0106> 
+- PL&PM(sub)
 
 3. 라마단 비에리(vieri)          <https://github.com/vieri4643>
+- DEV
 ***
 # 주요기능
-- 주요 기능
 - 회원가입 및 로그인
 - 상품 목록 조회(카테고리별 조회)
 - 장바구니 추가/삭제/수량 변경
@@ -67,8 +69,35 @@ https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-websi
 
 ***
 # 기능별 gif
-### 회원가입 & 로그인
+### 회원가입 & 로그인(주문 페이지 적용 전)
 ![relo](mdgif/loginregi.gif)
 
 ### 상품 카테고리 별 조회 
 ![pro](mdgif/products.gif)
+
+### 장바구니 추가/삭제/수량 변경
+![cartG](mdgif/cartG.gif)
+
+### 고객 주문 및 결제 + 배송 정보 등록
+#### - 바로 결제 + 배송 정보 등록
+![nowP](mdgif/)
+
+#### - 카트에서 결제
+![cartP](mdgif/)
+
+### 관리자 기능(상품 등록/수정/삭제, 고객 수정/삭제)
+
+#### -상품 등록
+![adminpre](mdgif/adminpre.gif)
+
+#### -상품 수정
+![adminpmo](mdgif/adminpmo.gif)
+
+#### -상품 삭제
+![adminpd](mdgif/adminpd.gif)
+
+#### -고객 수정
+![cadminM](mdgif/cadminM.gif)
+
+#### -고객 삭제
+![cadminD](mdgif/cadminD.gif)
