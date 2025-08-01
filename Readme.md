@@ -80,10 +80,10 @@ https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-websi
 
 ### 고객 주문 및 결제 + 배송 정보 등록
 #### - 바로 결제 + 배송 정보 등록
-![nowP](mdgif/)
+![nowP](mdgif/nowP.gif)
 
 #### - 카트에서 결제
-![cartP](mdgif/)
+![cartP](mdgif/cartP.gif)
 
 ### 관리자 기능(상품 등록/수정/삭제, 고객 수정/삭제)
 
@@ -101,3 +101,12 @@ https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-websi
 
 #### -고객 삭제
 ![cadminD](mdgif/cadminD.gif)
+
+### 주문 내역 확인 및 주문 상품 관리
+![ordercheck](mdgif/ordercheck.gif)
+
+### 고객 주소지(배송지) 관리
+![custaddress](mdgif/custaddress.gif)
+
+### 검색 기능
+![searchP](mdgif/searchP.gif)
