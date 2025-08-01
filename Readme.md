@@ -9,10 +9,10 @@
 ***
 # 🕺구성원/역할
 1. 주민성(Rediaum)          <https://github.com/Rediaum>
-- PM
+- PM, ppt 작성
 
 2. 주희성(jhs0106)        <https://github.com/jhs0106> 
-- PL&PM(sub)
+- PL&PM(sub), readme.md 작성
 
 3. 라마단 비에리(vieri)          <https://github.com/vieri4643>
 - DEV
