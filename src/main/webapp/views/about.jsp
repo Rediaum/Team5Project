@@ -28,44 +28,12 @@
     <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
     
     <style>
-        /* 드롭다운 메뉴 기본 스타일 */
-        .dropdown-menu {
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
-
-        /* 드롭다운 아이템 스타일 */
-        .dropdown-item {
-            padding: 8px 16px;
-            color: #333;
-            transition: background-color 0.2s;
-        }
-
-        /* 드롭다운 아이템 호버 효과 */
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #f7444e;
-        }
-
-        /* 드롭다운 구분선 스타일 */
-        .dropdown-divider {
-            margin: 5px 0;
-        }
-
-        /* 드롭다운 아이템 내 아이콘 스타일 */
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
-        }
-        
         .white-link {
             color: white;
         }
         .white-link:hover,
         .white-link:focus,
         .white-link:active{
-            color: #cccccc;
             text-decoration: underline;
         }
         .white-link:visited {
@@ -300,84 +268,65 @@
     </div>
 </section>
 <!-- end why section -->
-<!-- footer section -->
-<footer class="footer_section">
+<%-- 푸터 섹션 시작 --%>
+<footer>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 footer-col">
-                <div class="footer_contact">
-                    <h4>
-                        Reach at..
-                    </h4>
-                    <div class="contact_link_box">
-                        <a href="">
-                            <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            <span>
-                        Location
-                        </span>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-phone" aria-hidden="true"></i>
-                            <span>
-                        Call +01 1234567890
-                        </span>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-envelope" aria-hidden="true"></i>
-                            <span>
-                        demo@gmail.com
-                        </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 footer-col">
-                <div class="footer_detail">
-                    <a href="index.jsp" class="footer-logo">
-                        Famms
+        <div class="row justify-content-center">
+            <%-- 회사 로고 --%>
+            <div class="col-md-3 pr-md-4">
+                <div class="logo_footer">
+                    <a href="${pageContext.request.contextPath}/">
+                        <img width="210" src="${pageContext.request.contextPath}/views/images/logo.png" alt="로고" />
                     </a>
-                    <p>
-                        Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with
+                </div>
+            </div>
+            <!-- 정보 (주소 + GitHub) -->
+            <div class="col-md-4 pr-md-4">
+                <div class="information_f">
+                    <p style="margin-bottom: 0.5rem;">
+                        <strong>ADDRESS:</strong><br/>
+                        충청남도 아산시 탕정면 선문로 221번길 70 선문대학교
                     </p>
-                    <div class="footer_social">
-                        <a href="">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                    <p style="margin-bottom: 0;">
+                        <strong>GITHUB:</strong>
+                        <a href="https://github.com/Rediaum/Team5Project"
+                           class="black-link"
+                           target="_blank" rel="noopener noreferrer">
+                            Team5Project
                         </a>
-                        <a href="">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-linkedin" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-pinterest" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    </p>
                 </div>
             </div>
-            <div class="col-md-4 footer-col">
-                <div class="map_container">
-                    <div class="map">
-                        <div id="googleMap"></div>
-                    </div>
+            <!-- 네비게이션 메뉴 -->
+            <div class="col-md-2">
+                <div class="footer-menu">
+                    <h5>Menu</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="${pageContext.request.contextPath}/" class="text-dark">Home</a></li>
+                        <li><a href="${pageContext.request.contextPath}/about" class="text-dark">About</a></li>
+                        <li><a href="${pageContext.request.contextPath}/testimonial" class="text-dark">Testimonial</a></li>
+                        <c:if test="${role ne 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/product" class="text-dark">Products</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contact" class="text-dark">Contact</a></li>
+                        </c:if>
+                        <c:if test="${role eq 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/admin/inventory" class="text-dark">Inventory</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/customerList" class="text-dark">Customer</a></li>
+                        </c:if>
+                    </ul>
                 </div>
-            </div>
-        </div>
-        <div class="footer-info">
-            <div class="col-lg-7 mx-auto px-0">
-                <p>
-                    &copy; <span id="displayYear"></span> All Rights Reserved By
-                    <a href="https://html.design/">Free Html Templates</a><br>
-                    
-                    Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-                </p>
             </div>
         </div>
     </div>
 </footer>
+<!-- footer end -->
+
+<%-- 저작권 정보 --%>
+<div class="cpy_">
+    <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
+        Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+    </p>
+</div>
 <!-- footer section -->
 <!-- jQuery 라이브러리 -->
 <script src="${pageContext.request.contextPath}/views/js/jquery-3.4.1.min.js"></script>

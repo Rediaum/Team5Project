@@ -533,35 +533,65 @@
     </div>
 </section>
 
-<!-- ===== 푸터 ===== -->
-<footer class="footer_section">
+<%-- 푸터 섹션 시작 --%>
+<footer>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 footer-col">
-                <div class="footer_contact">
-                    <h4>연락처</h4>
-                    <div class="contact_link_box">
-                        <a href=""><i class="fa fa-map-marker"></i><span>서울시 강남구</span></a>
-                        <a href=""><i class="fa fa-phone"></i><span>02-1234-5678</span></a>
-                        <a href=""><i class="fa fa-envelope"></i><span>team5@shop.com</span></a>
-                    </div>
+        <div class="row justify-content-center">
+            <%-- 회사 로고 --%>
+            <div class="col-md-3 pr-md-4">
+                <div class="logo_footer">
+                    <a href="${pageContext.request.contextPath}/">
+                        <img width="210" src="${pageContext.request.contextPath}/views/images/logo.png" alt="로고" />
+                    </a>
                 </div>
             </div>
-            <div class="col-md-4 footer-col">
-                <div class="footer_info">
-                    <h4>고객센터</h4>
-                    <p>평일 09:00 - 18:00<br>주말/공휴일 휴무</p>
+            <!-- 정보 (주소 + GitHub) -->
+            <div class="col-md-4 pr-md-4">
+                <div class="information_f">
+                    <p style="margin-bottom: 0.5rem;">
+                        <strong>ADDRESS:</strong><br/>
+                        충청남도 아산시 탕정면 선문로 221번길 70 선문대학교
+                    </p>
+                    <p style="margin-bottom: 0;">
+                        <strong>GITHUB:</strong>
+                        <a href="https://github.com/Rediaum/Team5Project"
+                           class="black-link"
+                           target="_blank" rel="noopener noreferrer">
+                            Team5Project
+                        </a>
+                    </p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="footer_info">
-                    <h5>Team 5 Shop</h5>
-                    <p>최고의 상품과 서비스를 제공합니다</p>
+            <!-- 네비게이션 메뉴 -->
+            <div class="col-md-2">
+                <div class="footer-menu">
+                    <h5>Menu</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="${pageContext.request.contextPath}/" class="text-dark">Home</a></li>
+                        <li><a href="${pageContext.request.contextPath}/about" class="text-dark">About</a></li>
+                        <li><a href="${pageContext.request.contextPath}/testimonial" class="text-dark">Testimonial</a></li>
+                        <c:if test="${role ne 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/product" class="text-dark">Products</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contact" class="text-dark">Contact</a></li>
+                        </c:if>
+                        <c:if test="${role eq 'admin'}">
+                            <li><a href="${pageContext.request.contextPath}/admin/inventory" class="text-dark">Inventory</a></li>
+                            <li><a href="${pageContext.request.contextPath}/admin/customerList" class="text-dark">Customer</a></li>
+                        </c:if>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </footer>
+<!-- footer end -->
+
+<%-- 저작권 정보 --%>
+<div class="cpy_">
+    <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
+        Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+    </p>
+</div>
 
 <!-- ===== JavaScript ===== -->
 <script>
