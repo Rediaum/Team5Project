@@ -205,6 +205,11 @@
             <a href="${pageContext.request.contextPath}/admin/customerList" class="btn btn-danger">Cancel</a>
         </div>
     </form>
+    <form action="${pageContext.request.contextPath}/admin/customerList/delete" method="post"
+          onsubmit="return confirm('정말 삭제하시겠습니까?');" style="margin-top:10px;">
+        <input type="hidden" name="custId" value="${cust.custId}" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
 </div>
 <!-- end Customer Update form section -->
 
