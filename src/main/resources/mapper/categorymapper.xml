@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.repository.CategoryRepository">
+
+    <!-- 기본 조회 -->
+    <select id="select" parameterType="Integer" resultType="Category">
+        SELECT * FROM category WHERE category_id = #{categoryId}
+    </select>
+
+    <!-- 전체 조회 -->
+    <select id="selectAll" resultType="Category">
+        SELECT * FROM category ORDER BY category_id
+    </select>
+
+    <!-- 대분류 카테고리만 조회 (parent_category_id가 null) -->
+    <select id="selectMainCategories" resultType="Category">
+        SELECT * FROM category
+        WHERE parent_category_id IS NULL
+        ORDER BY category_id
+    </select>
+
+    <!-- 특정 대분류의 소분류 조회 -->
+    <select id="selectSubCategories" parameterType="Integer" resultType="Category">
+        SELECT * FROM category
+        WHERE parent_category_id = #{parentCategoryId}
+        ORDER BY category_id
+    </select>
+
+    <!-- 계층 구조 포함한 전체 조회 (대분류 먼저, 그 다음 소분류) -->
+    <select id="selectAllWithHierarchy" resultType="Category">
+        SELECT * FROM category
+        ORDER BY
+            CASE WHEN parent_category_id IS NULL THEN category_id ELSE parent_category_id END,
+            parent_category_id IS NOT NULL,
+            category_id
+    </select>
+
+    <!-- 카테고리명으로 조회 -->
+    <select id="selectByCategoryName" parameterType="String" resultType="Category">
+        SELECT * FROM category WHERE category_name = #{categoryName}
+    </select>
+
+    <!-- 하위 카테고리 개수 조회 -->
+    <select id="countSubCategories" parameterType="Integer" resultType="int">
+        SELECT COUNT(*) FROM category WHERE parent_category_id = #{categoryId}
+    </select>
+
+    <!-- 등록 -->
+    <insert id="insert" parameterType="Category">
+        INSERT INTO category (parent_category_id, category_name, category_update)
+        VALUES (#{parentCategoryId}, #{categoryName}, NOW())
+    </insert>
+
+    <!-- 수정 -->
+    <update id="update" parameterType="Category">
+        UPDATE category SET
+                            parent_category_id = #{parentCategoryId},
+                            category_name = #{categoryName},
+                            category_update = NOW()
+        WHERE category_id = #{categoryId}
+    </update>
+
+    <!-- 삭제 -->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM category WHERE category_id = #{categoryId}
+    </delete>
+
+</mapper>

@@ -146,13 +146,12 @@
                      <label>카테고리</label>
                      <select name="category" class="form-control">
                         <option value="0">전체 카테고리</option>
-                        <option value="1" ${selectedCategory == 1 ? 'selected' : ''}>🎧 오디오</option>
-                        <option value="2" ${selectedCategory == 2 ? 'selected' : ''}>🎮 게이밍</option>
-                        <option value="3" ${selectedCategory == 3 ? 'selected' : ''}>⌚ 웨어러블</option>
-                        <option value="4" ${selectedCategory == 4 ? 'selected' : ''}>💻 PC/노트북</option>
-                        <option value="5" ${selectedCategory == 5 ? 'selected' : ''}>🖥️ 모니터</option>
-                        <option value="6" ${selectedCategory == 6 ? 'selected' : ''}>📺 TV</option>
-                        <option value="7" ${selectedCategory == 7 ? 'selected' : ''}>📱 스마트폰</option>
+                        <!-- 동적으로 생성되는 카테고리 옵션들 -->
+                        <c:forEach var="category" items="${mainCategories}">
+                           <option value="${category.categoryId}" ${selectedCategory == category.categoryId ? 'selected' : ''}>
+                                 ${category.categoryName}
+                           </option>
+                        </c:forEach>
                      </select>
                   </div>
                </div>
