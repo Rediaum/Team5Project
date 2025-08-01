@@ -133,9 +133,11 @@
                                         </a>
 
                                         <%-- 주문 내역 메뉴 추가 --%>
-                                        <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
-                                            <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
-                                        </a>
+                                        <c:if test="${sessionScope.role eq 'customer'}">
+                                            <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
+                                                <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
+                                            </a>
+                                        </c:if>
 
                                         <%-- 구분선 --%>
                                         <div class="dropdown-divider"></div>
@@ -551,32 +553,6 @@
     </section>
 </c:if>
 <!-- end product section -->
-
-<%--  구독 섹션 --%>
-<c:if test="${sessionScope.role ne 'admin'}">
-    <section class="subscribe_section">
-        <div class="container-fuild">
-            <div class="box">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="subscribe_form ">
-                            <div class="heading_container heading_center">
-                                <h3>Subscribe To Get Discount Offers</h3>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-                            <%-- 이메일 구독 폼 --%>
-                            <form action="">
-                                <input type="email" placeholder="Enter your email">
-                                <button>subscribe</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</c:if>
-<!-- end subscribe section -->
 
 <%-- 16. 고객 후기 섹션 --%>
 <section class="client_section layout_padding">

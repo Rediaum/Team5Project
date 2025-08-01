@@ -22,38 +22,6 @@
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
    <style>
-
-      /* 드롭다운 메뉴 기본 스타일 */
-      .dropdown-menu {
-         border: 1px solid #ddd;
-         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-         border-radius: 5px;
-      }
-
-      /* 드롭다운 아이템 스타일 */
-      .dropdown-item {
-         padding: 8px 16px;
-         color: #333;
-         transition: background-color 0.2s;
-      }
-
-      /* 드롭다운 아이템 호버 효과 */
-      .dropdown-item:hover {
-         background-color: #f8f9fa;
-         color: #f7444e;
-      }
-
-      /* 드롭다운 구분선 스타일 */
-      .dropdown-divider {
-         margin: 5px 0;
-      }
-
-      /* 드롭다운 아이템 내 아이콘 스타일 */
-      .dropdown-item i {
-         margin-right: 8px;
-         width: 16px;
-      }
-
       /* 카테고리 바 스타일 추가 */
       .category_filter_container {
          text-align: center;
@@ -309,7 +277,7 @@
       <div class="row">
          <div class="col-md-12">
             <div class="full">
-               <h3>Product Grid</h3>
+               <h3>Our Products</h3>
             </div>
          </div>
       </div>
@@ -318,10 +286,6 @@
 <section class="product_section layout_padding">
       <section class="product_section layout_padding">
          <div class="container">
-            <div class="heading_container heading_center">
-               <h2>Our <span>products</span></h2>
-            </div>
-
 
             <!-- 카테고리 필터 바 - 동적 버전으로 교체 -->
             <div class="category_filter_container" style="margin-bottom: 40px;">
