@@ -19,7 +19,7 @@
     <%-- 2. 리소스(CSS, JS, 이미지 등) 경로 설정 --%>
     <%-- 사용자 경로인 /src/main/webapp/views/ 에 맞게 경로를 수정합니다. --%>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/views/images/favicon.png" type="">
-    <title>Shop - Project team - 5</title>
+    <title>Home - Shop Project Team 5</title>
     <!-- bootstrap core css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/views/css/bootstrap.css" />
     <!-- font awesome style -->

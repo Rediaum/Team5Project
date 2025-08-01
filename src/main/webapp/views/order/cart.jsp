@@ -18,33 +18,6 @@
   <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
 
   <style>
-    /* ===== 드롭다운 메뉴 스타일 ===== */
-    .dropdown-menu {
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      border-radius: 5px;
-    }
-
-    .dropdown-item {
-      padding: 8px 16px;
-      color: #333;
-      transition: background-color 0.2s;
-    }
-
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: #f7444e;
-    }
-
-    .dropdown-divider {
-      margin: 5px 0;
-    }
-
-    .dropdown-item i {
-      margin-right: 8px;
-      width: 16px;
-    }
-
     /* ===== 장바구니 전용 스타일 ===== */
     .product-name-link {
       color: #333;
