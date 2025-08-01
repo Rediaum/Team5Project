@@ -51,12 +51,20 @@
     - 💡 다양한 라이브러리 및 플러그인 적용
 ***    
 ### 🗂️ ERD
-<img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/a57db5b2-becc-4688-835f-c126391cf482" />
-
+![ERD](mdimg/ERD5.png)
 ### 🗂️ DDL
 https://www.notion.so/erd-ddl-238fe5d709bc80bd90dcfe2b4614ebf0?source=copy_link
 ### 🗂️ DML
 https://www.notion.so/DML-239fe5d709bc80ab8bc7f5d57af3c7e4?source=copy_link  -- 샘플 DML
-
+***
+### 화면 흐름도
+![flowchart](mdimg/screenFlowChart.png)
 ### 🗂️ Based on Template
 https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-website-template/
+***
+# 프로젝트 구조
+![project structure](mdimg/projectS.png)
+
+***
+# 기능별 gif
+![relo](mdgif/register&login.gif)
