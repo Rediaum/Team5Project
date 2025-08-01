@@ -396,6 +396,13 @@
                         <input type="hidden" name="returnUrl" value="${returnUrl}">
                     </c:if>
 
+                    <c:if test="${not empty productId}">
+                        <input type="hidden" name="productId" value="${productId}">
+                    </c:if>
+                    <c:if test="${not empty quantity}">
+                        <input type="hidden" name="quantity" value="${quantity}">
+                    </c:if>
+
                     <div class="form-group">
                         <label for="addressName">배송지 이름*</label>
                         <input type="text" id="addressName" name="addressName" class="form-control"
