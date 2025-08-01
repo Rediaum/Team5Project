@@ -67,4 +67,4 @@ https://themewagon.com/themes/famms-free-responsive-bootstrap-4-e-commerce-websi
 
 ***
 # 기능별 gif
-![relo](mdgif/register&login.gif)
+![relo](mdgif/loginregi.gif)
