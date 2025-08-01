@@ -133,7 +133,7 @@
                                         </a>
 
                                         <%-- 주문 내역 메뉴 추가 --%>
-                                        <c:if test="${sessionScope.role eq 'customer'}">
+                                        <c:if test="${sessionScope.role eq 'cust'}">
                                             <a class="dropdown-item" href="${pageContext.request.contextPath}/order/history">
                                                 <i class="fa fa-list-alt" aria-hidden="true"></i> 주문 내역
                                             </a>

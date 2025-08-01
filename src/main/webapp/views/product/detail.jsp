@@ -44,7 +44,13 @@
                     let quantity = $('#quantity').val();
                     let productId = '${product.productId}';
 
-                    // 바로 구매 로직
+                    // 수량 검증
+                    if (quantity < 1 || quantity > 99) {
+                        alert('수량은 1~99개까지 선택 가능합니다.');
+                        return;
+                    }
+
+                    // 바로 구매 로직 - 기존 /order/direct 경로 활용
                     if(confirm('바로 구매하시겠습니까?')) {
                         location.href = '${pageContext.request.contextPath}/order/direct?productId=' + productId + '&quantity=' + quantity;
                     }
