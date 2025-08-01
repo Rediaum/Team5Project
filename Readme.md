@@ -51,7 +51,7 @@
     - 💡 다양한 라이브러리 및 플러그인 적용
 ***    
 ### 🗂️ ERD
-![ERD](mdimg/ERD5.png)
+![ERD](mdimg/ERD5.png) 
 ### 🗂️ DDL
 https://www.notion.so/erd-ddl-238fe5d709bc80bd90dcfe2b4614ebf0?source=copy_link
 ### 🗂️ DML
