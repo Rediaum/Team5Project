@@ -20,46 +20,46 @@
    <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet" />
    <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" />
    <link href="${pageContext.request.contextPath}/views/css/responsive.css" rel="stylesheet" />
-   
+
    <style>
-      
+
       /* 드롭다운 메뉴 기본 스타일 */
       .dropdown-menu {
          border: 1px solid #ddd;
          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
          border-radius: 5px;
       }
-      
+
       /* 드롭다운 아이템 스타일 */
       .dropdown-item {
          padding: 8px 16px;
          color: #333;
          transition: background-color 0.2s;
       }
-      
+
       /* 드롭다운 아이템 호버 효과 */
       .dropdown-item:hover {
          background-color: #f8f9fa;
          color: #f7444e;
       }
-      
+
       /* 드롭다운 구분선 스타일 */
       .dropdown-divider {
          margin: 5px 0;
       }
-      
+
       /* 드롭다운 아이템 내 아이콘 스타일 */
       .dropdown-item i {
          margin-right: 8px;
          width: 16px;
       }
-      
+
       /* 카테고리 바 스타일 추가 */
       .category_filter_container {
          text-align: center;
          padding: 20px 0;
       }
-      
+
       .category_filter_bar {
          display: inline-flex;
          background: #fff;
@@ -70,7 +70,7 @@
          flex-wrap: wrap;
          justify-content: center;
       }
-      
+
       .category_item {
          display: flex;
          flex-direction: column;
@@ -83,69 +83,69 @@
          min-width: 80px;
          background: transparent;
       }
-      
+
       .category_item:hover {
          background: #f8f9fa;
          color: #f7444e;
          text-decoration: none;
          transform: translateY(-2px);
       }
-      
+
       .category_item.active {
          background: #f7444e;
          color: white;
          transform: translateY(-2px);
       }
-      
+
       .category_item.active:hover {
          color: white;
       }
-      
+
       .category_icon {
          font-size: 24px;
          margin-bottom: 8px;
          transition: transform 0.3s ease;
       }
-      
+
       .category_item:hover .category_icon {
          transform: scale(1.1);
       }
-      
+
       .category_item span {
          font-size: 14px;
          font-weight: 500;
          white-space: nowrap;
       }
-      
+
       /* 모바일 반응형 */
       @media (max-width: 768px) {
          .category_filter_bar {
             padding: 8px;
             gap: 3px;
          }
-         
+
          .category_item {
             padding: 12px 8px;
             min-width: 60px;
          }
-         
+
          .category_icon {
             font-size: 20px;
             margin-bottom: 6px;
          }
-         
+
          .category_item span {
             font-size: 12px;
          }
       }
-      
+
       /* 스크롤바 숨기기 (모바일에서 가로 스크롤 시) */
       @media (max-width: 576px) {
          .category_filter_container {
             overflow-x: auto;
             padding: 15px 0;
          }
-         
+
          .category_filter_bar {
             display: flex;
             min-width: max-content;
@@ -166,12 +166,12 @@
          <nav class="navbar navbar-expand-lg custom_nav-container ">
             <%-- 로고 - 홈페이지로 링크 --%>
             <a class="navbar-brand" href="${pageContext.request.contextPath}/"><img width="250" src="${pageContext.request.contextPath}/views/images/logo.png" alt="#" /></a>
-            
+
             <%-- 모바일 메뉴 토글 버튼 --%>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                <span class=""> </span>
             </button>
-            
+
             <%-- 네비게이션 메뉴 --%>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                <ul class="navbar-nav">
@@ -179,7 +179,7 @@
                   <li class="nav-item active">
                      <a class="nav-link" href="${pageContext.request.contextPath}/">Home <span class="sr-only">(current)</span></a>
                   </li>
-                  
+
                   <%-- Pages 드롭다운 메뉴 --%>
                   <li class="nav-item dropdown">
                      <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="color: #000;">
@@ -190,17 +190,17 @@
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/testimonial">Testimonial</a>
                      </div>
                   </li>
-                  
+
                   <%-- Products 메뉴 --%>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/product">Products</a>
                   </li>
-                  
+
                   <%-- Contact 메뉴 --%>
                   <li class="nav-item">
                      <a class="nav-link" href="${pageContext.request.contextPath}/contact">Contact</a>
                   </li>
-                  
+
                   <%-- 사용자 관리 드롭다운 메뉴 (사람 아이콘) --%>
                   <li class="nav-item dropdown">
                      <%-- 사람 아이콘으로 구성된 드롭다운 트리거 --%>
@@ -212,7 +212,7 @@
                         </svg>
                         <span class="nav-label"><span class="caret"></span></span>
                      </a>
-                     
+
                      <%-- 드롭다운 메뉴 내용 --%>
                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <%-- 로그인 상태에 따른 메뉴 분기 --%>
@@ -251,7 +251,7 @@
                         </c:choose>
                      </div>
                   </li>
-                  
+
                   <%-- 장바구니 아이콘 메뉴 (로그인시에만 표시) --%>
                   <c:if test="${sessionScope.logincust != null}">
                      <li class="nav-item">
@@ -285,7 +285,7 @@
                         </a>
                      </li>
                   </c:if>
-                  
+
                   <%-- 7. 검색 폼 --%>
                   <form class="form-inline search-form-header" action="${pageContext.request.contextPath}/search" method="GET">
                      <div class="search-input-container">
@@ -322,68 +322,43 @@
                <h2>Our <span>products</span></h2>
             </div>
 
-            <!-- 카테고리 필터 바 추가 -->
+
+            <!-- 카테고리 필터 바 - 동적 버전으로 교체 -->
             <div class="category_filter_container" style="margin-bottom: 40px;">
                <div class="category_filter_bar">
                   <!-- 전체 보기 -->
                   <a href="${pageContext.request.contextPath}/product"
                      class="category_item ${selectedCategory == 0 ? 'active' : ''}">
-                     <div class="category_icon">🛍️</div>
+                     <div class="category_icon"><i class="fa fa-shopping-bag"></i></div>
                      <span>전체</span>
                   </a>
 
-                  <!-- 카테고리 1: 오디오/음향기기 -->
-                  <a href="${pageContext.request.contextPath}/product/category/1"
-                     class="category_item ${selectedCategory == 1 ? 'active' : ''}">
-                     <div class="category_icon">🎧</div>
-                     <span>오디오</span>
-                  </a>
-
-                  <!-- 카테고리 2: 게이밍/액세서리 -->
-                  <a href="${pageContext.request.contextPath}/product/category/2"
-                     class="category_item ${selectedCategory == 2 ? 'active' : ''}">
-                     <div class="category_icon">🎮</div>
-                     <span>게이밍</span>
-                  </a>
-
-                  <!-- 카테고리 3: 웨어러블/스마트기기 -->
-                  <a href="${pageContext.request.contextPath}/product/category/3"
-                     class="category_item ${selectedCategory == 3 ? 'active' : ''}">
-                     <div class="category_icon">⌚</div>
-                     <span>웨어러블</span>
-                  </a>
-
-                  <!-- 카테고리 4: 노트북/PC -->
-                  <a href="${pageContext.request.contextPath}/product/category/4"
-                     class="category_item ${selectedCategory == 4 ? 'active' : ''}">
-                     <div class="category_icon">💻</div>
-                     <span>PC</span>
-                     <span>/노트북</span>
-                  </a>
-
-                  <!-- 카테고리 5: 모니터 -->
-                  <a href="${pageContext.request.contextPath}/product/category/5"
-                     class="category_item ${selectedCategory == 5 ? 'active' : ''}">
-                     <div class="category_icon">🖥️</div>
-                     <span>모니터</span>
-                  </a>
-
-                  <!-- 카테고리 6: TV -->
-                  <a href="${pageContext.request.contextPath}/product/category/6"
-                     class="category_item ${selectedCategory == 6 ? 'active' : ''}">
-                     <div class="category_icon">📺</div>
-                     <span>TV</span>
-                  </a>
-
-                  <!-- 카테고리 7: 스마트폰 -->
-                  <a href="${pageContext.request.contextPath}/product/category/7"
-                     class="category_item ${selectedCategory == 7 ? 'active' : ''}">
-                     <div class="category_icon">📱</div>
-                     <span>스마트폰</span>
-                  </a>
+                  <!-- 동적으로 생성되는 카테고리 목록 -->
+                  <c:forEach var="category" items="${mainCategories}">
+                     <a href="${pageContext.request.contextPath}/product/category/${category.categoryId}"
+                        class="category_item ${selectedCategory == category.categoryId ? 'active' : ''}">
+                        <div class="category_icon">
+                           <!-- 카테고리명에 따른 Font Awesome 아이콘 매핑 -->
+                           <c:choose>
+                              <c:when test="${category.categoryName == '모바일/태블릿'}"><i class="fa fa-mobile"></i></c:when>
+                              <c:when test="${category.categoryName == '컴퓨터/노트북'}"><i class="fa fa-laptop"></i></c:when>
+                              <c:when test="${category.categoryName == '프린터/사무기기'}"><i class="fa fa-print"></i></c:when>
+                              <c:when test="${category.categoryName == 'TV/영상기기'}"><i class="fa fa-television"></i></c:when>
+                              <c:when test="${category.categoryName == '오디오/음향기기'}"><i class="fa fa-headphones"></i></c:when>
+                              <c:when test="${category.categoryName == '카메라/캠코더'}"><i class="fa fa-camera"></i></c:when>
+                              <c:when test="${category.categoryName == '생활가전'}"><i class="fa fa-home"></i></c:when>
+                              <c:when test="${category.categoryName == '주방가전'}"><i class="fa fa-cutlery"></i></c:when>
+                              <c:when test="${category.categoryName == '세탁/건조기'}"><i class="fa fa-tint"></i></c:when>
+                              <c:when test="${category.categoryName == '냉장/냉동가전'}"><i class="fa fa-snowflake-o"></i></c:when>
+                              <c:when test="${category.categoryName == '스마트홈/IoT'}"><i class="fa fa-wifi"></i></c:when>
+                              <c:otherwise><i class="fa fa-cube"></i></c:otherwise>
+                           </c:choose>
+                        </div>
+                        <span>${category.categoryName}</span>
+                     </a>
+                  </c:forEach>
                </div>
             </div>
-
             <!-- 기존 상품 그리드 코드 -->
             <div class="row">
                <c:forEach var="product" items="${productList}">

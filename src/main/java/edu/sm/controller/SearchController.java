@@ -1,6 +1,8 @@
 package edu.sm.controller;
 
+import edu.sm.dto.Category;
 import edu.sm.dto.Product;
+import edu.sm.service.CategoryService;
 import edu.sm.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/search")
 @Slf4j
 public class SearchController {
-
+    private final CategoryService categoryService;
     private final ProductService productService;
 
     // 기본 검색 페이지
@@ -40,6 +42,7 @@ public class SearchController {
 
         try {
             List<Product> searchResults;
+            List<Category> mainCategories = categoryService.getMainCategories();
 
             // 고급 검색 실행
             if (hasAdvancedFilters(keyword, category, minPrice, maxPrice)) {
@@ -55,6 +58,7 @@ public class SearchController {
             // 모델에 데이터 추가
             model.addAttribute("searchResults", searchResults);
             model.addAttribute("searchStats", searchStats);
+            model.addAttribute("mainCategories", mainCategories);
             model.addAttribute("keyword", keyword);
             model.addAttribute("selectedCategory", category != null ? category : 0);
             model.addAttribute("minPrice", minPrice);
